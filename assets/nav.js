@@ -44,19 +44,22 @@
   }).join("");
 
   var html =
-    '<div class="utility-bar">' +
-    '<div class="wrap">' +
-    '<span>APUNTES PERSONALES · SEGUNDO SEMESTRE 2026</span>' +
-    '<span class="u-links"><a href="' + base + 'index.html">Inicio</a></span>' +
-    "</div>" +
-    "</div>" +
+    /* Single compact sticky bar (was two stacked bars). Kept as one row so
+       the header takes as little vertical space as possible, leaving more
+       room for each page's own content menu (tabs / sidebar) underneath. */
     '<div class="site-nav">' +
-    '<div class="site-nav-inner wrap">' +
+    /* NOT class "wrap": several imported pages (e.g. the Economía guides)
+       define their own ".wrap" with large bottom padding meant for their
+       own content column. Reusing that class name here let their padding
+       leak onto our navbar and silently inflate its height. site-nav-inner
+       carries its own max-width/centering below instead. */
+    '<div class="site-nav-inner">' +
     '<a class="brand" href="' + base + 'index.html">🎓 Mi Semestre</a>' +
     /* Deliberately a <div>, not a semantic <nav> tag: some imported pages
        (e.g. the Computación guide) define bare `nav{...}` element styles
        for their own sidebar, which would otherwise leak onto this menu. */
     '<div class="course-links">' + links + "</div>" +
+    '<span class="sem-label">2° SEMESTRE 2026</span>' +
     "</div>" +
     "</div>";
 

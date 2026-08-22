@@ -46,44 +46,38 @@ body{
 a{color:var(--teal-dark);}
 p{color:var(--ink-soft);}
 
-/* ---------------- Utility bar (thin, above main nav) ---------------- */
-.utility-bar{
-  background:var(--charcoal-bar); color:#c7ccd1;
-  font-size:12px; letter-spacing:.02em;
-}
-.utility-bar .wrap{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:7px 24px; max-width:1000px;
-}
-.utility-bar .u-links{display:flex; gap:18px;}
-.utility-bar .u-links a{color:#c7ccd1; text-decoration:none; font-weight:600;}
-.utility-bar .u-links a:hover{color:#fff;}
-
-/* ---------------- Main navbar (present on every page) ---------------- */
+/* ---------------- Main navbar (present on every page) ----------------
+   One slim sticky row (previously a utility bar + a taller nav bar
+   stacked on top of each other, ~100px tall together). Kept compact so
+   each page's own content menu (tabs / sidebar) has more room below it. */
 .site-nav{
   position:sticky; top:0; z-index:50;
   background:var(--charcoal);
   border-bottom:2px solid var(--teal);
 }
 .site-nav-inner{
-  display:flex; align-items:center; gap:26px;
-  padding:14px 24px;
+  display:flex; align-items:center; gap:18px;
+  max-width:1000px; margin:0 auto; padding:9px 24px;
 }
 .site-nav .brand{
-  color:#fff; font-weight:800; text-decoration:none; font-size:15px;
-  flex:none; letter-spacing:-.01em; display:flex; align-items:center; gap:8px;
-  padding-right:20px; border-right:1px solid rgba(255,255,255,.15);
+  color:#fff; font-weight:800; text-decoration:none; font-size:14px;
+  flex:none; letter-spacing:-.01em; display:flex; align-items:center; gap:7px;
+  padding-right:16px; border-right:1px solid rgba(255,255,255,.15);
 }
 .site-nav .course-links{
-  display:flex; gap:4px; overflow-x:auto; scrollbar-width:thin;
+  display:flex; gap:2px; overflow-x:auto; scrollbar-width:thin;
 }
 .site-nav .course-links a{
-  color:#cfd4da; text-decoration:none; font-size:13.5px; font-weight:700;
-  padding:8px 14px; border-radius:6px; white-space:nowrap; flex:none;
+  color:#cfd4da; text-decoration:none; font-size:13px; font-weight:700;
+  padding:6px 12px; border-radius:6px; white-space:nowrap; flex:none;
   transition:background .15s, color .15s;
 }
 .site-nav .course-links a:hover{ background:rgba(255,255,255,.08); color:#fff; }
 .site-nav .course-links a.active{ background:var(--teal); color:#fff; }
+.site-nav .sem-label{
+  margin-left:auto; flex:none; color:#8b929c; font-size:10.5px;
+  font-weight:700; letter-spacing:.06em; white-space:nowrap;
+}
 
 /* ---------------- Hero header ---------------- */
 header.hero{
@@ -189,6 +183,6 @@ footer.site-footer{
 
 @media (max-width:640px){
   h1.title{font-size:28px;}
-  .site-nav-inner{gap:14px;}
-  .utility-bar .u-links{gap:10px;}
+  .site-nav-inner{gap:10px;}
+  .site-nav .sem-label{display:none;}
 }

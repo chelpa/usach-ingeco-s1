@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumen PEP 2 · Introducción a la Economía</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  p{ color: inherit; }
+  :root{
+    --bg:#f7f8fa;
+    --surface:#ffffff;
+    --surface-2:#eef1f6;
+    --text:#1c2430;
+    --text-muted:#5b6472;
+    --border:#e1e5eb;
+    --accent:#2f5fa8;
+    --accent-2:#1c3f75;
+    --accent-soft:#e7eefb;
+    --demand:#c2410c;
+    --supply:#1d7a5f;
+    --tax:#8a3ab0;
+    --amber:#b3701a;
+    --good:#1a7f4f;
+    --bad:#b3261e;
+    --shadow: 0 1px 2px rgba(20,25,35,.06), 0 6px 20px rgba(20,25,35,.05);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#12161d;
+      --surface:#1a2029;
+      --surface-2:#212836;
+      --text:#e8ecf3;
+      --text-muted:#a3adbb;
+      --border:#2b3341;
+      --accent:#6f9ce8;
+      --accent-2:#a9c4f2;
+      --accent-soft:#1e2a40;
+      --demand:#f0895a;
+      --supply:#4fc79a;
+      --tax:#c391e8;
+      --amber:#e0a94a;
+      --good:#4fd699;
+      --bad:#f28b82;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height:1.55;
+  }
+  a{color:var(--accent);}
+  .wrap{max-width:940px; margin:0 auto; padding:0 20px 80px;}
+
+  header.hero{
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    color:#fff;
+    padding:44px 20px 34px;
+    text-align:center;
+  }
+  header.hero .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:12.5px;
+    opacity:.85;
+    margin-bottom:8px;
+  }
+  header.hero h1{
+    margin:0 0 8px;
+    font-size:clamp(28px,4.2vw,40px);
+  }
+  header.hero p{
+    margin:0;
+    font-size:16px;
+    opacity:.92;
+    max-width:640px;
+    margin-inline:auto;
+  }
+
+  nav.tabs{
+    position:sticky; top:56px; z-index:20;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    box-shadow:var(--shadow);
+  }
+  nav.tabs .inner{
+    max-width:940px; margin:0 auto;
+    display:flex; gap:4px; overflow-x:auto;
+    padding:8px 14px;
+    -ms-overflow-style:none; scrollbar-width:none;
+  }
+  nav.tabs .inner::-webkit-scrollbar{display:none;}
+  nav.tabs a{
+    flex:none;
+    text-decoration:none;
+    color:var(--text-muted);
+    font-size:13.5px;
+    font-weight:600;
+    padding:9px 14px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  nav.tabs a:hover{background:var(--surface-2); color:var(--text);}
+  nav.tabs a.active{background:var(--accent-soft); color:var(--accent);}
+
+  section{padding:46px 0 10px;}
+  section h2{
+    font-size:24px;
+    margin:0 0 4px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .step{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:28px; height:28px; border-radius:50%;
+    background:var(--accent); color:#fff; font-size:14px; font-weight:700;
+    flex:none;
+  }
+  section > .lead{
+    color:var(--text-muted);
+    margin:0 0 22px;
+    font-size:15px;
+    max-width:660px;
+  }
+  h3.subhead{
+    font-size:16px; margin:26px 0 10px; color:var(--accent-2);
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:20px 22px;
+    margin-bottom:18px;
+  }
+  .card h3{margin:0 0 10px; font-size:16.5px;}
+  .card p{margin:0 0 10px; font-size:14.8px;}
+  .card p:last-child{margin-bottom:0;}
+  .muted{color:var(--text-muted);}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  .grid4{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  .grid5{display:grid; grid-template-columns:repeat(5,1fr); gap:12px;}
+  @media (max-width:1000px){ .grid5{grid-template-columns:repeat(3,1fr);} }
+  @media (max-width:900px){ .grid4{grid-template-columns:1fr 1fr;} }
+  @media (max-width:720px){ .grid2, .grid3{grid-template-columns:1fr;} }
+  @media (max-width:640px){ .grid5{grid-template-columns:1fr 1fr;} }
+  @media (max-width:520px){ .grid4, .grid5{grid-template-columns:1fr;} }
+
+  .diagram-box{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:14px 16px 4px;
+    margin-bottom:18px;
+  }
+  svg{width:100%; height:auto; display:block;}
+  .legend{display:flex; gap:18px; flex-wrap:wrap; padding:10px 4px 16px; font-size:13px; color:var(--text-muted);}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .swatch{width:14px; height:3px; border-radius:2px; display:inline-block;}
+
+  .callout{
+    border-left:3px solid var(--accent);
+    background:var(--accent-soft);
+    border-radius:0 10px 10px 0;
+    padding:12px 16px;
+    font-size:14.3px;
+    margin:14px 0;
+  }
+  .callout b{color:var(--accent-2);}
+  .callout.next{border-left-color:var(--tax); background:color-mix(in srgb, var(--tax) 10%, var(--surface));}
+
+  table{width:100%; border-collapse:collapse; font-size:13.6px; margin:8px 0 4px;}
+  th, td{ text-align:left; padding:8px 9px; border-bottom:1px solid var(--border); }
+  th{ color:var(--text-muted); font-weight:700; font-size:11.8px; text-transform:uppercase; letter-spacing:.03em; }
+  td.num, th.num{text-align:center;}
+  td.total{font-weight:700; color:var(--accent-2);}
+
+  .bullets{margin:0; padding-left:20px; font-size:14.8px;}
+  .bullets li{margin-bottom:6px;}
+
+  .zone-tag{
+    display:inline-block; font-size:11.5px; font-weight:700; padding:2px 9px;
+    border-radius:999px; margin-bottom:6px;
+  }
+  .zone-a{background:color-mix(in srgb, var(--good) 18%, var(--surface)); color:var(--good);}
+  .zone-b{background:color-mix(in srgb, var(--demand) 18%, var(--surface)); color:var(--demand);}
+  .zone-c{background:var(--surface-2); color:var(--text-muted);}
+
+  .flip-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px;}
+  .flip-card{ perspective:1000px; height:120px; cursor:pointer; }
+  .flip-inner{ position:relative; width:100%; height:100%; transition:transform .5s; transform-style:preserve-3d; }
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg);}
+  .flip-front, .flip-back{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:12px;
+    border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:12px; font-size:13.4px;
+  }
+  .flip-front{background:var(--surface); font-weight:700; color:var(--accent-2); box-shadow:var(--shadow);}
+  .flip-back{background:var(--accent); color:#fff; transform:rotateY(180deg);}
+
+  .quiz-q{margin-bottom:22px;}
+  .quiz-q p.qtext{font-weight:600; font-size:15px; margin:0 0 10px;}
+  .quiz-opts{display:grid; gap:8px;}
+  .opt{
+    display:flex; gap:10px; align-items:flex-start;
+    border:1px solid var(--border); border-radius:10px;
+    padding:10px 12px; font-size:14px; cursor:pointer;
+    background:var(--surface);
+  }
+  .opt:hover{border-color:var(--accent);}
+  .opt input{margin-top:3px;}
+  .opt.correct{border-color:var(--good); background:color-mix(in srgb, var(--good) 12%, var(--surface));}
+  .opt.incorrect{border-color:var(--bad); background:color-mix(in srgb, var(--bad) 12%, var(--surface));}
+
+  .quiz-actions{display:flex; align-items:center; gap:14px; margin-top:6px;}
+  button.primary{
+    background:var(--accent); color:#fff; border:none;
+    padding:11px 20px; border-radius:10px; font-size:14.5px; font-weight:700;
+    cursor:pointer;
+  }
+  button.primary:hover{background:var(--accent-2);}
+  #quizScore{font-size:14.5px; font-weight:700;}
+
+  footer{ text-align:center; color:var(--text-muted); font-size:12.8px; padding:30px 20px 50px; }
+
+  /* ---- Ejercicios ---- */
+  .ex-block{ margin-bottom:6px; }
+  .ex-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:16px 18px; margin-bottom:14px;
+  }
+  .ex-card .ex-num{ font-size:11.5px; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; }
+  .ex-card .ex-q{ font-size:14.6px; margin:0 0 10px; }
+  .ex-toggle{
+    background:var(--accent-soft); color:var(--accent-2); border:none; border-radius:8px;
+    padding:7px 14px; font-size:12.6px; font-weight:700; cursor:pointer;
+  }
+  .ex-toggle:hover{ filter:brightness(0.95); }
+  .ex-sol{
+    display:none; margin-top:12px; padding:11px 14px; border-radius:10px;
+    background:color-mix(in srgb, var(--good) 10%, var(--surface)); border-left:3px solid var(--good);
+    font-size:13.6px;
+  }
+  .ex-sol.open{ display:block; }
+  .ex-sol b{ color:var(--good); }
+
+  /* ---- Mapa conceptual ---- */
+  .map-col{ display:flex; flex-direction:column; }
+  .map-head{
+    color:#fff; text-align:center; border-radius:12px; padding:12px 12px; font-weight:800; font-size:13.5px;
+    margin-bottom:0;
+  }
+  .map-head.c4{ background:var(--good); }
+  .map-head.c5{ background:var(--accent); }
+  .map-head.c6{ background:var(--tax); }
+  .map-head.c7{ background:var(--demand); }
+  .map-head.c8{ background:var(--amber); }
+  .map-leaf{
+    border-radius:10px; padding:10px 12px; font-size:12.2px; margin-top:0;
+  }
+  .map-col.c4 .map-leaf{ background:color-mix(in srgb, var(--good) 12%, var(--surface)); border:1px solid var(--good); border-left:3px solid var(--good); }
+  .map-col.c5 .map-leaf{ background:var(--accent-soft); border:1px solid var(--accent); border-left:3px solid var(--accent); }
+  .map-col.c6 .map-leaf{ background:color-mix(in srgb, var(--tax) 12%, var(--surface)); border:1px solid var(--tax); border-left:3px solid var(--tax); }
+  .map-col.c7 .map-leaf{ background:color-mix(in srgb, var(--demand) 12%, var(--surface)); border:1px solid var(--demand); border-left:3px solid var(--demand); }
+  .map-col.c8 .map-leaf{ background:color-mix(in srgb, var(--amber) 14%, var(--surface)); border:1px solid var(--amber); border-left:3px solid var(--amber); }
+  .map-leaf + .map-leaf{ margin-top:10px; }
+  .map-leaf .leaf-title{ font-weight:800; margin-bottom:4px; }
+  .map-col.c4 .leaf-title{ color:var(--good); }
+  .map-col.c5 .leaf-title{ color:var(--accent-2); }
+  .map-col.c6 .leaf-title{ color:var(--tax); }
+  .map-col.c7 .leaf-title{ color:var(--demand); }
+  .map-col.c8 .leaf-title{ color:var(--amber); }
+  .map-leaf ul{ margin:0; padding-left:14px; }
+  .map-leaf li{ margin-bottom:2px; }
+  .map-stack{ display:flex; flex-direction:column; gap:10px; margin-top:14px; padding-left:6px; border-left:2px dashed var(--border); }
+
+  /* ---- Plan de repaso ---- */
+  .plan-day{
+    display:grid; grid-template-columns:74px 1fr; gap:12px;
+    border:1px solid var(--border); border-radius:12px; padding:12px 16px; margin-bottom:12px;
+    background:var(--surface);
+  }
+  .plan-day.exam{ background:color-mix(in srgb, var(--tax) 10%, var(--surface)); border-color:var(--tax); }
+  .plan-daylabel{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+  .plan-daylabel .dow{ font-size:11px; font-weight:800; color:var(--accent); text-transform:uppercase; }
+  .plan-day.exam .plan-daylabel .dow{ color:var(--tax); }
+  .plan-daylabel .date{ font-size:20px; font-weight:800; }
+  .plan-topic{ font-size:14.5px; font-weight:800; color:var(--accent-2); margin-bottom:4px; }
+  .plan-day.exam .plan-topic{ color:var(--tax); }
+  .plan-tasks label{ display:flex; gap:8px; align-items:flex-start; font-size:13px; margin-bottom:4px; cursor:pointer; }
+  .plan-tasks input{ margin-top:3px; }
+  .plan-dur{ display:inline-block; margin-top:4px; font-size:10.8px; font-weight:700; color:var(--text-muted); background:var(--surface-2); padding:2px 9px; border-radius:999px; }
+</style>
+</head>
+<body>
+
+<script src="../../assets/nav.js" data-base="../../" data-course="economia"></script>
+
+<header class="hero">
+  <div class="eyebrow">Introducción a la Economía · USACH</div>
+  <h1>Resumen PEP 2</h1>
+  <p>Clase 4 a Clase 8 — Unidad 2 completa (mercado, consumidor, productor, elasticidad y bienestar) y Unidad 3 (macroeconomía: PIB, desempleo, productividad y crecimiento) — Semestre 1, 2026.</p>
+</header>
+
+<nav class="tabs">
+  <div class="inner" id="tabNav">
+    <a href="#clase4">Clase 4</a>
+    <a href="#clase5">Clase 5</a>
+    <a href="#clase6">Clase 6</a>
+    <a href="#clase7">Clase 7</a>
+    <a href="#clase8">Clase 8</a>
+    <a href="#ejercicios">Ejercicios</a>
+    <a href="#mapa">Mapa conceptual</a>
+    <a href="#glosario">Glosario</a>
+    <a href="#plan">Plan de repaso</a>
+    <a href="#quiz">Autoevaluación</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ================= CLASE 4 ================= -->
+  <section id="clase4">
+    <h2><span class="step">1</span> Clase 4 · Mercado, demanda, oferta y equilibrio</h2>
+    <p class="lead">Repaso: un mercado es un conjunto de compradores y vendedores que interactúan para intercambiar un bien o servicio. Compradores → demanda; vendedores → oferta; el precio coordina a ambos.</p>
+
+    <div class="card">
+      <h3>Mercado competitivo</h3>
+      <ul class="bullets">
+        <li>Muchos compradores y vendedores (mercado atomizado) · bienes homogéneos · información perfecta · sin barreras de entrada/salida.</li>
+        <li><b>→ Agentes precio-aceptantes:</b> ningún agente individual puede modificar el precio de mercado.</li>
+      </ul>
+    </div>
+
+    <h3 class="subhead">Ley de la demanda y ley de la oferta</h3>
+    <div class="grid2">
+      <div class="card"><h3 style="color:var(--demand)">Demanda</h3><p>Si el precio sube (todo lo demás constante), la cantidad demandada tiende a <b>bajar</b>.</p></div>
+      <div class="card"><h3 style="color:var(--supply)">Oferta</h3><p>Si el precio sube (todo lo demás constante), la cantidad ofrecida tiende a <b>subir</b>.</p></div>
+    </div>
+    <div class="callout"><b>Movimiento vs. desplazamiento:</b> un cambio en el precio del mismo bien genera <b>movimiento sobre la curva</b>. Un cambio en otro factor (ingreso, gustos, bienes relacionados, número de agentes, expectativas, costos, tecnología) genera <b>desplazamiento de la curva</b>.</div>
+
+    <h3 class="subhead">Equilibrio, excesos y shocks</h3>
+    <div class="diagram-box">
+      <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
+        <line x1="70" y1="20" x2="70" y2="310" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <line x1="70" y1="310" x2="470" y2="310" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="30" y="18" font-size="12" fill="currentColor" opacity="0.6">Precio</text>
+        <text x="440" y="326" font-size="12" fill="currentColor" opacity="0.6">Cantidad</text>
+        <line x1="70" y1="56.25" x2="396" y2="273.75" stroke="var(--demand)" stroke-width="3"/>
+        <text x="400" y="270" font-size="13" fill="var(--demand)" font-weight="700">D</text>
+        <line x1="70" y1="273.75" x2="396" y2="56.25" stroke="var(--supply)" stroke-width="3"/>
+        <text x="400" y="60" font-size="13" fill="var(--supply)" font-weight="700">S</text>
+        <circle cx="233" cy="165" r="6" fill="var(--accent)"/>
+        <line x1="233" y1="165" x2="233" y2="310" stroke="var(--accent)" stroke-width="1.3" stroke-dasharray="4,3" opacity="0.7"/>
+        <line x1="70" y1="165" x2="233" y2="165" stroke="var(--accent)" stroke-width="1.3" stroke-dasharray="4,3" opacity="0.7"/>
+        <text x="238" y="160" font-size="12.5" fill="var(--accent)" font-weight="700">Equilibrio (Pe, Qe)</text>
+        <text x="35" y="169" font-size="11" fill="var(--accent)" opacity="0.8">Pe</text>
+        <text x="228" y="325" font-size="11" fill="var(--accent)" opacity="0.8">Qe</text>
+      </svg>
+      <div class="legend">
+        <span><span class="swatch" style="background:var(--demand)"></span>Demanda</span>
+        <span><span class="swatch" style="background:var(--supply)"></span>Oferta</span>
+      </div>
+    </div>
+
+    <table>
+      <thead><tr><th>Situación</th><th>Relación</th><th>Presión sobre el precio</th></tr></thead>
+      <tbody>
+        <tr><td>Exceso de oferta (P&gt;Pe)</td><td>Qs &gt; Qd</td><td>Baja</td></tr>
+        <tr><td>Exceso de demanda (P&lt;Pe)</td><td>Qd &gt; Qs</td><td>Sube</td></tr>
+        <tr><td>Equilibrio</td><td>Qs = Qd</td><td>Sin presión sistemática</td></tr>
+      </tbody>
+    </table>
+
+    <div class="grid2">
+      <div class="card">
+        <h3 style="color:var(--demand)">Shock de demanda</h3>
+        <p>Un aumento de demanda desplaza D a la derecha → <b>suben Pe y Qe</b>.</p>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--supply)">Shock de oferta</h3>
+        <p>Una caída de oferta desplaza S a la izquierda → <b>sube Pe y baja Qe</b>.</p>
+      </div>
+    </div>
+    <div class="callout"><b>Shocks simultáneos:</b> si demanda y oferta se desplazan a la vez, el efecto sobre la cantidad puede ser ambiguo — depende de cuál desplazamiento es mayor.</div>
+  </section>
+
+  <!-- ================= CLASE 5 ================= -->
+  <section id="clase5">
+    <h2><span class="step">2</span> Clase 5 · Decisiones detrás de la demanda y la oferta</h2>
+    <p class="lead">¿De dónde provienen las curvas de demanda y oferta? Módulo 1: el consumidor. Módulo 2: el productor.</p>
+
+    <h3 class="subhead">Restricción presupuestaria y precio relativo</h3>
+    <div class="card">
+      <p>El consumidor elige la combinación de bienes que le entrega mayor beneficio posible, dado su ingreso y los precios. Ejemplo: Martina dispone de <b>$12.000</b> semanales para café (C, $2.000) y colaciones (A, $3.000) → <b>2.000C + 3.000A ≤ 12.000</b>.</p>
+      <p class="muted"><b>Precio relativo (PC/PA):</b> mide cuántas unidades de un bien se sacrifican por una unidad adicional de otro — es el costo de oportunidad expresado en bienes.</p>
+    </div>
+
+    <h3 class="subhead">Beneficio marginal y la regla BM/P</h3>
+    <table>
+      <thead><tr><th>Unidad</th><th class="num">BM café</th><th class="num">BM colación</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="num">$6.000</td><td class="num">$7.500</td></tr>
+        <tr><td>2</td><td class="num">$4.000</td><td class="num">$6.000</td></tr>
+        <tr><td>3</td><td class="num">$2.000</td><td class="num">$3.000</td></tr>
+        <tr><td>4</td><td class="num">$1.000</td><td class="num">$1.500</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>Regla BM/P:</b> el beneficio marginal por cada peso gastado en un bien. El próximo peso debe ir donde genere más beneficio por peso gastado.</div>
+
+    <h3 class="subhead">Óptimo interior vs. solución de esquina</h3>
+    <div class="grid2">
+      <div class="card"><h3>Óptimo interior</h3><p>BMx/Px = BMy/Py = ... : el último peso gastado en cada bien rinde lo mismo. No significa gastar igual en cada bien.</p></div>
+      <div class="card"><h3>Solución de esquina</h3><p>El consumidor elige no consumir un bien porque incluso su primera unidad rinde poco por peso frente a otras alternativas.</p></div>
+    </div>
+    <div class="card"><p><b>Mecanismo de la pendiente negativa:</b> baja el precio de un bien → sube su BM/P → se vuelve más atractivo → el consumidor reasigna gasto hacia ese bien → aumenta la cantidad consumida. Así nace la pendiente negativa de la demanda.</p></div>
+
+    <h3 class="subhead">El problema del productor: función de producción y PMg</h3>
+    <p>Una empresa competitiva es tomadora de precios: observa P y decide cuánto producir. <b>q = f(K,L)</b>, con K (capital) fijo y L (trabajo) variable en el corto plazo.</p>
+    <table>
+      <thead><tr><th>Trabajadores (L)</th><th class="num">Producción (q)</th></tr></thead>
+      <tbody>
+        <tr><td>0</td><td class="num">0</td></tr>
+        <tr><td>1</td><td class="num">12</td></tr>
+        <tr><td>2</td><td class="num">28</td></tr>
+        <tr><td>3</td><td class="num">40</td></tr>
+        <tr><td>4</td><td class="num">48</td></tr>
+        <tr><td>5</td><td class="num">52</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>Ley del PMg decreciente:</b> con capital fijo, unidades adicionales de trabajo aportan cada vez menos producción adicional (aunque la producción total puede seguir subiendo).</div>
+
+    <h3 class="subhead">Costo marginal y la regla P = CMg</h3>
+    <div class="card">
+      <p>Si cada trabajador cuesta lo mismo pero produce menos (PMg↓), el costo por unidad adicional sube (CMg↑).</p>
+      <p><b>Regla marginal:</b> conviene producir mientras P &gt; CMg; no conviene si P &lt; CMg; el óptimo se alcanza donde <b>P = CMg</b>. Como el CMg es creciente, precios más altos hacen rentables unidades más costosas → oferta con pendiente positiva.</p>
+    </div>
+  </section>
+
+  <!-- ================= CLASE 6 ================= -->
+  <section id="clase6">
+    <h2><span class="step">3</span> Clase 6 · Elasticidad, bienestar e intervención pública</h2>
+    <p class="lead">La elasticidad mide sensibilidad. Los excedentes y teoremas del bienestar explican por qué el equilibrio competitivo es eficiente. Los controles de precios e impuestos alteran ese equilibrio.</p>
+
+    <h3 class="subhead">Elasticidad-precio</h3>
+    <p>Elasticidad = (%Δ variable respuesta) / (%Δ variable que origina el cambio). Es una medida de magnitud, no depende de las unidades.</p>
+    <table>
+      <thead><tr><th>Clasificación</th><th>Condición</th><th>Significado</th></tr></thead>
+      <tbody>
+        <tr><td>Inelástica</td><td>|ε| &lt; 1</td><td>La cantidad cambia proporcionalmente menos que el precio</td></tr>
+        <tr><td>Unitaria</td><td>|ε| = 1</td><td>La cantidad cambia en la misma proporción que el precio</td></tr>
+        <tr><td>Elástica</td><td>|ε| &gt; 1</td><td>La cantidad cambia proporcionalmente más que el precio</td></tr>
+      </tbody>
+    </table>
+    <div class="grid2">
+      <div class="card"><h3>Determinantes</h3><p class="muted">Sustitutos disponibles · necesidad vs. lujo · importancia en el presupuesto · horizonte temporal para ajustar · definición del mercado (amplia vs. estrecha).</p></div>
+      <div class="card"><h3>Elasticidad e ingreso total (IT=P×Q)</h3><p class="muted">Inelástica: P↑ → IT↑. Unitaria: IT no cambia. Elástica: P↑ → IT↓.</p></div>
+    </div>
+
+    <h3 class="subhead">Elasticidad-ingreso y elasticidad cruzada</h3>
+    <div class="grid2">
+      <div class="card"><h3>Elasticidad-ingreso (εY)</h3><p>εY = %ΔQD / %ΔY. εY&lt;0: bien inferior. 0&lt;εY&lt;1: necesidad. εY&gt;1: bien de lujo.</p></div>
+      <div class="card"><h3>Elasticidad cruzada (εxy)</h3><p>εxy = %ΔQD,x / %ΔPy. εxy&gt;0: sustitutos. εxy&lt;0: complementarios.</p></div>
+    </div>
+
+    <h3 class="subhead">Excedentes y teoremas del bienestar</h3>
+    <div class="diagram-box">
+      <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="70,56.25 233,165 70,165" fill="var(--demand)" opacity="0.18"/>
+        <polygon points="70,273.75 233,165 70,165" fill="var(--supply)" opacity="0.18"/>
+        <line x1="70" y1="20" x2="70" y2="310" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <line x1="70" y1="310" x2="470" y2="310" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="30" y="18" font-size="12" fill="currentColor" opacity="0.6">Precio</text>
+        <text x="440" y="326" font-size="12" fill="currentColor" opacity="0.6">Cantidad</text>
+        <line x1="70" y1="56.25" x2="396" y2="273.75" stroke="var(--demand)" stroke-width="3"/>
+        <text x="400" y="270" font-size="13" fill="var(--demand)" font-weight="700">D</text>
+        <line x1="70" y1="273.75" x2="396" y2="56.25" stroke="var(--supply)" stroke-width="3"/>
+        <text x="400" y="60" font-size="13" fill="var(--supply)" font-weight="700">S</text>
+        <circle cx="233" cy="165" r="6" fill="var(--accent)"/>
+        <line x1="70" y1="165" x2="233" y2="165" stroke="var(--accent)" stroke-width="1.3" stroke-dasharray="4,3" opacity="0.7"/>
+        <text x="95" y="105" font-size="12.5" fill="var(--demand)" font-weight="700">EC</text>
+        <text x="95" y="230" font-size="12.5" fill="var(--supply)" font-weight="700">EP</text>
+        <text x="35" y="169" font-size="11" fill="var(--accent)" opacity="0.8">P*</text>
+      </svg>
+      <div class="legend">
+        <span><span class="swatch" style="background:var(--demand)"></span>Excedente del consumidor (EC)</span>
+        <span><span class="swatch" style="background:var(--supply)"></span>Excedente del productor (EP)</span>
+      </div>
+    </div>
+    <div class="card">
+      <p><b>EC:</b> disposición a pagar menos precio pagado, sumada sobre todas las unidades — área bajo la demanda y sobre P*. <b>EP:</b> precio recibido menos costo — área sobre la oferta y bajo P*. <b>ET = EC + EP</b>, y se maximiza en el equilibrio competitivo.</p>
+    </div>
+    <div class="grid2">
+      <div class="card"><h3>1er teorema del bienestar</h3><p>Bajo competencia perfecta sin fallas de mercado, el equilibrio competitivo es eficiente en el sentido de Pareto.</p></div>
+      <div class="card"><h3>2º teorema del bienestar</h3><p>Una asignación eficiente deseada puede alcanzarse vía mercados competitivos, redistribuyendo dotaciones iniciales.</p></div>
+    </div>
+
+    <h3 class="subhead">Controles de precios</h3>
+    <table>
+      <thead><tr><th>Instrumento</th><th>No vinculante</th><th>Vinculante</th></tr></thead>
+      <tbody>
+        <tr><td>Precio máximo (techo)</td><td>Pmax ≥ P*: sin efecto</td><td>Pmax &lt; P*: QD &gt; QS → escasez</td></tr>
+        <tr><td>Precio mínimo (piso)</td><td>Pmin ≤ P*: sin efecto</td><td>Pmin &gt; P*: QS &gt; QD → exceso de oferta</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>Racionamiento no basado en precios</b> (cuando un control es vinculante): colas, listas de prioridad, discriminación, deterioro de calidad, mercados negros.</div>
+
+    <h3 class="subhead">Impuestos, recaudación y subsidios</h3>
+    <div class="card">
+      <p>La <b>cuña tributaria</b> es t = Pc − Pv. Ejemplo: P*=$3.000, Q*=100, t=$500 → Pc=$3.300, Pv=$2.800, Qt=80. Incidencia: compradores $300, vendedores $200.</p>
+      <p><b>Recaudación</b> = t×Qt = 500×80 = $40.000. <b>Pérdida irrecuperable</b> = ½×t×(Q*−Qt) = ½×500×20 = $5.000.</p>
+      <p class="muted"><b>Regla de incidencia:</b> el lado menos elástico soporta mayor parte de la carga. <b>Subsidio:</b> invierte la cuña (Pv−Pc=s), aumenta la cantidad transada; costo fiscal = s×Qs.</p>
+    </div>
+  </section>
+
+  <!-- ================= CLASE 7 ================= -->
+  <section id="clase7">
+    <h2><span class="step">4</span> Clase 7 · Macroeconomía: ¿cómo medimos una economía?</h2>
+    <p class="lead">El Producto Interno Bruto (PIB) resume la producción de un país en una sola cifra.</p>
+
+    <div class="card">
+      <h3>PIB: definición</h3>
+      <p>Valor de mercado de todos los bienes y servicios <b>finales</b> producidos <b>dentro de un país</b> durante un <b>período</b> determinado.</p>
+      <p class="muted"><b>Bien final vs. intermedio:</b> solo se cuenta el bien final, para evitar la doble contabilización. Ej.: harina $1.000 + pan $2.000 + sándwich final $5.000 → PIB cuenta solo $5.000, no $8.000.</p>
+    </div>
+
+    <div class="callout"><b>Identidad macroeconómica:</b> Producción total = Gasto total = Ingreso total.</div>
+
+    <h3 class="subhead">Y = C + I + G + XN</h3>
+    <table>
+      <thead><tr><th>Componente</th><th>Qué incluye</th></tr></thead>
+      <tbody>
+        <tr><td>C — Consumo</td><td>Bienes y servicios finales de los hogares (vivienda nueva NO es C, es I)</td></tr>
+        <tr><td>I — Inversión</td><td>Capital nuevo, vivienda nueva e inventarios</td></tr>
+        <tr><td>G — Gasto de gobierno</td><td>Bienes, servicios e inversión pública (transferencias NO son G)</td></tr>
+        <tr><td>XN — Exportaciones netas</td><td>Exportaciones − Importaciones (X − M)</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subhead">PIB nominal vs. PIB real</h3>
+    <div class="grid2">
+      <div class="card"><h3>PIB nominal</h3><p>PIBNt = Σ pi,t × qi,t — usa los precios de cada período.</p></div>
+      <div class="card"><h3>PIB real</h3><p>PIBRt = Σ pi,base × qi,t — usa precios constantes; aísla el cambio en cantidades.</p></div>
+    </div>
+    <div class="card">
+      <p class="muted">Ejemplo: el PIB nominal pasó de $400.000 a $527.000 (+31,75%), pero a precios constantes el PIB real pasó de $400.000 a $430.000 (+7,5%). El PIB nominal mezcla precios y cantidades; el real aísla solo cantidades.</p>
+      <p><b>Crecimiento:</b> g = (PIBRt − PIBRt-1) / PIBRt-1 × 100.</p>
+    </div>
+
+    <h3 class="subhead">PIB real per cápita y tasa de desempleo</h3>
+    <div class="grid2">
+      <div class="card"><h3>PIB real per cápita</h3><p>PIB real / población. Mide el nivel material promedio — no muestra la distribución.</p></div>
+      <div class="card"><h3>Tasa de desempleo</h3><p>u = D / (O+D) × 100. El denominador es la <b>fuerza de trabajo</b> (ocupados + desocupados), no toda la población.</p></div>
+    </div>
+  </section>
+
+  <!-- ================= CLASE 8 ================= -->
+  <section id="clase8">
+    <h2><span class="step">5</span> Clase 8 · Productividad y crecimiento económico</h2>
+    <p class="lead">¿Por qué unas economías son más ricas que otras? No es solo cuánto se trabaja, sino cuánto se produce por hora o por trabajador.</p>
+
+    <table>
+      <thead><tr><th>Medida</th><th>Qué es</th><th>Qué muestra</th></tr></thead>
+      <tbody>
+        <tr><td>Producción total (Y)</td><td>PIB real producido</td><td>Tamaño de la economía</td></tr>
+        <tr><td>PIB real per cápita (Y/N)</td><td>Producción promedio por habitante</td><td>Nivel material promedio</td></tr>
+        <tr><td>Productividad laboral (Y/L)</td><td>Producción promedio por trabajador</td><td>Capacidad productiva del trabajo</td></tr>
+      </tbody>
+    </table>
+    <div class="callout">Una economía puede producir menos en total y ser más productiva por trabajador (y viceversa) — son comparaciones distintas y ambas pueden ser correctas a la vez.</div>
+
+    <h3 class="subhead">Y = A · F(K, H, L)</h3>
+    <div class="grid4">
+      <div class="card"><h3>K</h3><p class="muted">Capital físico: maquinaria, equipos, infraestructura.</p></div>
+      <div class="card"><h3>H</h3><p class="muted">Capital humano: conocimientos, experiencia, habilidades.</p></div>
+      <div class="card"><h3>L</h3><p class="muted">Trabajo: cantidad de trabajo utilizada.</p></div>
+      <div class="card"><h3>A</h3><p class="muted">Tecnología: métodos y organización para combinar factores con más eficiencia.</p></div>
+    </div>
+
+    <h3 class="subhead">Rendimientos decrecientes del capital</h3>
+    <div class="card">
+      <p>Al agregar máquinas por trabajador (K/L) manteniendo los demás factores constantes, cada máquina adicional aporta <b>menos</b> producción adicional que la anterior. La producción total sigue subiendo, pero cada vez menos.</p>
+    </div>
+
+    <h3 class="subhead">Acumulación de capital vs. mejora tecnológica</h3>
+    <div class="grid2">
+      <div class="card"><h3>Acumulación de capital (K)</h3><p>Eleva el nivel de producción, pero enfrenta rendimientos decrecientes — no sostiene el crecimiento por sí sola.</p></div>
+      <div class="card"><h3>Mejora tecnológica y de H</h3><p>Mejor uso de los factores disponibles; puede sostener aumentos persistentes de productividad.</p></div>
+    </div>
+    <div class="callout"><b>Crecimiento económico sostenido:</b> aumento persistente de la producción real por habitante en el tiempo. Requiere mejoras en A y H, no solo acumular K.</div>
+  </section>
+
+  <!-- ================= EJERCICIOS ================= -->
+  <section id="ejercicios">
+    <h2><span class="step">6</span> Guía de ejercicios</h2>
+    <p class="lead">31 ejercicios con solución paso a paso, en 9 bloques (Clase 4 a Clase 8). Intenta resolver antes de mirar la respuesta.</p>
+    <div id="exContainer"></div>
+  </section>
+
+  <!-- ================= MAPA CONCEPTUAL ================= -->
+  <section id="mapa">
+    <h2><span class="step">7</span> Mapa conceptual</h2>
+    <p class="lead">Cómo se conectan los conceptos de Clase 4 a Clase 8.</p>
+    <div class="card" style="text-align:center; margin-bottom:20px;">
+      <div style="font-weight:800; color:var(--accent-2); font-size:15px;">PEP 2 — Introducción a la Economía</div>
+      <div class="muted" style="font-size:12.5px;">Clase 4 a Clase 8 · Unidad 2 + Unidad 3</div>
+    </div>
+    <div class="grid5" id="mapaGrid">
+      <div class="map-col c4">
+        <div class="map-head c4">Clase 4 · Mercado y equilibrio</div>
+        <div class="map-stack">
+          <div class="map-leaf">
+            <div class="leaf-title">Mercado competitivo</div>
+            <ul><li>Comprador→demanda · Vendedor→oferta</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Ley demanda/oferta</div>
+            <ul><li>Movimiento vs. desplazamiento</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Equilibrio y excesos</div>
+            <ul><li>Pe, Qe: Qd = Qs</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Shocks</div>
+            <ul><li>D↑→Pe↑Qe↑ · S↓→Pe↑Qe↓</li></ul>
+          </div>
+        </div>
+      </div>
+      <div class="map-col c5">
+        <div class="map-head c5">Clase 5 · Consumidor y productor</div>
+        <div class="map-stack">
+          <div class="map-leaf">
+            <div class="leaf-title">Restricción presupuestaria</div>
+            <ul><li>Precio relativo = costo de oportunidad</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">BM y regla BM/P</div>
+            <ul><li>Igualar BM por peso gastado</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Óptimo interior / esquina</div>
+            <ul><li>BMx/Px = BMy/Py</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Función de producción</div>
+            <ul><li>q=f(K,L) · PMg decreciente</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">CMg y regla P=CMg</div>
+            <ul><li>CMg sube cuando PMg cae</li></ul>
+          </div>
+        </div>
+      </div>
+      <div class="map-col c6">
+        <div class="map-head c6">Clase 6 · Elasticidad y bienestar</div>
+        <div class="map-stack">
+          <div class="map-leaf">
+            <div class="leaf-title">Elasticidad-precio</div>
+            <ul><li>|εD| y εS · determinantes</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Elast. ingreso y cruzada</div>
+            <ul><li>Sustitutos vs. complementarios</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Excedentes y teoremas</div>
+            <ul><li>EC+EP=ET, máximo en competencia</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Controles de precios</div>
+            <ul><li>Techo/piso vinculante</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Impuestos y subsidios</div>
+            <ul><li>Cuña, incidencia, recaudación</li></ul>
+          </div>
+        </div>
+      </div>
+      <div class="map-col c7">
+        <div class="map-head c7">Clase 7 · Medir la economía</div>
+        <div class="map-stack">
+          <div class="map-leaf">
+            <div class="leaf-title">PIB: definición</div>
+            <ul><li>Bien final vs. intermedio</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Identidad macro</div>
+            <ul><li>Y = C+I+G+XN</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">PIB nominal vs. real</div>
+            <ul><li>Real aísla cambios en cantidad</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">PIB per cápita</div>
+            <ul><li>Nivel material promedio</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Tasa de desempleo</div>
+            <ul><li>u = D/(O+D)×100</li></ul>
+          </div>
+        </div>
+      </div>
+      <div class="map-col c8">
+        <div class="map-head c8">Clase 8 · Productividad</div>
+        <div class="map-stack">
+          <div class="map-leaf">
+            <div class="leaf-title">Medidas de productividad</div>
+            <ul><li>Y, Y/N, Y/L</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Y = A·F(K,H,L)</div>
+            <ul><li>K, H, L, A</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Rendimientos decrecientes</div>
+            <ul><li>Cada máquina aporta menos</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Crecimiento sostenido</div>
+            <ul><li>Requiere mejoras en A y H</li></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GLOSARIO ================= -->
+  <section id="glosario">
+    <h2><span class="step">8</span> Glosario — toca para ver la definición</h2>
+    <p class="lead">Repasa los 52 conceptos clave antes de la prueba.</p>
+    <div class="flip-grid" id="flipGrid"></div>
+  </section>
+
+  <!-- ================= PLAN DE REPASO ================= -->
+  <section id="plan">
+    <h2><span class="step">9</span> Plan de repaso</h2>
+    <p class="lead">Desde hoy sábado 22 hasta la prueba, martes 25 de agosto de 2026. Marca las tareas a medida que las completas.</p>
+    <div id="planContainer"></div>
+    <div class="callout"><b>Cómo usarlo:</b> sesiones cortas al principio y al final, más largas a mitad de semana (35–90 min), repartidas en varios días rinden más que una sola maratón. Si un día te falta tiempo, prioriza los ejercicios por sobre releer el resumen.</div>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section id="quiz">
+    <h2><span class="step">10</span> Autoevaluación rápida</h2>
+    <p class="lead">Responde y luego pulsa "Revisar respuestas" para ver tu puntaje.</p>
+    <div id="quizContainer"></div>
+    <div class="quiz-actions">
+      <button class="primary" id="checkQuiz">Revisar respuestas</button>
+      <span id="quizScore"></span>
+    </div>
+  </section>
+
+</div>
+
+<footer>Resumen de estudio generado a partir de las diapositivas de Clase 4 a Clase 8 (Semestre 1, 2026) — Departamento de Economía, USACH. Repasa siempre con tus apuntes y la guía de ejercicios oficial.</footer>
+
+<script>
+  // ---- Active nav highlight ----
+  var navLinks = document.querySelectorAll('#tabNav a');
+  var sections = Array.from(navLinks).map(function(l){ return document.querySelector(l.getAttribute('href')); });
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = sections[0];
+    sections.forEach(function(s){ if(s.offsetTop <= pos) current = s; });
+    navLinks.forEach(function(l){ l.classList.remove('active'); });
+    var idx = sections.indexOf(current);
+    if(idx >= 0) navLinks[idx].classList.add('active');
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+
+  // ---- Glossary flip cards ----
+  var terms = [
+    ["Mercado competitivo", "Muchos compradores y vendedores, bienes homogéneos, información perfecta, sin barreras de entrada/salida → agentes precio-aceptantes."],
+    ["Equilibrio de mercado", "Precio (Pe) y cantidad (Qe) donde Qd = Qs; no hay presión sistemática para cambiar el precio."],
+    ["Exceso de oferta / demanda", "Oferta: Qs>Qd, precio baja. Demanda: Qd>Qs, precio sube."],
+    ["Shock de demanda / oferta", "Demanda↑: suben Pe y Qe. Oferta↓: sube Pe y baja Qe. Simultáneos: efecto en Q puede ser ambiguo."],
+    ["Restricción presupuestaria", "Combinaciones de bienes que un consumidor puede financiar con su ingreso y los precios vigentes."],
+    ["Precio relativo", "PC/PA: mide cuántas unidades de un bien se sacrifican por una unidad adicional de otro (costo de oportunidad)."],
+    ["Beneficio marginal (BM)", "Beneficio adicional que entrega una unidad más de un bien; suele ser decreciente."],
+    ["Regla BM/P", "Beneficio marginal por cada peso gastado en un bien. El próximo peso debe ir donde genere más beneficio por peso."],
+    ["Condición de óptimo interior", "BMx/Px = BMy/Py = ... : el último peso gastado en cada bien rinde lo mismo."],
+    ["Solución de esquina", "El consumidor elige no consumir un bien porque su primera unidad rinde poco por peso frente a otras alternativas."],
+    ["Función de producción", "q = f(K,L): cantidad máxima producible combinando capital (K) y trabajo (L)."],
+    ["Producto marginal (PMg)", "Producción adicional generada por un trabajador adicional. Tiende a ser decreciente con capital fijo."],
+    ["Ley del PMg decreciente", "Con capital fijo, unidades adicionales de trabajo aportan cada vez menos producción adicional."],
+    ["Costo marginal (CMg)", "Costo de producir una unidad adicional. Sube cuando el PMg cae (mismo salario, menos unidades)."],
+    ["Regla marginal (P = CMg)", "Empresa competitiva: produce mientras P>CMg; no produce si P<CMg; óptimo donde P=CMg."],
+    ["Elasticidad", "Mide cuánto cambia porcentualmente una variable cuando otra cambia en 1%. No depende de las unidades."],
+    ["Elasticidad-precio de la demanda", "|εD| = %ΔQD / %ΔP. Inelástica <1, unitaria =1, elástica >1."],
+    ["Elasticidad-precio de la oferta", "εS = %ΔQS / %ΔP. Normalmente positiva."],
+    ["Determinantes de la elasticidad", "Sustitutos, necesidad/lujo, importancia en el presupuesto, horizonte temporal, definición del mercado."],
+    ["Elasticidad e ingreso total", "Demanda inelástica: P↑ → IT↑. Unitaria: IT no cambia. Elástica: P↑ → IT↓."],
+    ["Elasticidad-ingreso", "εY = %ΔQD/%ΔY. εY<0: bien inferior. εY>0: normal (0-1 necesidad, >1 lujo)."],
+    ["Elasticidad cruzada", "εxy = %ΔQD,x/%ΔPy. Positiva: sustitutos. Negativa: complementarios."],
+    ["Excedente del consumidor (EC)", "Disposición a pagar menos precio pagado, sumado sobre todas las unidades. Área bajo la demanda y sobre P*."],
+    ["Excedente del productor (EP)", "Precio recibido menos costo, sumado sobre todas las unidades. Área sobre la oferta y bajo P*."],
+    ["Excedente total (ET)", "ET = EC + EP. Se maximiza en el equilibrio competitivo."],
+    ["Primer teorema del bienestar", "Bajo competencia perfecta sin fallas de mercado, el equilibrio competitivo es eficiente en el sentido de Pareto."],
+    ["Segundo teorema del bienestar", "Una asignación eficiente deseada puede alcanzarse vía mercados competitivos, redistribuyendo dotaciones iniciales."],
+    ["Precio máximo (techo)", "Precio legal más alto permitido. Vinculante si Pmax<P*: genera escasez (QD>QS)."],
+    ["Precio mínimo (piso)", "Precio legal más bajo permitido. Vinculante si Pmin>P*: genera exceso de oferta (QS>QD)."],
+    ["Racionamiento no basado en precios", "Colas, listas de prioridad, discriminación, deterioro de calidad, mercados negros."],
+    ["Cuña tributaria", "t = Pc − Pv: diferencia entre lo que paga el comprador y lo que recibe el vendedor por un impuesto."],
+    ["Incidencia legal vs. económica", "Legal: quién entrega el impuesto al Estado. Económica: quién pierde poder de compra o ingreso real."],
+    ["Principio de equivalencia", "Cobrar el impuesto a compradores o vendedores genera la misma cuña e incidencia económica."],
+    ["Regla de incidencia tributaria", "El lado menos elástico del mercado (demanda u oferta) soporta una mayor proporción de la carga."],
+    ["Recaudación tributaria", "R = t × Qt: impuesto por unidad multiplicado por la cantidad transada tras el impuesto."],
+    ["Pérdida irrecuperable (peso muerto)", "PE = ½×t×(Q*−Qt): caída del excedente total que no se convierte en recaudación."],
+    ["Subsidio", "Invierte la cuña (Pv−Pc=s); aumenta la cantidad transada; costo fiscal = s×Qs."],
+    ["PIB (definición)", "Valor de mercado de todos los bienes y servicios finales producidos dentro de un país durante un período."],
+    ["Bien final vs. intermedio", "Solo se cuenta el bien final en el PIB, para evitar la doble contabilización de insumos."],
+    ["Identidad macroeconómica", "Producción total = Gasto total = Ingreso total."],
+    ["Y = C + I + G + XN", "Consumo + Inversión + Gasto de gobierno + Exportaciones netas (X−M)."],
+    ["PIB nominal", "PIBNt = Σ pi,t × qi,t: usa los precios de cada período."],
+    ["PIB real", "PIBRt = Σ pi,base × qi,t: usa precios constantes; aísla el cambio en cantidades."],
+    ["Crecimiento del PIB real", "g = (PIBRt − PIBRt-1) / PIBRt-1 × 100."],
+    ["PIB real per cápita", "PIB real dividido por la población; nivel material promedio (no muestra distribución)."],
+    ["Tasa de desempleo", "u = D / (O+D) × 100, donde el denominador es la fuerza de trabajo (ocupados + desocupados)."],
+    ["Productividad laboral (Y/L)", "Producción promedio por trabajador; capacidad productiva del trabajo."],
+    ["Y = A F(K,H,L)", "Función de producción agregada: K capital físico, H capital humano, L trabajo, A tecnología."],
+    ["Capital físico (K)", "Maquinaria, equipos e infraestructura que aumentan la producción por hora trabajada."],
+    ["Capital humano (H)", "Conocimientos, experiencia y habilidades; tiene un costo presente y rinde capacidad futura."],
+    ["Rendimientos decrecientes del capital", "Cada máquina adicional por trabajador aporta menos producción adicional que la anterior."],
+    ["Crecimiento económico sostenido", "Aumento persistente de la producción real por habitante en el tiempo; requiere mejoras en A y H, no solo K."]
+  ];
+  var grid = document.getElementById('flipGrid');
+  terms.forEach(function(t){
+    var card = document.createElement('div');
+    card.className = 'flip-card';
+    card.innerHTML = '<div class="flip-inner"><div class="flip-front">' + t[0] + '</div><div class="flip-back">' + t[1] + '</div></div>';
+    card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+    grid.appendChild(card);
+  });
+
+  // ---- Ejercicios ----
+  var ejercicios = [
+    { block: "Bloque 1 · Mercado, equilibrio y shocks (Clase 4)", items: [
+      ["Con Qd=120,100,80,60,40 y Qs=40,70,80,100,130 a precios $1.000 a $3.000, ¿cuál es el precio y la cantidad de equilibrio? Clasifica cada fila como exceso de oferta, exceso de demanda o equilibrio.",
+       "Precio de equilibrio: <b>$2.000</b>; cantidad de equilibrio: <b>80</b> (Qd=Qs=80). A $1.000 y $1.500 hay exceso de demanda (Qd&gt;Qs). A $2.500 y $3.000 hay exceso de oferta (Qs&gt;Qd)."],
+      ["Al comenzar el semestre aumenta la demanda por café y por arriendos cerca del campus. La oferta de café es relativamente elástica, y la de arriendos es inelástica en el corto plazo. ¿En qué mercado aumentará más el precio? ¿En cuál aumentará más la cantidad?",
+       "Con oferta más inelástica (arriendos), una mayor parte del ajuste ocurre vía precio: el precio sube más. Con oferta más elástica (café), una mayor parte del ajuste ocurre vía cantidad: la cantidad aumenta más."],
+    ]},
+    { block: "Bloque 2 · Decisión del consumidor (Clase 5)", items: [
+      ["Martina dispone de un ingreso semanal de $12.000 para comprar cafés (C) y colaciones (A). PC=$2.000, PA=$3.000. Escribe su restricción presupuestaria.",
+       "<b>2.000C + 3.000A ≤ 12.000</b>."],
+      ["Calcula la cantidad máxima de cafés que puede comprar Martina si destina todo su ingreso a cafés. Luego, la cantidad máxima de colaciones.",
+       "Cafés: 12.000/2.000 = <b>6 cafés</b>. Colaciones: 12.000/3.000 = <b>4 colaciones</b>."],
+      ["Determina si las combinaciones (C,A)=(3,2) y (C,A)=(1,3) son factibles, justificando con el gasto total.",
+       "(3,2): gasto = 3×2.000 + 2×3.000 = 6.000+6.000 = $12.000 → <b>factible</b> (agota el presupuesto). (1,3): gasto = 1×2.000 + 3×3.000 = 2.000+9.000 = $11.000 → <b>factible</b> (no agota todo el presupuesto)."],
+      ["Con BM café: unidad1=$6.000, BM colación: unidad1=$7.500, calcula el beneficio marginal por peso gastado de la primera unidad de cada bien (BMC/PC y BMA/PA, con PC=$2.000, PA=$3.000). ¿Cuál debería comprar primero?",
+       "BMC/PC = 6.000/2.000 = <b>3</b>. BMA/PA = 7.500/3.000 = <b>2,5</b>. Como 3 &gt; 2,5, debería comprar primero la unidad de café: rinde más beneficio por peso gastado."],
+      ["Si el precio del café baja a $1.000 (manteniendo constante el ingreso y el precio de la colación), ¿qué ocurre con la restricción presupuestaria y con la cantidad demandada de café?",
+       "La restricción presupuestaria gira: ahora se pueden comprar hasta 12.000/1.000=12 cafés (más que antes) manteniendo igual el máximo de colaciones. Al bajar el precio, sube el BM/P del café, por lo que Martina reasigna gasto hacia el café y su cantidad demandada de café aumenta — consistente con la ley de la demanda."],
+    ]},
+    { block: "Bloque 3 · Producción y costo marginal (Clase 5)", items: [
+      ["Una cafetería utiliza trabajadores para producir cafés (cada trabajador gana $12.000 al día): L=0→q=0, L=1→q=12, L=2→q=28, L=3→q=40, L=4→q=48, L=5→q=52. Calcula el producto marginal (PMg) de cada trabajador adicional, del 1° al 5°.",
+       "PMg1=12−0=12. PMg2=28−12=16. PMg3=40−28=12. PMg4=48−40=8. PMg5=52−48=4. (El PMg sube al inicio y luego decrece — patrón de rendimientos decrecientes tras cierto punto)."],
+      ["Calcula el costo marginal (CMg) de producir cada café adicional en los tramos del 3° al 5° trabajador (cada trabajador cuesta $12.000).",
+       "CMg3 = 12.000/12 = <b>$1.000</b> por café. CMg4 = 12.000/8 = <b>$1.500</b> por café. CMg5 = 12.000/4 = <b>$3.000</b> por café. A medida que el PMg cae, el CMg sube."],
+      ["Si el precio de mercado del café es P=$1.200, ¿hasta qué trabajador conviene contratar, aplicando la regla P=CMg?",
+       "Conviene contratar mientras P&gt;CMg. El 3er trabajador tiene CMg=$1.000 (&lt;$1.200, conviene). El 4° tiene CMg=$1.500 (&gt;$1.200, no conviene). Por lo tanto, la cafetería contrata hasta el <b>3er trabajador</b>, produciendo <b>40 cafés</b>."],
+    ]},
+    { block: "Bloque 4 · Elasticidad-precio, ingreso y cruzada (Clase 6)", items: [
+      ["Una cafetería aumenta el precio de sus cafés en 10%. La cantidad demandada disminuye en 5%. Calcula |εD|, clasifica la demanda e interpreta el resultado.",
+       "|εD| = 5%/10% = <b>0,5</b>. Es <b>inelástica</b> (|ε|&lt;1): la cantidad demandada responde proporcionalmente menos que el precio. Interpretación: los consumidores tienen pocas alternativas cercanas o el café representa una parte pequeña de su presupuesto."],
+      ["¿Qué ocurre con el ingreso total de la cafetería del ejercicio anterior? ¿Cómo cambiaría la elasticidad si aparecieran varias cafeterías sustitutas cerca del campus?",
+       "Con demanda inelástica, si P sube, el ingreso total (IT=P×Q) <b>aumenta</b>: el efecto precio domina al efecto cantidad. Si aparecen sustitutos cercanos, la demanda se vuelve <b>más elástica</b> (los consumidores tienen más alternativas para cambiarse)."],
+      ["El ingreso promedio de los estudiantes aumenta 8%, y la demanda de almuerzos preparados aumenta 12%. Calcula la elasticidad-ingreso y clasifica el bien.",
+       "εY = 12%/8% = <b>1,5</b>. Como εY&gt;1, los almuerzos preparados son un <b>bien normal de lujo</b>: su demanda responde más que proporcionalmente al ingreso."],
+      ["El precio del té aumenta 10% y la demanda de café aumenta 6%. Calcula la elasticidad cruzada entre café y té, y determina si son sustitutos o complementarios.",
+       "εxy = 6%/10% = <b>0,6</b> (positiva). Como εxy&gt;0, café y té son bienes <b>sustitutos</b>: al subir el precio del té, aumenta la demanda de café."],
+    ]},
+    { block: "Bloque 5 · Equilibrio y excedentes (Clase 6)", items: [
+      ["En un mercado competitivo: PD = 7.000 − 50Q, PO = 1.000 + 50Q. Calcula el precio y la cantidad de equilibrio.",
+       "Igualando: 7.000−50Q = 1.000+50Q → 6.000 = 100Q → Q* = <b>60</b>. P* = 7.000−50(60) = 7.000−3.000 = <b>$4.000</b>."],
+      ["Calcula el excedente del consumidor (EC), usando EC = ½ × base × altura.",
+       "La demanda corta el eje P en 7.000 (Q=0). Altura del triángulo = 7.000−4.000 = 3.000. Base = Q* = 60. EC = ½×60×3.000 = <b>$90.000</b>."],
+      ["Calcula el excedente del productor (EP).",
+       "La oferta corta el eje P en 1.000 (Q=0). Altura = 4.000−1.000 = 3.000. Base = 60. EP = ½×60×3.000 = <b>$90.000</b>."],
+      ["Calcula el excedente total (ET) y explica por qué el equilibrio competitivo lo maximiza.",
+       "ET = EC+EP = 90.000+90.000 = <b>$180.000</b>. Se maximiza porque hasta Q*=60 toda unidad tiene disposición a pagar mayor que el costo (conviene intercambiarla); más allá de Q* el costo supera la disposición a pagar, por lo que agregar esas unidades reduciría el excedente total."],
+      ["Si aumenta la demanda del bien (la curva de demanda se desplaza a la derecha), sin hacer cálculos, ¿qué ocurre con precio, cantidad, EC, EP y ET?",
+       "El nuevo equilibrio tiene mayor precio y mayor cantidad. El excedente del productor aumenta (vende más a mejor precio). El excedente del consumidor puede subir o bajar según cuánto suba el precio, pero el <b>excedente total del mercado aumenta</b>, ya que se realizan más transacciones beneficiosas."],
+    ]},
+    { block: "Bloque 6 · Controles de precios (Clase 6)", items: [
+      ["Con el mismo mercado (PD=7.000−50Q, PO=1.000+50Q, P*=$4.000, Q*=60), la autoridad fija un precio máximo Pmax=$3.000. Determina si es vinculante.",
+       "Pmax=$3.000 &lt; P*=$4.000, por lo tanto el precio máximo <b>SÍ es vinculante</b>: obliga a transar por debajo del precio de equilibrio."],
+      ["Calcula la cantidad demandada y la cantidad ofrecida al precio máximo, y determina si hay escasez.",
+       "QD: 3.000 = 7.000−50Q → 50Q=4.000 → QD=<b>80</b>. QS: 3.000 = 1.000+50Q → 50Q=2.000 → QS=<b>40</b>. Como QD(80) &gt; QS(40), hay <b>escasez de 40 unidades</b>: exceso de demanda."],
+    ]},
+    { block: "Bloque 7 · Impuestos y pérdida irrecuperable (Clase 6)", items: [
+      ["En el mercado del café: P*=$3.000, Q*=100. Se aplica un impuesto específico t=$500. Tras el impuesto, Pc=$3.300, Pv=$2.800, Qt=80. Verifica que Pc−Pv=t, y calcula la incidencia por unidad de compradores y de vendedores.",
+       "Pc−Pv = 3.300−2.800 = $500 = t. ✓ Incidencia compradores: Pc−P* = 3.300−3.000 = <b>$300</b>. Incidencia vendedores: P*−Pv = 3.000−2.800 = <b>$200</b>. $300+$200=$500=t."],
+      ["Calcula la recaudación tributaria y la pérdida irrecuperable (peso muerto).",
+       "Recaudación = t×Qt = 500×80 = <b>$40.000</b>. Pérdida irrecuperable = ½×t×(Q*−Qt) = ½×500×(100−80) = ½×500×20 = <b>$5.000</b>."],
+      ["Si la demanda de este mercado fuera más inelástica, ¿la carga tributaria de los compradores sería mayor o menor? ¿Y la pérdida irrecuperable?",
+       "Con demanda más inelástica, los compradores cambian poco su cantidad ante el impuesto (les resulta difícil evitarlo), por lo que soportan una <b>MAYOR</b> proporción de la carga. La pérdida irrecuperable sería <b>MENOR</b>, porque se pierden menos transacciones (la caída en la cantidad transada es menor)."],
+    ]},
+    { block: "Bloque 8 · Medición del PIB (Clase 7)", items: [
+      ["Dos bienes y dos períodos — Café: P1=$2.000, Q1=100, P2=$2.500, Q2=110. Almuerzo: P1=$5.000, Q1=40, P2=$6.000, Q2=42. Calcula el PIB nominal del período 1 y del período 2.",
+       "PIBN1 = 2.000×100 + 5.000×40 = 200.000+200.000 = <b>$400.000</b>. PIBN2 = 2.500×110 + 6.000×42 = 275.000+252.000 = <b>$527.000</b>."],
+      ["Calcula el PIB real del período 2, usando los precios del período 1 como base.",
+       "PIBR2 = 2.000×110 + 5.000×42 = 220.000+210.000 = <b>$430.000</b> (PIBR1 = PIBN1 = $400.000, porque ya está a precios del período 1)."],
+      ["Calcula el crecimiento del PIB real entre el período 1 y el período 2, y compáralo con el crecimiento del PIB nominal.",
+       "Crecimiento real: (430.000−400.000)/400.000×100 = <b>7,5%</b>. Crecimiento nominal: (527.000−400.000)/400.000×100 = <b>31,75%</b>. El PIB nominal creció mucho más porque mezcla el efecto de precios más altos con el de mayor cantidad producida; el PIB real (7,5%) aísla solo el cambio en cantidades."],
+      ["Una economía tiene 900 ocupados, 100 desocupados y 300 personas fuera de la fuerza de trabajo. Calcula la tasa de desempleo.",
+       "Fuerza de trabajo = 900+100 = 1.000. u = 100/1.000×100 = <b>10%</b>. (No se divide por 1.300, porque las personas fuera de la fuerza de trabajo no participan en el mercado laboral)."],
+    ]},
+    { block: "Bloque 9 · Productividad y crecimiento (Clase 8)", items: [
+      ["Dos economías producen un único bien agregado: Economía A: Y=600, L=100. Economía B: Y=480, L=60. Calcula la productividad laboral (Y/L) de cada una. ¿Cuál produce más en total? ¿Cuál es más productiva por trabajador?",
+       "Y/L (A) = 600/100 = <b>6</b>. Y/L (B) = 480/60 = <b>8</b>. La Economía A produce más en total (600 &gt; 480), pero la Economía B es más productiva por trabajador (8 &gt; 6). Ambas afirmaciones son correctas simultáneamente: tamaño y productividad son comparaciones distintas."],
+      ["Un trabajador recibe máquinas adicionales (K/L) sin cambiar su jornada, formación ni tecnología. Producción por trabajador: 0 máq.→0, 1 máq.→30, 2 máq.→50, 3 máq.→64, 4 máq.→73. Calcula los aportes marginales de cada máquina y describe el patrón.",
+       "Aporte 1ª máquina: 30−0=30. 2ª: 50−30=20. 3ª: 64−50=14. 4ª: 73−64=9. El patrón es de <b>rendimientos decrecientes</b>: cada máquina adicional aporta menos producción que la anterior, aunque la producción total sigue aumentando."],
+      ["Dos economías con igual número de trabajadores: una solo compra más máquinas (K); la otra mejora equipos, formación (H) y procesos (A) a la vez. ¿Cuál tiene mejores condiciones para sostener el crecimiento en el largo plazo?",
+       "La que mejora H y A además de K tiene mejores condiciones para sostener el crecimiento: la sola acumulación de capital (K) enfrenta rendimientos decrecientes y eleva el nivel pero no sostiene el crecimiento indefinidamente, mientras que la mejora tecnológica y de capital humano puede generar aumentos persistentes de productividad."],
+    ]},
+  ];
+
+  var exContainer = document.getElementById('exContainer');
+  var exCounter = 0;
+  ejercicios.forEach(function(block){
+    var h = document.createElement('h3');
+    h.className = 'subhead';
+    h.textContent = block.block;
+    exContainer.appendChild(h);
+    block.items.forEach(function(item){
+      exCounter++;
+      var card = document.createElement('div');
+      card.className = 'ex-card';
+      var solId = 'sol-' + exCounter;
+      card.innerHTML =
+        '<div class="ex-num">Ejercicio ' + exCounter + '</div>' +
+        '<p class="ex-q">' + item[0] + '</p>' +
+        '<button class="ex-toggle" data-target="' + solId + '">Ver solución</button>' +
+        '<div class="ex-sol" id="' + solId + '"><b>Solución:</b> ' + item[1] + '</div>';
+      exContainer.appendChild(card);
+    });
+  });
+  exContainer.addEventListener('click', function(e){
+    if(e.target.classList.contains('ex-toggle')){
+      var sol = document.getElementById(e.target.dataset.target);
+      var open = sol.classList.toggle('open');
+      e.target.textContent = open ? 'Ocultar solución' : 'Ver solución';
+    }
+  });
+
+  // ---- Plan de repaso ----
+  var plan = [
+    { dow:'Sáb', date:'22', topic:'Clase 4 · Mercado y equilibrio — y Clase 5 · Consumidor y productor', dur:'≈ 100 min', tasks:[
+      'Lee el resumen — mercado competitivo, equilibrio y shocks; luego restricción presupuestaria, BM y regla BM/P, óptimo interior vs. solución de esquina, función de producción, PMg, CMg y regla P=CMg',
+      'Resuelve los ejercicios 1 a 10 de la Guía (Bloques 1, 2 y 3 — mercado, problema de Martina, cafetería)',
+      'Repasa las flashcards / glosario 1 a 19 y las ramas "Clase 4" y "Clase 5" del mapa conceptual'] },
+    { dow:'Dom', date:'23', topic:'Clase 6 completa · Elasticidad, bienestar, controles de precios e impuestos', dur:'≈ 100 min', tasks:[
+      'Lee el resumen — elasticidad-precio, determinantes, elasticidad-ingreso y cruzada, excedentes y teoremas del bienestar, precios máximos/mínimos, cuña e incidencia tributaria, recaudación, pérdida irrecuperable, subsidios',
+      'Resuelve los ejercicios 11 a 24 de la Guía (Bloques 4, 5, 6 y 7)',
+      'Repasa las flashcards / glosario 20 a 41 y la rama "Clase 6" del mapa conceptual',
+      'Rinde la autoevaluación de esta página una vez'] },
+    { dow:'Lun', date:'24', topic:'Clase 7 · PIB — y Clase 8 · Productividad y crecimiento — repaso final', dur:'≈ 90 min', tasks:[
+      'Lee el resumen — PIB, identidad macro, Y=C+I+G+XN, PIB nominal vs. real, desempleo; luego medidas de productividad, Y=A·F(K,H,L), rendimientos decrecientes, crecimiento sostenido',
+      'Resuelve los ejercicios 25 a 31 de la Guía (Bloques 8 y 9)',
+      'Repasa las flashcards / glosario 42 a 52, luego las 52 completas una vez, rápido',
+      'Revisa el mapa conceptual completo (5 ramas) de un vistazo, en voz alta',
+      'Repite la autoevaluación una última vez, sin mirar apuntes',
+      'Nada de estudio nuevo en la noche — prioriza dormir bien'] },
+    { dow:'Mar', date:'25', topic:'🎯 Día del PEP 2', dur:null, exam:true, tasks:[
+      'Repaso rápido de 10 min por la mañana: glosario y mapa conceptual',
+      'Desayuna y llega con tiempo — no estudies material nuevo antes de entrar'] },
+  ];
+  var planContainer = document.getElementById('planContainer');
+  plan.forEach(function(d, di){
+    var div = document.createElement('div');
+    div.className = 'plan-day' + (d.exam ? ' exam' : '');
+    var tasksHtml = d.tasks.map(function(t, ti){
+      return '<label><input type="checkbox" id="pt-'+di+'-'+ti+'"> <span>'+t+'</span></label>';
+    }).join('');
+    div.innerHTML =
+      '<div class="plan-daylabel"><div class="dow">'+d.dow+'</div><div class="date">'+d.date+'</div></div>' +
+      '<div><div class="plan-topic">'+d.topic+'</div><div class="plan-tasks">'+tasksHtml+'</div>' +
+      (d.dur ? '<span class="plan-dur">'+d.dur+'</span>' : '') + '</div>';
+    planContainer.appendChild(div);
+  });
+
+  // ---- Quiz ----
+  var quiz = [
+    {
+      q: "En un mercado competitivo, los agentes son...",
+      opts: ["Formadores de precio", "Tomadores de precio (precio-aceptantes)", "Monopolistas", "Reguladores del Estado"],
+      correct: 1
+    },
+    {
+      q: "Si el precio de mercado está por encima del precio de equilibrio, se produce...",
+      opts: ["Exceso de demanda", "Exceso de oferta", "Un nuevo equilibrio inmediato", "Ningún cambio"],
+      correct: 1
+    },
+    {
+      q: "La regla del beneficio marginal por peso (BM/P) indica que el próximo peso del consumidor debe destinarse a...",
+      opts: ["El bien más barato disponible", "El bien que entregue mayor beneficio marginal por peso gastado", "Dividirse en partes iguales entre todos los bienes", "El bien con mayor beneficio marginal total, sin importar el precio"],
+      correct: 1
+    },
+    {
+      q: "La condición de óptimo interior del consumidor se cumple cuando...",
+      opts: ["Se gasta la misma cantidad de dinero en cada bien", "BMx/Px = BMy/Py para todos los bienes consumidos", "Se consume la mayor cantidad posible de un solo bien", "El precio de todos los bienes es igual"],
+      correct: 1
+    },
+    {
+      q: "Según la ley del producto marginal decreciente, cuando el PMg de los trabajadores cae...",
+      opts: ["El costo marginal (CMg) también cae", "El costo marginal (CMg) sube", "La producción total necesariamente cae", "El salario baja automáticamente"],
+      correct: 1
+    },
+    {
+      q: "La regla marginal de la empresa competitiva señala que el óptimo de producción se alcanza cuando...",
+      opts: ["P > CMg", "P < CMg", "P = CMg", "CMg = 0"],
+      correct: 2
+    },
+    {
+      q: "Si |εD| = 0,4, la demanda es...",
+      opts: ["Elástica", "Unitaria", "Inelástica", "Perfectamente elástica"],
+      correct: 2
+    },
+    {
+      q: "Si la demanda de un bien es inelástica y su precio sube, el ingreso total del vendedor...",
+      opts: ["Aumenta", "Disminuye", "No cambia", "Depende del costo marginal"],
+      correct: 0
+    },
+    {
+      q: "Un bien con elasticidad-ingreso εY > 1 se clasifica como...",
+      opts: ["Bien inferior", "Bien normal de primera necesidad", "Bien normal de lujo", "Bien complementario"],
+      correct: 2
+    },
+    {
+      q: "El excedente del consumidor (EC) corresponde al área...",
+      opts: ["Bajo la curva de oferta y sobre el precio de equilibrio", "Bajo la curva de demanda y sobre el precio de equilibrio", "Sobre la curva de demanda", "Entre las curvas de oferta y demanda a cualquier precio"],
+      correct: 1
+    },
+    {
+      q: "Según el primer teorema del bienestar, bajo competencia perfecta y sin fallas de mercado...",
+      opts: ["El equilibrio competitivo siempre es equitativo", "El equilibrio competitivo es eficiente en el sentido de Pareto", "El Estado debe fijar los precios", "No existe excedente del consumidor"],
+      correct: 1
+    },
+    {
+      q: "Un precio máximo (techo) es vinculante cuando...",
+      opts: ["Pmax es mayor o igual al precio de equilibrio", "Pmax es menor que el precio de equilibrio", "Pmax es igual al costo marginal", "Nunca es vinculante en mercados competitivos"],
+      correct: 1
+    },
+    {
+      q: "La regla de incidencia tributaria establece que la mayor parte de la carga de un impuesto recae sobre...",
+      opts: ["El lado más elástico del mercado", "El lado menos elástico del mercado", "Siempre los vendedores", "Siempre los compradores"],
+      correct: 1
+    },
+    {
+      q: "Para evitar la doble contabilización, el PIB solo considera...",
+      opts: ["Los bienes intermedios", "Los bienes y servicios finales", "Todos los bienes producidos en cualquier etapa", "Solo los bienes exportados"],
+      correct: 1
+    },
+    {
+      q: "La principal diferencia entre PIB nominal y PIB real es que el PIB real...",
+      opts: ["Excluye el sector público", "Usa precios constantes de un período base, aislando el cambio en cantidades", "Solo mide bienes importados", "Es siempre mayor que el nominal"],
+      correct: 1
+    },
+    {
+      q: "La tasa de desempleo se calcula dividiendo a los desocupados por...",
+      opts: ["Toda la población del país", "La población en edad de trabajar", "La fuerza de trabajo (ocupados + desocupados)", "El número de ocupados únicamente"],
+      correct: 2
+    },
+    {
+      q: "Los rendimientos decrecientes del capital implican que, manteniendo L y tecnología constantes...",
+      opts: ["Cada máquina adicional aporta más producción que la anterior", "Cada máquina adicional aporta menos producción adicional que la anterior", "La producción total siempre disminuye", "El capital deja de ser útil después de cierto punto"],
+      correct: 1
+    },
+    {
+      q: "En Y = A·F(K,H,L), la letra A representa...",
+      opts: ["Capital físico", "Capital humano", "Tecnología", "Trabajo"],
+      correct: 2
+    }
+  ];
+
+  var qc = document.getElementById('quizContainer');
+  quiz.forEach(function(item, qi){
+    var div = document.createElement('div');
+    div.className = 'quiz-q';
+    var optsHtml = item.opts.map(function(o, oi){
+      return '<label class="opt" data-qi="'+qi+'" data-oi="'+oi+'">' +
+             '<input type="radio" name="q'+qi+'" value="'+oi+'"> <span>'+o+'</span></label>';
+    }).join('');
+    div.innerHTML = '<p class="qtext">' + (qi+1) + '. ' + item.q + '</p><div class="quiz-opts">' + optsHtml + '</div>';
+    qc.appendChild(div);
+  });
+
+  document.getElementById('checkQuiz').addEventListener('click', function(){
+    var score = 0;
+    quiz.forEach(function(item, qi){
+      var selected = document.querySelector('input[name="q'+qi+'"]:checked');
+      var opts = document.querySelectorAll('.opt[data-qi="'+qi+'"]');
+      opts.forEach(function(o){
+        o.classList.remove('correct','incorrect');
+        var oi = parseInt(o.dataset.oi, 10);
+        if(oi === item.correct) o.classList.add('correct');
+        else if(selected && parseInt(selected.value,10) === oi) o.classList.add('incorrect');
+      });
+      if(selected && parseInt(selected.value,10) === item.correct) score++;
+    });
+    document.getElementById('quizScore').textContent = 'Puntaje: ' + score + ' / ' + quiz.length;
+  });
+</script>
+</body>
+</html>
