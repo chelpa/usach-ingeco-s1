@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de Estudio Interactiva — Administración (Robbins)</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  p{ color: inherit; }
+  :root, .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --surface-2:      #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.10);
+    --series-1:       #2a78d6; /* blue - acento principal */
+    --series-2:       #eb6834; /* orange */
+    --series-3:       #1baf7a; /* aqua */
+    --series-4:       #eda100; /* yellow */
+    --series-7:       #4a3aa7; /* violet */
+    --good:           #0ca30c;
+    --good-text:      #006300;
+    --warning:        #fab219;
+    --critical:       #d03b3b;
+    --card-bg:        #ffffff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --surface-2:      #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.10);
+      --series-1:       #3987e5;
+      --series-2:       #d95926;
+      --series-3:       #199e70;
+      --series-4:       #c98500;
+      --series-7:       #9085e9;
+      --good:           #0ca30c;
+      --good-text:      #0ca30c;
+      --warning:        #fab219;
+      --critical:       #e66767;
+      --card-bg:        #222220;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --surface-1:      #1a1a19;
+    --surface-2:      #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --border:         rgba(255,255,255,0.10);
+    --series-1:       #3987e5;
+    --series-2:       #d95926;
+    --series-3:       #199e70;
+    --series-4:       #c98500;
+    --series-7:       #9085e9;
+    --good:           #0ca30c;
+    --good-text:      #0ca30c;
+    --warning:        #fab219;
+    --critical:       #e66767;
+    --card-bg:        #222220;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--surface-2);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100vh; }
+  a { color: inherit; }
+
+  .app-header {
+    position: sticky; top: 100px; z-index: 20;
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--gridline);
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .app-header .brand { display:flex; align-items:center; gap:10px; cursor:pointer; }
+  .app-header .brand .logo {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--series-1), var(--series-7));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:700; font-size:15px; flex:none;
+  }
+  .app-header h1 { font-size: 16px; margin: 0; line-height:1.2; }
+  .app-header .subtitle { font-size:12px; color:var(--text-muted); margin:0; }
+  .header-actions { display:flex; align-items:center; gap:8px; }
+  .icon-btn {
+    border: 1px solid var(--border); background: var(--surface-1); color: var(--text-primary);
+    width: 36px; height: 36px; border-radius: 9px; cursor: pointer;
+    display:flex; align-items:center; justify-content:center; font-size:16px;
+  }
+  .icon-btn:hover { background: var(--gridline); }
+
+  main { max-width: 980px; margin: 0 auto; padding: 24px 20px 64px; }
+  .hidden { display: none !important; }
+
+  /* ---------- Dashboard ---------- */
+  .stat-row { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:26px; }
+  .stat-tile {
+    background: var(--card-bg); border:1px solid var(--border); border-radius: 14px;
+    padding: 16px 18px;
+  }
+  .stat-tile .label { font-size:12px; color:var(--text-muted); margin:0 0 6px; text-transform:uppercase; letter-spacing:.03em;}
+  .stat-tile .value { font-size:26px; font-weight:700; margin:0; }
+  .stat-tile .value small { font-size: 14px; color: var(--text-secondary); font-weight:500; }
+
+  .section-title { font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--text-secondary); margin: 28px 0 12px; }
+
+  .chapter-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(210px,1fr)); gap:14px; }
+  .chapter-card {
+    background: var(--card-bg); border:1px solid var(--border); border-radius:14px;
+    padding:16px; cursor:pointer; text-align:left; transition: transform .12s ease, border-color .12s ease;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .chapter-card:hover { transform: translateY(-2px); border-color: var(--series-1); }
+  .chapter-card .cap-num { font-size:12px; font-weight:700; color: var(--series-1); text-transform:uppercase; letter-spacing:.04em; }
+  .chapter-card h3 { font-size:15px; margin:0; line-height:1.3; min-height:40px; }
+  .chapter-card .pages { font-size:11px; color:var(--text-muted); }
+  .progress-track { height:6px; border-radius:4px; background:var(--gridline); overflow:hidden; }
+  .progress-fill { height:100%; background: var(--series-1); border-radius:4px; }
+  .chapter-card .mini-stats { display:flex; justify-content:space-between; font-size:11px; color:var(--text-secondary); }
+  .badge-done { display:inline-flex; align-items:center; gap:4px; font-size:11px; color: var(--good-text); font-weight:600; }
+
+  /* ---------- Chapter view ---------- */
+  .back-btn {
+    display:inline-flex; align-items:center; gap:6px; background:none; border:none; color:var(--text-secondary);
+    font-size:13px; cursor:pointer; padding:6px 0; margin-bottom:10px;
+  }
+  .back-btn:hover { color: var(--series-1); }
+  .chapter-head h2 { margin:0 0 2px; font-size:22px; }
+  .chapter-head p { margin:0; color:var(--text-muted); font-size:13px; }
+
+  .tabs { display:flex; gap:6px; margin: 18px 0 20px; border-bottom:1px solid var(--gridline); }
+  .tab-btn {
+    background:none; border:none; padding:10px 14px; font-size:13px; font-weight:600;
+    color:var(--text-muted); cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px;
+  }
+  .tab-btn.active { color: var(--series-1); border-bottom-color: var(--series-1); }
+  .tab-panel { display:none; }
+  .tab-panel.active { display:block; }
+
+  /* Resumen */
+  .summary-box {
+    background: var(--card-bg); border:1px solid var(--border); border-radius:14px;
+    padding:22px; font-size:15px; line-height:1.7; color: var(--text-primary);
+  }
+  .summary-box strong { color: var(--series-1); }
+
+  /* Flashcards */
+  .flash-wrap { display:flex; flex-direction:column; align-items:center; gap:16px; }
+  .flash-meta { display:flex; justify-content:space-between; width:100%; max-width:520px; font-size:12px; color:var(--text-muted); }
+  .flash-progress { width:100%; max-width:520px; }
+  .flashcard-scene { width:100%; max-width:520px; height:260px; perspective: 1400px; }
+  .flashcard {
+    position:relative; width:100%; height:100%; cursor:pointer;
+    transform-style: preserve-3d; transition: transform .5s cubic-bezier(.4,.2,.2,1);
+  }
+  .flashcard.flipped { transform: rotateY(180deg); }
+  .flash-face {
+    position:absolute; inset:0; backface-visibility:hidden;
+    border-radius:16px; border:1px solid var(--border); background: var(--card-bg);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    padding:26px; font-size:17px; line-height:1.5; box-shadow: 0 6px 18px rgba(0,0,0,.06);
+  }
+  .flash-face .kicker { position:absolute; top:14px; left:16px; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-muted); }
+  .flash-face.back { transform: rotateY(180deg); background: var(--surface-1); }
+  .flash-controls { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; width:100%; max-width:520px; }
+  .btn {
+    border:1px solid var(--border); background: var(--card-bg); color:var(--text-primary);
+    padding:9px 14px; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .btn:hover { border-color: var(--series-1); }
+  .btn.primary { background: var(--series-1); border-color: var(--series-1); color:#fff; }
+  .btn.primary:hover { opacity:.9; }
+  .btn.good { background: var(--good); border-color: var(--good); color:#fff; }
+  .btn.warn { background: var(--surface-1); border-color: var(--warning); color: var(--text-primary); }
+  .btn:disabled { opacity:.45; cursor:not-allowed; }
+  .btn.sm { padding:6px 10px; font-size:12px; }
+
+  /* Quiz */
+  .quiz-wrap { max-width:620px; margin:0 auto; }
+  .quiz-progress-row { display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .quiz-card { background: var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:22px; }
+  .quiz-question { font-size:16px; font-weight:600; margin:0 0 16px; line-height:1.5; }
+  .quiz-options { display:flex; flex-direction:column; gap:8px; }
+  .quiz-option {
+    text-align:left; padding:12px 14px; border-radius:10px; border:1px solid var(--border);
+    background: var(--surface-1); cursor:pointer; font-size:14px; color:var(--text-primary);
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .quiz-option .opt-letter {
+    flex:none; width:22px; height:22px; border-radius:6px; background:var(--gridline);
+    display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:var(--text-secondary);
+  }
+  .quiz-option:hover:not(:disabled) { border-color: var(--series-1); }
+  .quiz-option.correct { border-color: var(--good); background: color-mix(in srgb, var(--good) 12%, var(--surface-1)); }
+  .quiz-option.correct .opt-letter { background: var(--good); color:#fff; }
+  .quiz-option.incorrect { border-color: var(--critical); background: color-mix(in srgb, var(--critical) 12%, var(--surface-1)); }
+  .quiz-option.incorrect .opt-letter { background: var(--critical); color:#fff; }
+  .quiz-option:disabled { cursor:default; }
+  .quiz-feedback { margin-top:14px; padding:12px 14px; border-radius:10px; font-size:13px; line-height:1.5; display:none; }
+  .quiz-feedback.show { display:block; }
+  .quiz-feedback.ok { background: color-mix(in srgb, var(--good) 14%, var(--surface-1)); color: var(--good-text); }
+  .quiz-feedback.bad { background: color-mix(in srgb, var(--critical) 14%, var(--surface-1)); color: var(--critical); }
+  .quiz-feedback .exp { color: var(--text-primary); margin-top:6px; }
+  .quiz-footer { display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
+  .quiz-result { text-align:center; padding:36px 20px; }
+  .quiz-result .score { font-size:42px; font-weight:800; color: var(--series-1); margin:6px 0; }
+  .quiz-result p { color:var(--text-secondary); font-size:14px; }
+
+  footer.app-footer { text-align:center; color:var(--text-muted); font-size:12px; padding:30px 20px 40px; }
+
+  @media (max-width: 620px) {
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .stat-row .stat-tile:nth-child(3) { grid-column: span 2; }
+  }
+</style>
+</head>
+<body>
+
+<script src="../../assets/nav.js" data-base="../../" data-course="administracion"></script>
+
+<header class="app-header">
+  <div class="brand" onclick="goDashboard()">
+    <div class="logo">A</div>
+    <div>
+      <h1>Guía de Estudio — Administración</h1>
+      <p class="subtitle">Robbins, 13ª edición · Cap. 11–15</p>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" id="themeToggle" title="Cambiar tema" aria-label="Cambiar tema">🌙</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== DASHBOARD ===================== -->
+  <section id="view-dashboard">
+    <div class="stat-row" id="statRow"></div>
+    <div class="section-title">📊 Estado global</div>
+    <p style="color:var(--text-secondary); font-size:13px; margin-top:-6px;">Tu progreso se guarda automáticamente en este navegador.</p>
+
+    <div class="section-title">🗂️ Capítulos</div>
+    <div class="chapter-grid" id="chapterGrid"></div>
+  </section>
+
+  <!-- ===================== CHAPTER VIEW ===================== -->
+  <section id="view-chapter" class="hidden">
+    <button class="back-btn" onclick="goDashboard()">← Volver al panel</button>
+    <div class="chapter-head">
+      <h2 id="chTitle"></h2>
+      <p id="chMeta"></p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="resumen" onclick="switchTab('resumen')">📄 Resumen</button>
+      <button class="tab-btn" data-tab="flash" onclick="switchTab('flash')">📇 Flashcards</button>
+      <button class="tab-btn" data-tab="quiz" onclick="switchTab('quiz')">📝 Quiz</button>
+    </div>
+
+    <div class="tab-panel active" id="panel-resumen">
+      <div class="summary-box" id="summaryText"></div>
+    </div>
+
+    <div class="tab-panel" id="panel-flash">
+      <div class="flash-wrap">
+        <div class="flash-meta">
+          <span id="flashCounter">Carta 1 / 20</span>
+          <span id="flashKnownCount">0 dominadas</span>
+        </div>
+        <div class="flash-progress"><div class="progress-track"><div class="progress-fill" id="flashProgressFill" style="width:0%"></div></div></div>
+
+        <div class="flashcard-scene">
+          <div class="flashcard" id="flashcardEl" onclick="flipCard()">
+            <div class="flash-face front">
+              <div class="kicker">Pregunta</div>
+              <div id="flashFrontText"></div>
+            </div>
+            <div class="flash-face back">
+              <div class="kicker">Respuesta</div>
+              <div id="flashBackText"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flash-controls">
+          <button class="btn" onclick="prevCard()">⟵ Anterior</button>
+          <button class="btn" onclick="flipCard()">🔄 Voltear</button>
+          <button class="btn" onclick="nextCard()">Siguiente ⟶</button>
+        </div>
+        <div class="flash-controls">
+          <button class="btn warn" onclick="markCard(false)">↻ Repasar de nuevo</button>
+          <button class="btn good" onclick="markCard(true)">✓ ¡Lo sé!</button>
+          <button class="btn sm" onclick="shuffleCards()">🔀 Barajar</button>
+          <button class="btn sm" onclick="resetFlashProgress()">Reiniciar progreso</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-quiz">
+      <div class="quiz-wrap" id="quizWrap"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  Contenido basado en Robbins, <em>Administración</em>, 13ª edición (Capítulos 11–15). Hecho para repasar antes de tus pruebas 💪
+</footer>
+
+<script>
+/* =========================================================
+   DATOS DE LOS CAPÍTULOS
+   ========================================================= */
+const DATA = {
+cap11: {
+  numero: 11, titulo: "Diseño de la estructura organizacional", paginas: "347–372",
+  resumen: "Organizar es la función administrativa que consiste en disponer y estructurar el trabajo para lograr las metas. Su resultado es la <strong>estructura organizacional</strong> (representada en el organigrama), definida mediante el <strong>diseño organizacional</strong>, que involucra 6 decisiones clave: especialización del trabajo, departamentalización (funcional, geográfica, por productos, por procesos, por clientes), cadena de mando (autoridad de línea/personal, responsabilidad, unidad de mando), tramo de control, centralización/descentralización (empoderamiento) y formalización.<br><br>Estos elementos combinados producen dos extremos: la <strong>organización mecanicista</strong> (rígida, centralizada) y la <strong>orgánica</strong> (flexible, descentralizada). La elección depende de factores de contingencia: estrategia, tamaño, tecnología e incertidumbre del entorno.<br><br><strong>Diseños tradicionales:</strong> simple, funcional y divisional. <strong>Diseños contemporáneos:</strong> estructura de equipos, matricial, de proyectos, sin límites, virtual y fuerzas de tarea.<br><br><strong>Esquemas de trabajo flexibles del siglo XXI:</strong> trabajo a distancia, semana laboral comprimida, horarios flexibles, puestos compartidos y fuerza laboral contingente.",
+  flashcards: [
+    {f:"¿Qué es \"organizar\" como función administrativa?", b:"Disponer y estructurar el trabajo para lograr las metas organizacionales."},
+    {f:"¿Qué es la estructura organizacional?", b:"La disposición formal de los puestos de trabajo dentro de una organización."},
+    {f:"¿Cuáles son los 6 elementos del diseño organizacional?", b:"Especialización del trabajo, departamentalización, cadena de mando, tramo de control, centralización/descentralización y formalización."},
+    {f:"¿Qué es la especialización del trabajo?", b:"Dividir las actividades laborales en tareas específicas para distintos puestos de trabajo (también llamada división del trabajo)."},
+    {f:"Nombra los 5 tipos de departamentalización.", b:"Funcional, geográfica, por productos, por procesos y por clientes."},
+    {f:"¿Qué es la cadena de mando?", b:"La línea de autoridad que se extiende de los niveles más altos a los más bajos y especifica quién le reporta a quién."},
+    {f:"¿Qué diferencia hay entre autoridad de línea y autoridad de personal?", b:"La de línea faculta a dirigir el trabajo de un empleado; la de personal respalda, apoya y asesora a quienes tienen autoridad de línea."},
+    {f:"¿Qué establece el principio de unidad de mando?", b:"Que cada empleado debe reportarle únicamente a un gerente."},
+    {f:"¿Qué es el tramo de control?", b:"La cantidad de empleados que un gerente puede manejar con eficiencia y eficacia."},
+    {f:"¿Qué es la centralización?", b:"El grado en que la toma de decisiones se concentra en los niveles más altos de la organización."},
+    {f:"¿Qué es el empoderamiento (empowerment) de los empleados?", b:"Otorgar a la fuerza laboral más autoridad (poder) para tomar decisiones."},
+    {f:"¿Qué es la formalización?", b:"El nivel de estandarización de los puestos de trabajo y el grado en que reglas y procedimientos determinan la conducta de los empleados."},
+    {f:"¿Qué diferencia a la organización mecanicista de la orgánica?", b:"Mecanicista = rígida, alta especialización y formalización, centralizada; Orgánica = flexible, equipos interfuncionales, descentralizada, baja formalización."},
+    {f:"Según Woodward, ¿qué estructura es más efectiva para la producción en masa?", b:"La estructura mecanicista."},
+    {f:"¿Qué caracteriza a la estructura matricial?", b:"Asigna especialistas de distintos departamentos funcionales a uno o varios proyectos, generando una cadena de mando dual."},
+    {f:"¿Qué es una organización sin límites?", b:"Una organización cuyo diseño no está determinado ni acotado por límites horizontales, verticales o externos."},
+    {f:"¿Qué es una fuerza de tarea (comité ad hoc)?", b:"Un equipo de trabajo temporal constituido para resolver un problema específico y de corto plazo que afecta a varios departamentos."},
+    {f:"¿Qué es el trabajo a distancia?", b:"Configuración laboral en la que los empleados trabajan desde casa y se vinculan a la oficina mediante una computadora."},
+    {f:"¿Qué es la semana laboral comprimida?", b:"Un esquema en el que los empleados trabajan más horas por día pero menos días por semana (ej. 4 días de 10 horas)."},
+    {f:"¿Quiénes son los trabajadores contingentes?", b:"Trabajadores temporales, independientes o bajo contrato eventual, cuyo empleo depende de la demanda de sus servicios."}
+  ],
+  quiz: [
+    {q:"¿Cuál de los siguientes NO es uno de los seis elementos clave del diseño organizacional?", opts:{a:"Especialización del trabajo", b:"Cultura organizacional", c:"Tramo de control", d:"Formalización"}, correct:"b", exp:"Los seis elementos son especialización del trabajo, departamentalización, cadena de mando, tramo de control, centralización/descentralización y formalización; la cultura organizacional se estudia por separado."},
+    {q:"Una empresa que agrupa sus puestos de trabajo en departamentos de ingeniería, contabilidad, manufactura y RH está usando:", opts:{a:"Departamentalización geográfica", b:"Departamentalización funcional", c:"Departamentalización por procesos", d:"Departamentalización por clientes"}, correct:"b", exp:"Agrupa puestos de trabajo por función (áreas especializadas similares), como en el ejemplo de la figura 11-3."},
+    {q:"Según la perspectiva contemporánea, ¿qué determina principalmente el tramo de control adecuado?", opts:{a:"Una cifra fija de 5 a 6 subordinados por gerente", b:"Las habilidades y experiencia de gerentes y empleados, y las características del trabajo", c:"El tamaño del edificio de oficinas", d:"La antigüedad del gerente en la empresa"}, correct:"b", exp:"La perspectiva contemporánea rechaza la 'cifra mágica' tradicional (5-6): el tramo adecuado depende de la capacitación y experiencia de empleados y gerentes, la similitud de tareas, la proximidad física, entre otros factores."},
+    {q:"Una organización que enfrenta un entorno dinámico e incierto y busca innovar constantemente probablemente adoptará una estructura:", opts:{a:"Mecanicista", b:"Orgánica", c:"Simple", d:"Ninguna de las anteriores, permanecerá sin cambios"}, correct:"b", exp:"La organización orgánica es altamente adaptativa y flexible, ideal para entornos inciertos y estrategias de innovación; la mecanicista funciona mejor con control estricto de costos en entornos estables."},
+    {q:"En una estructura matricial, un empleado:", opts:{a:"Reporta únicamente a su gerente funcional", b:"No tiene ningún gerente asignado", c:"Reporta simultáneamente a un gerente funcional y a un gerente de proyecto (cadena de mando dual)", d:"Cambia de departamento cada semana obligatoriamente"}, correct:"c", exp:"La estructura matricial 'quebranta' el principio de unidad de mando porque los empleados están sujetos a la autoridad compartida de dos gerentes: el de su área funcional y el del proyecto."}
+  ]
+},
+cap12: {
+  numero: 12, titulo: "Administración de los recursos humanos", paginas: "379–406",
+  resumen: "La <strong>ARH</strong> garantiza contar con el personal apropiado, en la cantidad precisa y en el momento adecuado. Es importante porque: (1) es fuente de ventaja competitiva, (2) es parte central de la estrategia organizacional, y (3) el trato al personal impacta directamente el desempeño de la empresa. Las <strong>prácticas laborales de alto rendimiento</strong> elevan el desempeño individual y organizacional.<br><br>El <strong>proceso de ARH</strong> consta de 8 actividades, afectadas por el entorno externo (economía, sindicatos, leyes/normativas y tendencias demográficas):<br><br>• <strong>Identificación y selección</strong> de empleados competentes: planeación de RH (análisis de puestos → descripción y especificación del puesto), reclutamiento o destitución, y selección (evitando errores por rechazo o por aceptación, mediante instrumentos válidos y confiables).<br>• <strong>Desarrollo de habilidades:</strong> inducción y capacitación (tradicional o basada en tecnología).<br>• <strong>Retención de empleados:</strong> administración del desempeño (BARS, APO, 360°, etc.) y remuneración/prestaciones (pago basado en habilidades, pago variable).<br><br><strong>Temas contemporáneos:</strong> reducción de personal, acoso sexual y control de costos de RH (salud y jubilación).",
+  flashcards: [
+    {f:"¿Qué es la ARH?", b:"La función que garantiza contar con el personal apropiado, en la cantidad precisa y en el lugar y momento adecuados."},
+    {f:"¿Cuáles son las 3 razones por las que la ARH es importante?", b:"Es fuente de ventaja competitiva, es parte central de la estrategia organizacional, y la forma de tratar al personal impacta el desempeño de la empresa."},
+    {f:"¿Qué son las prácticas laborales de alto rendimiento?", b:"Prácticas (equipos autoadministrados, capacitación, comunicación abierta, remuneración por desempeño) que generan alto desempeño individual y organizacional."},
+    {f:"¿Cuáles son los 4 factores externos que más afectan el proceso de ARH?", b:"La economía, los sindicatos, las leyes/normativas gubernamentales y las tendencias demográficas."},
+    {f:"¿Qué es un sindicato?", b:"Una organización que representa a los trabajadores y busca proteger sus intereses mediante negociaciones colectivas."},
+    {f:"¿Qué es la planeación de recursos humanos?", b:"El proceso mediante el cual los gerentes se aseguran de contar con la cantidad correcta de personas capaces, en los lugares y momentos correctos."},
+    {f:"¿Qué es el análisis de puestos de trabajo?", b:"Una evaluación que define los puestos de trabajo y las características conductuales necesarias para desempeñarlos."},
+    {f:"¿Cuál es la diferencia entre descripción de puestos y especificación de puestos?", b:"La descripción detalla las características del puesto (contenido, entorno, condiciones); la especificación establece los requisitos mínimos que debe cumplir la persona."},
+    {f:"¿Qué es el reclutamiento?", b:"Localización, identificación y atracción de candidatos capaces."},
+    {f:"¿Qué es la selección en ARH?", b:"El análisis de los candidatos a un puesto de trabajo para determinar quién está mejor calificado para cubrirlo."},
+    {f:"¿Qué es un error por rechazo y un error por aceptación?", b:"Error por rechazo: rechazar a un candidato que habría tenido éxito. Error por aceptación: aceptar a un candidato que resulta tener mal desempeño."},
+    {f:"¿Qué significa que un instrumento de selección sea válido y confiable?", b:"Válido: tiene relación comprobada con un criterio relevante (el desempeño). Confiable: mide el mismo parámetro de forma consistente en el tiempo."},
+    {f:"¿Qué es una descripción realista del puesto de trabajo?", b:"Una descripción preliminar que da información tanto positiva como negativa sobre la organización y el cargo, para generar expectativas realistas."},
+    {f:"¿Qué es la inducción y sus dos tipos?", b:"Introducción del nuevo empleado a su puesto y a la organización; incluye inducción de la unidad de trabajo e inducción de la organización."},
+    {f:"Nombra 3 métodos tradicionales de capacitación.", b:"En el trabajo, rotación de puestos, y mentoría/asesoría (también válidos: ejercicios experimentales, manuales, conferencias)."},
+    {f:"¿Qué es un sistema de administración del desempeño?", b:"El establecimiento de estándares utilizados para evaluar el rendimiento de los trabajadores."},
+    {f:"Nombra 3 métodos de evaluación del desempeño.", b:"Ensayo escrito, incidentes críticos, escalas gráficas de calificación (también: BARS, comparación con pares, APO, evaluación de 360 grados)."},
+    {f:"¿Qué es el pago basado en habilidades?", b:"Sistema que recompensa a los empleados por las habilidades y competencias que pueden demostrar, no por el título del puesto."},
+    {f:"¿Qué es el pago variable?", b:"Sistema en el que la remuneración del individuo depende de su desempeño."},
+    {f:"¿Qué es el acoso sexual según la EEOC?", b:"Cualquier acción o actividad indeseable de naturaleza sexual que afecte explícita o implícitamente el empleo, el desempeño o el entorno laboral de un individuo."},
+    {f:"¿Qué es la reducción de personal (despidos)?", b:"La eliminación planeada de puestos de trabajo en una organización."}
+  ],
+  quiz: [
+    {q:"¿Cuál de las siguientes NO es una de las tres razones por las que la ARH es importante?", opts:{a:"Es fuente de ventaja competitiva", b:"Es parte importante de las estrategias organizacionales", c:"Elimina por completo la necesidad de sindicatos", d:"El trato al personal impacta el desempeño organizacional"}, correct:"c", exp:"La ARH no elimina la necesidad de sindicatos; de hecho, éstos son uno de los factores externos que la propia ARH debe gestionar."},
+    {q:"En el proceso de selección, cuando se rechaza a un candidato que en realidad habría tenido éxito en el puesto, se comete un:", opts:{a:"Error por aceptación", b:"Error por rechazo", c:"Error de validez", d:"Error de confiabilidad"}, correct:"b", exp:"Ocurre cuando se predice erróneamente que un candidato fracasaría y por eso se le rechaza, aunque habría tenido buen desempeño; puede exponer a la empresa a demandas por discriminación."},
+    {q:"Un instrumento de selección 'confiable' es aquel que:", opts:{a:"Siempre predice el éxito laboral", b:"Mide el mismo parámetro de forma consistente en el tiempo", c:"Es económico de aplicar", d:"Ha sido aprobado por un sindicato"}, correct:"b", exp:"La confiabilidad se refiere a la consistencia de la medición; la validez se refiere a que el instrumento tenga relación comprobada con el desempeño en el puesto."},
+    {q:"¿Cuál de los siguientes es un método de evaluación del desempeño que combina incidentes críticos con escalas de calificación, usando ejemplos de conductas laborales reales?", opts:{a:"APO", b:"Evaluación de 360 grados", c:"BARS (escalas de calificación basadas en el comportamiento)", d:"Comparación con pares"}, correct:"c", exp:"BARS combina elementos de los incidentes críticos y las escalas gráficas de calificación, evaluando conductas laborales específicas y medibles."},
+    {q:"El pago variable es un sistema de remuneración en el que:", opts:{a:"Todos los empleados reciben el mismo salario sin importar su desempeño", b:"La remuneración depende del desempeño del empleado", c:"Solo se paga por antigüedad", d:"El salario se fija exclusivamente por ley"}, correct:"b", exp:"En los sistemas de pago variable, la remuneración de un individuo depende de alguna medida de su desempeño (bonos, comisiones, participación de utilidades, etc.)."}
+  ]
+},
+cap13: {
+  numero: 13, titulo: "Creación y administración de equipos", paginas: "417–436",
+  resumen: "Un <strong>grupo</strong> son dos o más individuos que interactúan y son interdependientes, reunidos para lograr metas específicas; puede ser formal o informal. Los grupos se desarrollan en <strong>5 etapas</strong>: formación, tormenta, normalización, desempeño y disolución.<br><br>El desempeño y satisfacción grupal depende de condiciones externas, recursos de los miembros, <strong>estructura del grupo</strong> (roles, normas, conformidad, pensamiento grupal, estatus, tamaño, holgazanería social, cohesión), <strong>procesos grupales</strong> (toma de decisiones y manejo de conflictos: perspectiva tradicional vs. relaciones humanas vs. interaccionista; conflictos funcionales/disfuncionales, de tarea/relación/proceso) y el tipo de tarea.<br><br>Los <strong>equipos de trabajo</strong> se diferencian de los grupos porque persiguen una meta común usando sinergia positiva, responsabilidad mutua y habilidades complementarias. Tipos: resolución de problemas, autoadministrados, interfuncionales y virtuales. Los equipos eficaces comparten: metas claras, habilidades relevantes, confianza mutua, compromiso unificado, buena comunicación, habilidades de negociación, liderazgo adecuado y apoyo interno/externo.<br><br><strong>Desafíos contemporáneos:</strong> equipos globales, desarrollo de habilidades de trabajo en equipo y comprensión de redes sociales.",
+  flashcards: [
+    {f:"¿Qué es un grupo?", b:"Dos o más individuos que interactúan y son interdependientes, que se reúnen para lograr metas específicas."},
+    {f:"¿Cuáles son las 5 etapas del desarrollo de un grupo?", b:"Formación, tormenta, normalización, desempeño y disolución."},
+    {f:"¿Qué caracteriza la etapa de 'tormenta'?", b:"Surgen conflictos sobre quién controlará el grupo y cuál será su misión; se establece la jerarquía de liderazgo."},
+    {f:"¿Qué es un rol dentro de un grupo?", b:"Los patrones conductuales que se espera observar en alguien que ocupa un puesto determinado dentro de una unidad social."},
+    {f:"¿Qué son las normas de un grupo?", b:"Expectativas o estándares aceptados y compartidos por los miembros de un grupo (sobre esfuerzo, vestimenta, lealtad, etc.)."},
+    {f:"¿Qué demostró el experimento de Asch?", b:"El impacto de la conformidad: una tercera parte de las veces las personas dan respuestas incorrectas con tal de coincidir con el grupo."},
+    {f:"¿Qué es el pensamiento grupal?", b:"Cuando un grupo ejerce gran presión sobre un individuo para que ajuste su opinión con la de los demás miembros, con el fin de proteger la imagen del grupo."},
+    {f:"¿Qué es la holgazanería social?", b:"La tendencia de las personas a esforzarse menos cuando trabajan con otros que cuando lo hacen solas."},
+    {f:"¿Qué es la cohesión del grupo?", b:"El grado en que los miembros de un grupo se sienten atraídos entre sí y comparten sus metas."},
+    {f:"¿Cuáles son las 3 perspectivas sobre el conflicto?", b:"Tradicional (evitar el conflicto), de relaciones humanas (es natural e inevitable), e interaccionista (cierto grado es necesario para el buen desempeño)."},
+    {f:"¿Qué diferencia hay entre conflicto funcional y disfuncional?", b:"El funcional respalda las metas del grupo y mejora su desempeño; el disfuncional impide que el grupo cumpla sus metas."},
+    {f:"Nombra los 3 tipos de conflicto según su naturaleza.", b:"Conflicto de tarea (contenido y metas), conflicto de relación (interpersonal) y conflicto de proceso (forma de realizar el trabajo)."},
+    {f:"¿Qué diferencia a un equipo de trabajo de un grupo de trabajo?", b:"El equipo tiene liderazgo compartido, responsabilidad personal y comunitaria, un propósito específico propio, y trabajo realizado colectivamente; el grupo tiene un líder claro y responsabilidad solo personal."},
+    {f:"¿Qué es un equipo autoadministrado?", b:"Un grupo formal de empleados que opera sin un gerente y es responsable de un proceso o segmento de trabajo completo."},
+    {f:"¿Qué es un equipo interfuncional?", b:"Un equipo de trabajo conformado por individuos con diversas especialidades funcionales."},
+    {f:"¿Qué es un equipo virtual?", b:"Un equipo que utiliza la tecnología para conectar a integrantes físicamente dispersos, con el fin de lograr una meta común."},
+    {f:"Nombra 4 características de los equipos eficaces.", b:"Metas claras, habilidades relevantes, confianza mutua y buena comunicación (también: compromiso unificado, habilidades de negociación, liderazgo adecuado, apoyo interno/externo)."},
+    {f:"¿Qué es un equipo para resolución de problemas?", b:"Empleados del mismo departamento o área funcional que participan en esfuerzos para mejorar procesos o resolver problemas, generalmente sin autoridad para implementar sus recomendaciones."},
+    {f:"¿Qué es la estructura de red social en un grupo?", b:"Los patrones de conexión informal entre los individuos que forman parte de un grupo."},
+    {f:"¿Qué desafíos estructurales enfrentan los equipos globales?", b:"Diferencias culturales en conformidad, estatus, holgazanería social y cohesión, además de problemas de comunicación y manejo de conflictos."}
+  ],
+  quiz: [
+    {q:"Según el modelo de las 5 etapas del desarrollo de grupos, ¿en qué etapa el grupo se prepara para desintegrarse y se concentra más en actividades de conclusión que en el desempeño de la tarea?", opts:{a:"Formación", b:"Tormenta", c:"Normalización", d:"Disolución"}, correct:"d", exp:"Es la etapa final para los grupos temporales (equipos de proyecto, fuerzas de tarea), donde el interés se centra en concluir actividades más que en el desempeño."},
+    {q:"La tendencia de las personas a esforzarse menos cuando trabajan en grupo que cuando trabajan solas se llama:", opts:{a:"Pensamiento grupal", b:"Holgazanería social", c:"Conformidad", d:"Cohesión"}, correct:"b", exp:"Ocurre porque los individuos sienten que su contribución no puede medirse individualmente y que el trabajo no está repartido equitativamente."},
+    {q:"Según la perspectiva interaccionista del conflicto:", opts:{a:"Todo conflicto debe evitarse siempre", b:"El conflicto es un mal necesario que hay que tolerar sin más", c:"Cierto grado de conflicto es absolutamente necesario para que un grupo tenga un desempeño eficaz", d:"El conflicto nunca puede ser positivo"}, correct:"c", exp:"La perspectiva interaccionista sostiene que el conflicto puede ser positivo y que un nivel adecuado (conflicto funcional) es necesario para el buen desempeño grupal."},
+    {q:"¿Cuál de las siguientes es una característica de los equipos de trabajo (y no de los grupos de trabajo)?", opts:{a:"Hay un líder claramente a cargo", b:"La responsabilidad es solo personal", c:"El rol de liderazgo es compartido y el trabajo se realiza colectivamente", d:"El desempeño se mide indirectamente según la influencia sobre otros"}, correct:"c", exp:"En los equipos de trabajo el liderazgo es compartido, hay responsabilidad personal y comunitaria, y el trabajo se ejecuta de forma colectiva."},
+    {q:"Un equipo formado por un médico, un farmacéutico, un trabajador social, un nutriólogo y un terapeuta respiratorio que colaboran diariamente en una UCI es un ejemplo de:", opts:{a:"Equipo virtual", b:"Equipo para resolución de problemas", c:"Equipo interfuncional", d:"Equipo autoadministrado"}, correct:"c", exp:"Está conformado por individuos con diversas especialidades funcionales que trabajan juntos hacia una meta común (el mejor tratamiento del paciente)."}
+  ]
+},
+cap14: {
+  numero: 14, titulo: "Administración de la comunicación", paginas: "451–471",
+  resumen: "La <strong>comunicación</strong> es la transferencia y comprensión de significados; requiere que el mensaje se transmita y se comprenda. Incluye la comunicación interpersonal y la organizacional. Cumple 4 funciones: control, motivación, expresión emocional e información.<br><br>El <strong>proceso de comunicación</strong> tiene 7 elementos: emisor → mensaje → codificación → canal → decodificación → receptor → retroalimentación, todo sujeto al <strong>ruido</strong>. Existe comunicación no verbal (lenguaje corporal, entonación verbal). Las <strong>barreras</strong> incluyen: cognitivas (sobrecarga de información, filtrado), emociones, socioculturales (jerga) y culturales nacionales. Para superarlas: retroalimentación, simplificar el lenguaje, <strong>escucha activa</strong>, controlar emociones y observar señales no verbales.<br><br>La comunicación organizacional fluye <strong>descendente</strong>, <strong>ascendente</strong>, <strong>lateral</strong> o <strong>transversal</strong>. Las redes de comunicación (cadena, rueda, todos los canales) varían en rapidez, exactitud, liderazgo y satisfacción. Los <strong>rumores</strong> son la red informal y solo pueden gestionarse, no eliminarse.<br><br>Internet y social media crean un entorno 24/7. <strong>Problemas contemporáneos:</strong> comunicación digital (riesgos legales/seguridad, falta de interacción personal), administración del conocimiento, comunicación con clientes, participación de empleados y comunicación ética.",
+  flashcards: [
+    {f:"¿Qué es la comunicación?", b:"La transferencia y comprensión de significados."},
+    {f:"¿Cuáles son las 4 funciones de la comunicación?", b:"Control, motivación, expresión emocional e información."},
+    {f:"¿Cuáles son los elementos del proceso de comunicación?", b:"Emisor, mensaje, codificación, canal, decodificación, receptor y retroalimentación (sujeto al ruido)."},
+    {f:"¿Qué es el ruido en la comunicación?", b:"Cualquier alteración que interfiere con la transmisión, recepción o retroalimentación de un mensaje."},
+    {f:"¿Qué es el lenguaje corporal?", b:"Gestos, expresiones faciales y otros movimientos corporales que transmiten significado."},
+    {f:"¿Qué es la sobrecarga de información?", b:"Cuando la información excede nuestra capacidad de procesamiento."},
+    {f:"¿Qué es el filtrado?", b:"La manipulación deliberada de la información con el fin de que el receptor la perciba de manera más favorable."},
+    {f:"¿Qué es la jerga?", b:"Terminología especializada o lenguaje técnico específico que utilizan los miembros de un grupo para comunicarse entre sí."},
+    {f:"¿Qué es la escucha activa?", b:"Escuchar el mensaje completo, sin hacer interpretaciones o juicios prematuros; requiere concentración total, a diferencia de solo oír."},
+    {f:"¿Qué es la comunicación descendente?", b:"Comunicación que fluye hacia abajo de la jerarquía, de un gerente hacia sus empleados."},
+    {f:"¿Qué es la comunicación ascendente?", b:"Comunicación que fluye hacia arriba de la jerarquía, de los empleados hacia los gerentes."},
+    {f:"¿Qué es la comunicación lateral?", b:"Comunicación que se lleva a cabo entre empleados del mismo nivel organizacional."},
+    {f:"¿Qué es la comunicación transversal?", b:"Comunicación que se da entre diversas áreas de trabajo y distintos niveles organizacionales."},
+    {f:"Nombra las 3 redes de comunicación más comunes.", b:"Red en cadena, red de rueda y red de todos los canales."},
+    {f:"¿Qué representan los rumores en una organización?", b:"La red de comunicación informal de la organización; no se pueden eliminar, solo administrar."},
+    {f:"¿Qué es una asamblea general (town hall meeting)?", b:"Una reunión pública informal donde los altos ejecutivos transmiten información, analizan temas o celebran logros con los empleados."},
+    {f:"¿Qué dos elementos del diseño del lugar de trabajo impactan la comunicación?", b:"Los cercos/barreras físicas (espacios abiertos vs. cerrados) y la densidad de personas en el área de trabajo."},
+    {f:"¿Cuáles son los dos desafíos principales de la comunicación digital?", b:"Problemas legales y de seguridad, y falta de interacción personal."},
+    {f:"¿Cuáles son los 3 componentes de cualquier proceso de entrega de servicio al cliente?", b:"El cliente, la organización de servicio y el proveedor individual del servicio."},
+    {f:"¿Qué diferencia hay entre comunicación formal e informal en la organización?", b:"La formal sigue los esquemas laborales prescritos por la organización; la informal no está definida por la jerarquía estructural."}
+  ],
+  quiz: [
+    {q:"Para que la comunicación sea exitosa, según el texto, es necesario que:", opts:{a:"El receptor esté de acuerdo con el mensaje", b:"El significado se transmita y se comprenda", c:"Se utilice siempre comunicación escrita", d:"No exista ningún tipo de retroalimentación"}, correct:"b", exp:"La comunicación es la transferencia y comprensión de significados; no implica que el receptor esté de acuerdo, solo que comprenda el mensaje tal como el emisor lo pretendía."},
+    {q:"Cuando un empleado le dice a su jefe únicamente lo que éste desea escuchar, omitiendo información desfavorable, está practicando:", opts:{a:"Escucha activa", b:"Filtrado", c:"Comunicación transversal", d:"Retroalimentación"}, correct:"b", exp:"El filtrado es la manipulación deliberada de la información para que el receptor la perciba de forma más favorable; suele aumentar con más niveles jerárquicos."},
+    {q:"Un analista de crédito que se comunica directamente con un gerente regional de marketing (de otro departamento y otro nivel) para informarle sobre un cliente, está usando:", opts:{a:"Comunicación descendente", b:"Comunicación ascendente", c:"Comunicación lateral", d:"Comunicación transversal"}, correct:"d", exp:"Ocurre entre diferentes áreas de trabajo y distintos niveles organizacionales, a diferencia de la lateral que es entre el mismo nivel."},
+    {q:"¿Cuál red de comunicación organizacional se caracteriza por la mayor satisfacción de sus miembros pero exactitud solo moderada?", opts:{a:"Red en cadena", b:"Red de rueda", c:"Red de todos los canales", d:"Ninguna de las anteriores"}, correct:"c", exp:"La comunicación fluye libremente entre todos los integrantes, lo que genera alta satisfacción y rapidez, pero exactitud solo moderada y ningún líder claro."},
+    {q:"Según el texto, ¿cuál es la mejor forma de minimizar las consecuencias negativas de los rumores en una organización?", opts:{a:"Prohibir que los empleados hablen entre sí de temas no laborales", b:"Comunicarse de manera abierta, completa y honesta con los empleados", c:"Ignorarlos por completo, ya que no afectan el desempeño", d:"Despedir a quienes los originan"}, correct:"b", exp:"Como los rumores no pueden eliminarse, la estrategia recomendada es la comunicación abierta, completa y honesta, especialmente cuando los empleados no están de acuerdo con decisiones tomadas."}
+  ]
+},
+cap15: {
+  numero: 15, titulo: "Comprensión y administración del comportamiento individual", paginas: "483–508",
+  resumen: "El <strong>comportamiento organizacional (CO)</strong> estudia las acciones de las personas en el trabajo. Como un iceberg, solo una parte es visible; la mayoría está oculta (actitudes, percepciones, normas). Sus metas son <strong>explicar, predecir e influir</strong> en 6 comportamientos: productividad, ausentismo, rotación, CCO, satisfacción laboral y mal comportamiento.<br><br>Las <strong>actitudes</strong> tienen 3 componentes: cognitivo, afectivo y conductual. Actitudes clave: satisfacción laboral, participación laboral, compromiso organizacional e involucramiento del empleado. La <strong>disonancia cognitiva</strong> explica que buscamos reducir la incomodidad de actitudes/conductas inconsistentes.<br><br>La <strong>personalidad</strong> se mide con el <strong>MBTI</strong> (16 tipos) y el <strong>modelo de los cinco grandes</strong> (extroversión, afabilidad, escrupulosidad —mejor predictor del desempeño—, estabilidad emocional, apertura a la experiencia). Otros rasgos: locus de control, maquiavelismo, autoestima, autovigilancia, toma de riesgos, tipo A/B, personalidad proactiva y resiliencia. La <strong>inteligencia emocional</strong> predice el desempeño en puestos con alta interacción social.<br><br>La <strong>percepción</strong> da significado al entorno. La <strong>teoría de la atribución</strong> explica si atribuimos conductas a causas internas o externas según singularidad, consenso y consistencia, sujeta a sesgos (error fundamental de atribución, sesgo al servicio del yo) y atajos (similitud asumida, estereotipos, efecto de halo).<br><br>El <strong>aprendizaje</strong> es un cambio permanente en la conducta por experiencia: el <strong>condicionamiento operante</strong> (Skinner) dice que la conducta es función de sus consecuencias; la <strong>teoría del aprendizaje social</strong> añade el aprendizaje por observación. El <strong>moldeamiento de la conducta</strong> usa reforzamiento positivo, reforzamiento negativo, castigo y extinción.<br><br><em>Material de la Clase 10 (complementario):</em> la <strong>inteligencia emocional</strong> se define como la capacidad de detectar y manejar las señales emocionales propias y ajenas; las <strong>emociones</strong> son sentimientos intensos dirigidos a alguien o algo, y las 6 básicas son ira, disgusto, miedo, sorpresa, tristeza y felicidad. La <strong>percepción de respaldo organizacional</strong> es la creencia de que la organización valora los aportes del empleado y se preocupa por su bienestar (distinta del compromiso o la participación laboral), y el <strong>involucramiento del personal</strong> ocurre cuando el empleado está conectado con su trabajo y siente satisfacción y entusiasmo por él. La percepción está influida por 3 factores: quién percibe, el objeto percibido y la situación.",
+  flashcards: [
+    {f:"¿Qué es el comportamiento organizacional (CO)?", b:"El estudio de las acciones que realizan las personas en el ámbito laboral."},
+    {f:"¿Cuáles son las 3 metas del CO?", b:"Explicar, predecir e influir en el comportamiento."},
+    {f:"Nombra los 6 comportamientos clave que estudia el CO.", b:"Productividad, ausentismo, rotación de personal, comportamiento cívico organizacional (CCO), satisfacción laboral y mal comportamiento en el trabajo."},
+    {f:"¿Qué es el comportamiento cívico organizacional (CCO)?", b:"Conducta discrecional que no forma parte de los requerimientos formales del puesto, pero fomenta el funcionamiento eficaz de la organización."},
+    {f:"¿Cuáles son los 3 componentes de una actitud?", b:"Cognitivo (creencias), afectivo (emociones) y conductual (intención de actuar)."},
+    {f:"¿Qué es la disonancia cognitiva?", b:"Cualquier incompatibilidad o inconsistencia entre actitudes, o entre comportamientos y actitudes."},
+    {f:"¿Qué es la participación laboral?", b:"El grado en que un empleado se identifica con su trabajo, participa activamente en él y considera su desempeño parte importante de su valía personal."},
+    {f:"¿Qué es el compromiso organizacional?", b:"El grado en que un empleado se identifica con una organización en particular y con sus objetivos, deseando mantener su filiación a ella."},
+    {f:"¿Cuáles son las 4 dicotomías del MBTI?", b:"Extrovertido/Introvertido, Sensorial/Intuitivo, Reflexivo/Sensible, Juicioso/Perceptivo."},
+    {f:"Nombra los 5 rasgos del modelo de los cinco grandes.", b:"Extroversión, afabilidad, escrupulosidad, estabilidad emocional y apertura a la experiencia."},
+    {f:"¿Qué rasgo del modelo de los cinco grandes predice mejor el desempeño laboral en general?", b:"La escrupulosidad."},
+    {f:"¿Qué diferencia hay entre locus de control interno y externo?", b:"Interno: la persona cree controlar su propio destino. Externo: cree que su vida está determinada por fuerzas externas (suerte, azar)."},
+    {f:"¿Qué es la autovigilancia?", b:"Rasgo de personalidad que determina la capacidad del individuo para ajustar su comportamiento a los factores situacionales externos."},
+    {f:"¿Cuáles son las 5 dimensiones de la inteligencia emocional (IE)?", b:"Autoconocimiento, autocontrol, automotivación, empatía y habilidades sociales."},
+    {f:"¿Qué es la percepción?", b:"El proceso mediante el cual damos significado a nuestro entorno, organizando e interpretando las impresiones sensoriales."},
+    {f:"¿Cuáles son los 3 factores de la teoría de la atribución?", b:"Singularidad, consenso y consistencia."},
+    {f:"¿Qué es el error fundamental de atribución?", b:"La tendencia a subestimar la influencia de factores externos y sobrestimar la de factores internos al juzgar el comportamiento de otros."},
+    {f:"¿Qué es el sesgo al servicio del yo?", b:"La tendencia a atribuir los éxitos propios a factores internos y los fracasos a factores externos."},
+    {f:"Nombra los 3 atajos usados para juzgar a los demás.", b:"Similitud asumida, estereotipos y efecto de halo."},
+    {f:"¿Qué establece el condicionamiento operante?", b:"Que la conducta es una función de sus consecuencias; se aprende a comportarse de cierta manera para obtener algo deseado o evitar algo desagradable."},
+    {f:"Nombra las 4 formas de moldear la conducta.", b:"Reforzamiento positivo, reforzamiento negativo, castigo y extinción."},
+    {f:"¿Qué sostiene la teoría del aprendizaje social?", b:"Que las personas pueden aprender tanto mediante la observación de modelos como a través de la experiencia directa."},
+    {f:"(Clase 10) ¿Qué es la inteligencia emocional (IE)?", b:"La capacidad de detectar y manejar las señales emocionales propias y ajenas, y la información relacionada con ellas."},
+    {f:"(Clase 10) ¿Qué son las emociones?", b:"Sentimientos intensos que están dirigidos hacia alguien o algo."},
+    {f:"(Clase 10) Nombra las 6 emociones básicas vistas en clase.", b:"Ira, disgusto, miedo, sorpresa, tristeza y felicidad."},
+    {f:"(Clase 10) ¿Qué es la percepción de respaldo organizacional?", b:"La creencia general del personal de que la organización a la que pertenece valora sus aportaciones y se preocupa por su bienestar."},
+    {f:"(Clase 10) ¿Qué es el involucramiento del personal?", b:"Cuando el personal está conectado con su trabajo, y siente satisfacción y entusiasmo con su labor."},
+    {f:"(Clase 10) ¿Cuáles son los 3 factores que influyen en la percepción?", b:"Quién percibe (el perceptor), el objeto percibido y la situación en que ocurre."}
+  ],
+  quiz: [
+    {q:"El comportamiento cívico organizacional (CCO) se define como:", opts:{a:"Una obligación formal establecida en el contrato del empleado", b:"Conducta discrecional que no es un requisito formal del puesto, pero fomenta el funcionamiento eficaz de la organización", c:"El nivel de ausentismo de un empleado", d:"La rotación voluntaria de personal"}, correct:"b", exp:"El CCO incluye conductas como ayudar a compañeros o ser voluntario para tareas extra, que no son exigidas formalmente pero benefician a la organización."},
+    {q:"Según el modelo de los cinco grandes, ¿cuál rasgo de personalidad predijo el desempeño laboral en los cinco grupos ocupacionales estudiados?", opts:{a:"Extroversión", b:"Apertura a la experiencia", c:"Escrupulosidad", d:"Estabilidad emocional"}, correct:"c", exp:"Fue el único rasgo que predijo el desempeño en las cinco categorías ocupacionales estudiadas; las demás dimensiones dependieron de la situación y el tipo de puesto."},
+    {q:"Un gerente de ventas atribuye el mal desempeño de su equipo a la 'pereza' de los vendedores, sin considerar que un competidor lanzó una línea de productos innovadora. Esto ejemplifica:", opts:{a:"El sesgo al servicio del yo", b:"El error fundamental de atribución", c:"El efecto de halo", d:"La similitud asumida"}, correct:"b", exp:"Consiste en subestimar la influencia de factores externos (el competidor) y sobrestimar los factores internos (pereza) al juzgar el comportamiento de otros."},
+    {q:"Cuando un gerente elogia a un empleado inmediatamente después de que entrega un reporte a tiempo, y esto aumenta la probabilidad de que siga siendo puntual, se está aplicando:", opts:{a:"Castigo", b:"Extinción", c:"Reforzamiento positivo", d:"Reforzamiento negativo"}, correct:"c", exp:"La conducta va seguida de algo placentero (el elogio), lo que incrementa la probabilidad de que la conducta deseada se repita."},
+    {q:"Según la teoría de la atribución, si todos los empleados que enfrentan la misma situación (tráfico) responden de la misma manera (llegan tarde), decimos que el comportamiento muestra:", opts:{a:"Alta singularidad", b:"Alto consenso", c:"Alta consistencia", d:"Bajo consenso"}, correct:"b", exp:"Cuando existe alto consenso, es más probable que el comportamiento se atribuya a una causa externa (el tráfico) en lugar de una causa interna del individuo."},
+    {q:"(Clase 10) Según la definición vista en clase, la inteligencia emocional es la capacidad de:", opts:{a:"Memorizar rápidamente grandes volúmenes de información", b:"Detectar y manejar las señales emocionales propias y ajenas, y la información relacionada", c:"Resolver problemas matemáticos complejos", d:"Persuadir a otros mediante el carisma"}, correct:"b", exp:"La IE se centra en identificar y gestionar emociones (propias y de otros), no en habilidades cognitivas generales ni de persuasión."},
+    {q:"(Clase 10) Cuando un empleado siente que su empresa realmente valora su trabajo y se preocupa por su bienestar, esto corresponde a:", opts:{a:"Compromiso organizacional", b:"Participación laboral", c:"Percepción de respaldo organizacional", d:"Involucramiento del personal"}, correct:"c", exp:"La percepción de respaldo organizacional es específicamente la creencia de que la organización valora los aportes del empleado y se preocupa por su bienestar; se distingue del compromiso (identificación con la organización) y de la participación (identificación con el trabajo mismo)."}
+  ]
+}
+};
+
+const CHAPTER_ORDER = ["cap11","cap12","cap13","cap14","cap15"];
+
+/* =========================================================
+   ESTADO / ALMACENAMIENTO
+   ========================================================= */
+function safeGet(key, fallback) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+  catch(e) { return fallback; }
+}
+function safeSet(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch(e) {}
+}
+
+function getKnown(chapKey) { return safeGet('pep2_known_'+chapKey, []); }
+function setKnown(chapKey, arr) { safeSet('pep2_known_'+chapKey, arr); }
+function getBestScore(chapKey) { return safeGet('pep2_score_'+chapKey, null); }
+function setBestScore(chapKey, score) {
+  const cur = getBestScore(chapKey);
+  if (cur === null || score > cur) safeSet('pep2_score_'+chapKey, score);
+}
+
+let currentChapter = null;
+let flashOrder = [];
+let flashIndex = 0;
+let flashFlipped = false;
+
+let quizIndex = 0;
+let quizScore = 0;
+let quizAnswered = false;
+
+/* =========================================================
+   TEMA
+   ========================================================= */
+function initTheme() {
+  const saved = safeGet('pep2_theme', null);
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  updateThemeIcon();
+}
+function updateThemeIcon() {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const isDark = cur === 'dark' || (!cur && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+}
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const isDarkNow = cur === 'dark' || (!cur && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const next = isDarkNow ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  safeSet('pep2_theme', next);
+  updateThemeIcon();
+});
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+function computeChapterProgress(key) {
+  const ch = DATA[key];
+  const known = getKnown(key);
+  const bestScore = getBestScore(key);
+  const flashPct = ch.flashcards.length ? Math.round((known.length / ch.flashcards.length) * 100) : 0;
+  const mastered = known.length === ch.flashcards.length && bestScore === ch.quiz.length;
+  return { known: known.length, total: ch.flashcards.length, flashPct, bestScore, mastered };
+}
+
+function renderDashboard() {
+  const statRow = document.getElementById('statRow');
+  const grid = document.getElementById('chapterGrid');
+  grid.innerHTML = '';
+
+  let totalFlash = 0, knownFlash = 0, masteredChapters = 0, scoresSum = 0, scoresCount = 0;
+
+  CHAPTER_ORDER.forEach(key => {
+    const ch = DATA[key];
+    const prog = computeChapterProgress(key);
+    totalFlash += prog.total;
+    knownFlash += prog.known;
+    if (prog.mastered) masteredChapters++;
+    if (prog.bestScore !== null) { scoresSum += prog.bestScore; scoresCount++; }
+
+    const card = document.createElement('button');
+    card.className = 'chapter-card';
+    card.onclick = () => openChapter(key);
+    card.innerHTML = `
+      <div class="cap-num">Capítulo ${ch.numero}${prog.mastered ? ' · <span class="badge-done">✓ Dominado</span>' : ''}</div>
+      <h3>${ch.titulo}</h3>
+      <div class="pages">pp. ${ch.paginas}</div>
+      <div class="progress-track"><div class="progress-fill" style="width:${prog.flashPct}%"></div></div>
+      <div class="mini-stats">
+        <span>📇 ${prog.known}/${prog.total} cartas</span>
+        <span>📝 ${prog.bestScore !== null ? prog.bestScore + '/' + ch.quiz.length : '—'}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  const avgScore = scoresCount ? (scoresSum / scoresCount).toFixed(1) : '—';
+  const flashPctTotal = totalFlash ? Math.round((knownFlash/totalFlash)*100) : 0;
+
+  statRow.innerHTML = `
+    <div class="stat-tile">
+      <p class="label">Capítulos dominados</p>
+      <p class="value">${masteredChapters} <small>/ ${CHAPTER_ORDER.length}</small></p>
+    </div>
+    <div class="stat-tile">
+      <p class="label">Flashcards dominadas</p>
+      <p class="value">${knownFlash} <small>/ ${totalFlash} (${flashPctTotal}%)</small></p>
+    </div>
+    <div class="stat-tile">
+      <p class="label">Promedio en quizzes</p>
+      <p class="value">${avgScore}${scoresCount ? ' <small>/ 5</small>' : ''}</p>
+    </div>
+  `;
+}
+
+function goDashboard() {
+  currentChapter = null;
+  document.getElementById('view-chapter').classList.add('hidden');
+  document.getElementById('view-dashboard').classList.remove('hidden');
+  renderDashboard();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* =========================================================
+   VISTA DE CAPÍTULO
+   ========================================================= */
+function openChapter(key) {
+  currentChapter = key;
+  const ch = DATA[key];
+  document.getElementById('chTitle').textContent = `Capítulo ${ch.numero} — ${ch.titulo}`;
+  document.getElementById('chMeta').textContent = `pp. ${ch.paginas} · Administración, Robbins 13ª ed.`;
+  document.getElementById('summaryText').innerHTML = ch.resumen;
+
+  document.getElementById('view-dashboard').classList.add('hidden');
+  document.getElementById('view-chapter').classList.remove('hidden');
+
+  switchTab('resumen');
+  initFlashcards(key);
+  initQuiz(key);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+}
+
+/* =========================================================
+   FLASHCARDS
+   ========================================================= */
+function initFlashcards(key) {
+  flashOrder = DATA[key].flashcards.map((_, i) => i);
+  flashIndex = 0;
+  flashFlipped = false;
+  renderFlashcard();
+}
+
+function renderFlashcard() {
+  const ch = DATA[currentChapter];
+  const idx = flashOrder[flashIndex];
+  const card = ch.flashcards[idx];
+  document.getElementById('flashFrontText').textContent = card.f;
+  document.getElementById('flashBackText').textContent = card.b;
+  document.getElementById('flashcardEl').classList.toggle('flipped', flashFlipped);
+  document.getElementById('flashCounter').textContent = `Carta ${flashIndex+1} / ${ch.flashcards.length}`;
+
+  const known = getKnown(currentChapter);
+  document.getElementById('flashKnownCount').textContent = `${known.length} dominadas`;
+  document.getElementById('flashProgressFill').style.width = (known.length / ch.flashcards.length * 100) + '%';
+}
+
+function flipCard() { flashFlipped = !flashFlipped; document.getElementById('flashcardEl').classList.toggle('flipped', flashFlipped); }
+function nextCard() { flashFlipped = false; flashIndex = (flashIndex + 1) % flashOrder.length; renderFlashcard(); }
+function prevCard() { flashFlipped = false; flashIndex = (flashIndex - 1 + flashOrder.length) % flashOrder.length; renderFlashcard(); }
+function shuffleCards() {
+  for (let i = flashOrder.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [flashOrder[i], flashOrder[j]] = [flashOrder[j], flashOrder[i]];
+  }
+  flashIndex = 0; flashFlipped = false; renderFlashcard();
+}
+function markCard(known) {
+  const idx = flashOrder[flashIndex];
+  let arr = getKnown(currentChapter);
+  if (known) { if (!arr.includes(idx)) arr.push(idx); }
+  else { arr = arr.filter(i => i !== idx); }
+  setKnown(currentChapter, arr);
+  nextCard();
+}
+function resetFlashProgress() {
+  setKnown(currentChapter, []);
+  renderFlashcard();
+}
+
+/* =========================================================
+   QUIZ
+   ========================================================= */
+function initQuiz(key) {
+  quizIndex = 0; quizScore = 0; quizAnswered = false;
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const ch = DATA[currentChapter];
+  const wrap = document.getElementById('quizWrap');
+
+  if (quizIndex >= ch.quiz.length) {
+    setBestScore(currentChapter, quizScore);
+    const pct = Math.round((quizScore/ch.quiz.length)*100);
+    wrap.innerHTML = `
+      <div class="quiz-card quiz-result">
+        <div style="font-size:40px;">${pct >= 80 ? '🎉' : pct >= 50 ? '👍' : '📚'}</div>
+        <p style="margin:4px 0 0;">Resultado final</p>
+        <div class="score">${quizScore} / ${ch.quiz.length}</div>
+        <p>${pct >= 80 ? '¡Excelente dominio del capítulo!' : pct >= 50 ? 'Vas bien, repasa las flashcards de lo que falló.' : 'Repasa el resumen y las flashcards antes de reintentar.'}</p>
+        <button class="btn primary" onclick="initQuiz(currentChapter)">🔁 Repetir quiz</button>
+      </div>`;
+    return;
+  }
+
+  const q = ch.quiz[quizIndex];
+  const letters = Object.keys(q.opts);
+
+  wrap.innerHTML = `
+    <div class="quiz-progress-row">
+      <span>Pregunta ${quizIndex+1} / ${ch.quiz.length}</span>
+      <span>Puntaje: ${quizScore}</span>
+    </div>
+    <div class="quiz-card">
+      <p class="quiz-question">${q.q}</p>
+      <div class="quiz-options" id="quizOptions">
+        ${letters.map(L => `<button class="quiz-option" data-letter="${L}" onclick="answerQuiz('${L}')"><span class="opt-letter">${L}</span><span>${q.opts[L]}</span></button>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <div class="quiz-footer">
+        <span></span>
+        <button class="btn primary" id="quizNextBtn" onclick="nextQuizQuestion()" disabled>Siguiente pregunta →</button>
+      </div>
+    </div>
+  `;
+}
+
+function answerQuiz(letter) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const ch = DATA[currentChapter];
+  const q = ch.quiz[quizIndex];
+  const correct = letter === q.correct;
+  if (correct) quizScore++;
+
+  document.querySelectorAll('#quizOptions .quiz-option').forEach(btn => {
+    btn.disabled = true;
+    const L = btn.dataset.letter;
+    if (L === q.correct) btn.classList.add('correct');
+    else if (L === letter) btn.classList.add('incorrect');
+  });
+
+  const fb = document.getElementById('quizFeedback');
+  fb.className = 'quiz-feedback show ' + (correct ? 'ok' : 'bad');
+  fb.innerHTML = `<strong>${correct ? '✓ Correcto' : '✗ Incorrecto'}</strong><div class="exp">${q.exp}</div>`;
+
+  document.getElementById('quizNextBtn').disabled = false;
+}
+
+function nextQuizQuestion() {
+  quizIndex++;
+  quizAnswered = false;
+  renderQuiz();
+}
+
+/* =========================================================
+   INIT
+   ========================================================= */
+initTheme();
+goDashboard();
+</script>
+</body>
+</html>

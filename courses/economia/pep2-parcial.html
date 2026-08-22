@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumen PEP 2 · Introducción a la Economía</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  p{ color: inherit; }
+  :root{
+    --bg:#f7f8fa;
+    --surface:#ffffff;
+    --surface-2:#eef1f6;
+    --text:#1c2430;
+    --text-muted:#5b6472;
+    --border:#e1e5eb;
+    --accent:#2f5fa8;
+    --accent-2:#1c3f75;
+    --accent-soft:#e7eefb;
+    --demand:#c2410c;
+    --supply:#1d7a5f;
+    --tax:#8a3ab0;
+    --good:#1a7f4f;
+    --bad:#b3261e;
+    --shadow: 0 1px 2px rgba(20,25,35,.06), 0 6px 20px rgba(20,25,35,.05);
+    --radius:14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#12161d;
+      --surface:#1a2029;
+      --surface-2:#212836;
+      --text:#e8ecf3;
+      --text-muted:#a3adbb;
+      --border:#2b3341;
+      --accent:#6f9ce8;
+      --accent-2:#a9c4f2;
+      --accent-soft:#1e2a40;
+      --demand:#f0895a;
+      --supply:#4fc79a;
+      --tax:#c391e8;
+      --good:#4fd699;
+      --bad:#f28b82;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height:1.55;
+  }
+  a{color:var(--accent);}
+  .wrap{max-width:940px; margin:0 auto; padding:0 20px 80px;}
+
+  header.hero{
+    background: linear-gradient(135deg, var(--accent-2), var(--accent));
+    color:#fff;
+    padding:44px 20px 34px;
+    text-align:center;
+  }
+  header.hero .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:12.5px;
+    opacity:.85;
+    margin-bottom:8px;
+  }
+  header.hero h1{
+    margin:0 0 8px;
+    font-size:clamp(28px,4.2vw,40px);
+  }
+  header.hero p{
+    margin:0;
+    font-size:16px;
+    opacity:.92;
+    max-width:600px;
+    margin-inline:auto;
+  }
+
+  nav.tabs{
+    position:sticky; top:100px; z-index:20;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+    box-shadow:var(--shadow);
+  }
+  nav.tabs .inner{
+    max-width:940px; margin:0 auto;
+    display:flex; gap:4px; overflow-x:auto;
+    padding:8px 14px;
+    -ms-overflow-style:none; scrollbar-width:none;
+  }
+  nav.tabs .inner::-webkit-scrollbar{display:none;}
+  nav.tabs a{
+    flex:none;
+    text-decoration:none;
+    color:var(--text-muted);
+    font-size:13.5px;
+    font-weight:600;
+    padding:9px 14px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  nav.tabs a:hover{background:var(--surface-2); color:var(--text);}
+  nav.tabs a.active{background:var(--accent-soft); color:var(--accent);}
+
+  section{padding:46px 0 10px;}
+  section h2{
+    font-size:24px;
+    margin:0 0 4px;
+    display:flex; align-items:center; gap:10px;
+  }
+  .step{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:28px; height:28px; border-radius:50%;
+    background:var(--accent); color:#fff; font-size:14px; font-weight:700;
+    flex:none;
+  }
+  section > .lead{
+    color:var(--text-muted);
+    margin:0 0 22px;
+    font-size:15px;
+    max-width:660px;
+  }
+  h3.subhead{
+    font-size:16px; margin:26px 0 10px; color:var(--accent-2);
+  }
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:20px 22px;
+    margin-bottom:18px;
+  }
+  .card h3{margin:0 0 10px; font-size:16.5px;}
+  .card p{margin:0 0 10px; font-size:14.8px;}
+  .card p:last-child{margin-bottom:0;}
+  .muted{color:var(--text-muted);}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  @media (max-width:720px){ .grid2, .grid3{grid-template-columns:1fr;} }
+
+  .diagram-box{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:14px 16px 4px;
+    margin-bottom:18px;
+  }
+  svg{width:100%; height:auto; display:block;}
+  .legend{display:flex; gap:18px; flex-wrap:wrap; padding:10px 4px 16px; font-size:13px; color:var(--text-muted);}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .swatch{width:14px; height:3px; border-radius:2px; display:inline-block;}
+
+  .callout{
+    border-left:3px solid var(--accent);
+    background:var(--accent-soft);
+    border-radius:0 10px 10px 0;
+    padding:12px 16px;
+    font-size:14.3px;
+    margin:14px 0;
+  }
+  .callout b{color:var(--accent-2);}
+  .callout.next{border-left-color:var(--tax); background:color-mix(in srgb, var(--tax) 10%, var(--surface));}
+
+  table{width:100%; border-collapse:collapse; font-size:13.6px; margin:8px 0 4px;}
+  th, td{ text-align:left; padding:8px 9px; border-bottom:1px solid var(--border); }
+  th{ color:var(--text-muted); font-weight:700; font-size:11.8px; text-transform:uppercase; letter-spacing:.03em; }
+  td.num, th.num{text-align:center;}
+  td.total{font-weight:700; color:var(--accent-2);}
+
+  .bullets{margin:0; padding-left:20px; font-size:14.8px;}
+  .bullets li{margin-bottom:6px;}
+
+  .zone-tag{
+    display:inline-block; font-size:11.5px; font-weight:700; padding:2px 9px;
+    border-radius:999px; margin-bottom:6px;
+  }
+  .zone-a{background:color-mix(in srgb, var(--good) 18%, var(--surface)); color:var(--good);}
+  .zone-b{background:color-mix(in srgb, var(--demand) 18%, var(--surface)); color:var(--demand);}
+  .zone-c{background:var(--surface-2); color:var(--text-muted);}
+
+  .flip-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px;}
+  .flip-card{ perspective:1000px; height:120px; cursor:pointer; }
+  .flip-inner{ position:relative; width:100%; height:100%; transition:transform .5s; transform-style:preserve-3d; }
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg);}
+  .flip-front, .flip-back{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:12px;
+    border:1px solid var(--border); display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:12px; font-size:13.4px;
+  }
+  .flip-front{background:var(--surface); font-weight:700; color:var(--accent-2); box-shadow:var(--shadow);}
+  .flip-back{background:var(--accent); color:#fff; transform:rotateY(180deg);}
+
+  .quiz-q{margin-bottom:22px;}
+  .quiz-q p.qtext{font-weight:600; font-size:15px; margin:0 0 10px;}
+  .quiz-opts{display:grid; gap:8px;}
+  .opt{
+    display:flex; gap:10px; align-items:flex-start;
+    border:1px solid var(--border); border-radius:10px;
+    padding:10px 12px; font-size:14px; cursor:pointer;
+    background:var(--surface);
+  }
+  .opt:hover{border-color:var(--accent);}
+  .opt input{margin-top:3px;}
+  .opt.correct{border-color:var(--good); background:color-mix(in srgb, var(--good) 12%, var(--surface));}
+  .opt.incorrect{border-color:var(--bad); background:color-mix(in srgb, var(--bad) 12%, var(--surface));}
+
+  .quiz-actions{display:flex; align-items:center; gap:14px; margin-top:6px;}
+  button.primary{
+    background:var(--accent); color:#fff; border:none;
+    padding:11px 20px; border-radius:10px; font-size:14.5px; font-weight:700;
+    cursor:pointer;
+  }
+  button.primary:hover{background:var(--accent-2);}
+  #quizScore{font-size:14.5px; font-weight:700;}
+
+  footer{ text-align:center; color:var(--text-muted); font-size:12.8px; padding:30px 20px 50px; }
+
+  /* ---- Ejercicios ---- */
+  .ex-block{ margin-bottom:6px; }
+  .ex-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:16px 18px; margin-bottom:14px;
+  }
+  .ex-card .ex-num{ font-size:11.5px; font-weight:800; color:var(--accent); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; }
+  .ex-card .ex-q{ font-size:14.6px; margin:0 0 10px; }
+  .ex-toggle{
+    background:var(--accent-soft); color:var(--accent-2); border:none; border-radius:8px;
+    padding:7px 14px; font-size:12.6px; font-weight:700; cursor:pointer;
+  }
+  .ex-toggle:hover{ filter:brightness(0.95); }
+  .ex-sol{
+    display:none; margin-top:12px; padding:11px 14px; border-radius:10px;
+    background:color-mix(in srgb, var(--good) 10%, var(--surface)); border-left:3px solid var(--good);
+    font-size:13.6px;
+  }
+  .ex-sol.open{ display:block; }
+  .ex-sol b{ color:var(--good); }
+
+  /* ---- Mapa conceptual ---- */
+  .map-col{ display:flex; flex-direction:column; }
+  .map-head{
+    color:#fff; text-align:center; border-radius:12px; padding:12px 16px; font-weight:800; font-size:14.5px;
+    margin-bottom:0;
+  }
+  .map-head.u1{ background:var(--accent); }
+  .map-head.u2{ background:var(--supply); }
+  .map-leaf{
+    border-radius:10px; padding:11px 14px; font-size:12.6px; margin-top:0;
+  }
+  .map-col.u1 .map-leaf{ background:var(--accent-soft); border:1px solid var(--accent); border-left:3px solid var(--accent); }
+  .map-col.u2 .map-leaf{ background:color-mix(in srgb, var(--supply) 12%, var(--surface)); border:1px solid var(--supply); border-left:3px solid var(--supply); }
+  .map-leaf + .map-leaf{ margin-top:12px; }
+  .map-leaf .leaf-title{ font-weight:800; margin-bottom:4px; }
+  .map-col.u1 .leaf-title{ color:var(--accent-2); }
+  .map-col.u2 .leaf-title{ color:var(--supply); }
+  .map-leaf ul{ margin:0; padding-left:16px; }
+  .map-leaf li{ margin-bottom:2px; }
+  .map-stack{ display:flex; flex-direction:column; gap:12px; margin-top:14px; padding-left:6px; border-left:2px dashed var(--border); }
+
+  /* ---- Plan de repaso ---- */
+  .plan-day{
+    display:grid; grid-template-columns:74px 1fr; gap:12px;
+    border:1px solid var(--border); border-radius:12px; padding:12px 16px; margin-bottom:12px;
+    background:var(--surface);
+  }
+  .plan-day.exam{ background:color-mix(in srgb, var(--tax) 10%, var(--surface)); border-color:var(--tax); }
+  .plan-daylabel{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+  .plan-daylabel .dow{ font-size:11px; font-weight:800; color:var(--accent); text-transform:uppercase; }
+  .plan-day.exam .plan-daylabel .dow{ color:var(--tax); }
+  .plan-daylabel .date{ font-size:20px; font-weight:800; }
+  .plan-topic{ font-size:14.5px; font-weight:800; color:var(--accent-2); margin-bottom:4px; }
+  .plan-day.exam .plan-topic{ color:var(--tax); }
+  .plan-tasks label{ display:flex; gap:8px; align-items:flex-start; font-size:13px; margin-bottom:4px; cursor:pointer; }
+  .plan-tasks input{ margin-top:3px; }
+  .plan-dur{ display:inline-block; margin-top:4px; font-size:10.8px; font-weight:700; color:var(--text-muted); background:var(--surface-2); padding:2px 9px; border-radius:999px; }
+</style>
+</head>
+<body>
+
+<script src="../../assets/nav.js" data-base="../../" data-course="economia"></script>
+
+<header class="hero">
+  <div class="eyebrow">Introducción a la Economía · USACH</div>
+  <h1>Resumen PEP 2</h1>
+  <p>Clase 3 (Unidad 1: conceptos económicos fundamentales) y Clase 4 (Unidad 2, Parte 1: oferta y demanda) — Semestre 1, 2026.</p>
+</header>
+
+<nav class="tabs">
+  <div class="inner" id="tabNav">
+    <a href="#u1">Costo de oportunidad y FPP</a>
+    <a href="#mercado">Mercado</a>
+    <a href="#demanda">Demanda</a>
+    <a href="#oferta">Oferta</a>
+    <a href="#precio">El precio</a>
+    <a href="#ejercicios">Ejercicios</a>
+    <a href="#mapa">Mapa conceptual</a>
+    <a href="#glosario">Glosario</a>
+    <a href="#plan">Plan de repaso</a>
+    <a href="#quiz">Autoevaluación</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ================= UNIDAD 1 ================= -->
+  <section id="u1">
+    <h2><span class="step">1</span> Costo de oportunidad y FPP</h2>
+    <p class="lead">Unidad 1 — Clase 3. La economía nace de una tensión: los deseos son ilimitados, pero los recursos son escasos. Esa brecha obliga a elegir.</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Deseos — ilimitados</h3>
+        <p class="muted">Más tiempo libre · mejores vacaciones · mayor salario · más bienes y servicios · mejor tecnología · mayor seguridad.</p>
+      </div>
+      <div class="card">
+        <h3>Recursos — escasos</h3>
+        <p class="muted">Tiempo (24 h/día) · dinero (presupuesto limitado) · trabajo y capital humano · tierra y recursos naturales · energía y atención · capacidad de producción.</p>
+      </div>
+    </div>
+
+    <h3 class="subhead">Restricciones y disyuntivas (trade-offs)</h3>
+    <div class="grid3">
+      <div class="card"><h3>⏱ Tiempo</h3><p>24 horas al día. Dedicar tiempo a una actividad implica menos tiempo para otra.</p></div>
+      <div class="card"><h3>💰 Presupuesto</h3><p>El ingreso disponible es finito. Gastar en un bien reduce lo disponible para otros.</p></div>
+      <div class="card"><h3>⚡ Capacidad</h3><p>Tecnología, capital y conocimiento determinan los límites de lo factible de producir.</p></div>
+    </div>
+    <div class="callout"><b>Disyuntiva (trade-off):</b> obtener más de algo implica necesariamente obtener menos de otra cosa. Las restricciones generan disyuntivas; las disyuntivas exigen elección.</div>
+
+    <h3 class="subhead">Costo de oportunidad</h3>
+    <div class="card">
+      <p><b>El costo de oportunidad es el valor de la mejor alternativa no elegida.</b></p>
+      <ul class="bullets">
+        <li>No es solo el gasto monetario: puede incluir tiempo y otras alternativas sacrificadas.</li>
+        <li>Solo importa la mejor alternativa sacrificada — no todas las alternativas perdidas.</li>
+        <li>Está siempre presente, incluso al elegir algo aparentemente "gratuito".</li>
+      </ul>
+    </div>
+    <div class="grid2">
+      <div class="card" style="text-align:center;">
+        <h3>¿Facebook es gratis?</h3>
+        <div style="font-size:34px; font-weight:800; color:var(--accent);">$0</div>
+        <p class="muted">Precio monetario — sin cobro visible.</p>
+      </div>
+      <div class="card" style="text-align:center;">
+        <h3>Costo real</h3>
+        <p>⏱ Tiempo invertido<br>🎯 La mejor alternativa sacrificada en ese tiempo</p>
+      </div>
+    </div>
+    <div class="callout"><b>Precio ≠ Costo:</b> el costo relevante no es el precio monetario, sino el valor de lo mejor que dejas de hacer.</div>
+
+    <h3 class="subhead">Frontera de Posibilidades de Producción (FPP)</h3>
+    <p>Muestra todas las combinaciones posibles de dos bienes que una economía puede producir usando eficientemente sus recursos. <b>La pendiente de la curva mide el costo de oportunidad</b> de producir una unidad adicional de un bien. La FPP no dice qué elegir: dice qué es posible elegir.</p>
+
+    <div class="diagram-box">
+      <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
+        <line x1="70" y1="20" x2="70" y2="310" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <line x1="70" y1="310" x2="470" y2="310" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="42" y="18" font-size="12" fill="currentColor" opacity="0.6">Bien Y</text>
+        <text x="440" y="326" font-size="12" fill="currentColor" opacity="0.6">Bien X</text>
+
+        <polyline points="70,68.3 126.7,80.4 183.3,104.6 240,140.8 296.7,189.2 353.3,249.6 410,310"
+                  fill="none" stroke="var(--supply)" stroke-width="3"/>
+
+        <circle cx="183.3" cy="104.6" r="6" fill="var(--good)"/>
+        <text x="193" y="100" font-size="12.5" fill="var(--good)" font-weight="700">A: Eficiente</text>
+
+        <circle cx="126.7" cy="189.2" r="6" fill="var(--demand)"/>
+        <text x="136.7" y="193" font-size="12.5" fill="var(--demand)" font-weight="700">B: Ineficiente</text>
+
+        <circle cx="183.3" cy="44.1" r="6" fill="currentColor" opacity="0.55"/>
+        <text x="193.3" y="48" font-size="12.5" fill="currentColor" opacity="0.7" font-weight="700">C: Inviable</text>
+      </svg>
+      <div class="legend">
+        <span><span class="swatch" style="background:var(--supply)"></span>FPP</span>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card"><span class="zone-tag zone-a">Zona A</span><p><b>Eficiente</b> — sobre la FPP. Se usan todos los recursos de forma óptima; no se puede mejorar un bien sin sacrificar el otro.</p></div>
+      <div class="card"><span class="zone-tag zone-b">Zona B</span><p><b>Ineficiente</b> — bajo la FPP. Hay recursos ociosos o mal asignados; se puede mejorar sin sacrificio adicional.</p></div>
+      <div class="card"><span class="zone-tag zone-c">Zona C</span><p><b>Inviable</b> — fuera de la FPP. No alcanzable con los recursos y tecnología actuales; requiere crecimiento o innovación.</p></div>
+    </div>
+  </section>
+
+  <!-- ================= MERCADO ================= -->
+  <section id="mercado">
+    <h2><span class="step">2</span> El mercado</h2>
+    <p class="lead">Unidad 2, Parte 1 — Clase 4. Un mercado es un conjunto de compradores y vendedores que interactúan para intercambiar un bien o servicio. Lo relevante no es el lugar físico, sino la interacción económica.</p>
+
+    <table>
+      <thead><tr><th>Agente</th><th>Qué decide</th><th>Variable asociada</th></tr></thead>
+      <tbody>
+        <tr><td>Comprador</td><td>Cuánto comprar</td><td>Cantidad demandada</td></tr>
+        <tr><td>Vendedor</td><td>Cuánto vender</td><td>Cantidad ofrecida</td></tr>
+        <tr><td>Mercado</td><td>Precio y cantidad transada</td><td>Equilibrio</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card">
+      <h3>Mercado competitivo: supuestos mínimos</h3>
+      <ul class="bullets">
+        <li>Muchos compradores y muchos vendedores → mercado atomizado.</li>
+        <li>Bienes homogéneos.</li>
+        <li>Información perfecta.</li>
+        <li>Sin barreras a la entrada ni a la salida.</li>
+      </ul>
+      <p><b>→ Agentes tomadores de precio (precio-aceptantes):</b> ningún agente tiene poder relevante para modificar el precio de mercado.</p>
+    </div>
+
+    <div class="callout"><b>Ejemplo hilo conductor:</b> a las 9:40, muchos estudiantes quieren comprar café antes del siguiente módulo; varias cafeterías deciden cuánto preparar y vender. Este caso se usa para ilustrar demanda, oferta y el rol del precio en las secciones siguientes.</div>
+  </section>
+
+  <!-- ================= DEMANDA ================= -->
+  <section id="demanda">
+    <h2><span class="step">3</span> Ley de la demanda</h2>
+    <p class="lead">Manteniendo todo lo demás constante, cuando el precio de un bien aumenta, la cantidad demandada tiende a disminuir.</p>
+
+    <div class="diagram-box">
+      <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
+        <line x1="70" y1="20" x2="70" y2="310" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <line x1="70" y1="310" x2="470" y2="310" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="30" y="18" font-size="12" fill="currentColor" opacity="0.6">Precio</text>
+        <text x="440" y="326" font-size="12" fill="currentColor" opacity="0.6">Café/sem.</text>
+        <line x1="70" y1="56.25" x2="396" y2="273.75" stroke="var(--demand)" stroke-width="3"/>
+        <text x="400" y="270" font-size="13" fill="var(--demand)" font-weight="700">D</text>
+        <text x="30" y="60" font-size="11" fill="currentColor" opacity="0.55">$7.000</text>
+        <text x="30" y="278" font-size="11" fill="currentColor" opacity="0.55">$1.000</text>
+        <text x="60" y="325" font-size="11" fill="currentColor" opacity="0.55">0</text>
+        <text x="390" y="325" font-size="11" fill="currentColor" opacity="0.55">6</text>
+      </svg>
+      <div class="legend"><span><span class="swatch" style="background:var(--demand)"></span>Demanda individual (Ana) — mercado del café</span></div>
+    </div>
+
+    <table>
+      <thead><tr><th>Precio</th><th class="num">Demanda (café/semana)</th></tr></thead>
+      <tbody>
+        <tr><td>$1.000</td><td class="num">6</td></tr>
+        <tr><td>$2.000</td><td class="num">5</td></tr>
+        <tr><td>$3.000</td><td class="num">4</td></tr>
+        <tr><td>$4.000</td><td class="num">3</td></tr>
+        <tr><td>$5.000</td><td class="num">2</td></tr>
+        <tr><td>$6.000</td><td class="num">1</td></tr>
+        <tr><td>$7.000</td><td class="num">0</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subhead">Demanda individual y demanda de mercado</h3>
+    <p>La demanda de mercado suma (horizontalmente) las cantidades que todos los compradores quieren adquirir a cada precio. Conceptos: <b>disposición a pagar</b> y <b>beneficio marginal decreciente</b>.</p>
+    <table>
+      <thead><tr><th>Precio</th><th class="num">Ana</th><th class="num">Benjamín</th><th class="num">Camila</th><th class="num">Demanda total</th></tr></thead>
+      <tbody>
+        <tr><td>$1.000</td><td class="num">6</td><td class="num">12</td><td class="num">30</td><td class="num total">48</td></tr>
+        <tr><td>$2.000</td><td class="num">5</td><td class="num">10</td><td class="num">25</td><td class="num total">40</td></tr>
+        <tr><td>$3.000</td><td class="num">4</td><td class="num">8</td><td class="num">20</td><td class="num total">32</td></tr>
+        <tr><td>$4.000</td><td class="num">3</td><td class="num">6</td><td class="num">15</td><td class="num total">24</td></tr>
+        <tr><td>$5.000</td><td class="num">2</td><td class="num">4</td><td class="num">10</td><td class="num total">16</td></tr>
+        <tr><td>$6.000</td><td class="num">1</td><td class="num">2</td><td class="num">5</td><td class="num total">8</td></tr>
+        <tr><td>$7.000</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num total">0</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subhead">Movimiento vs. desplazamiento de la demanda</h3>
+    <div class="grid2">
+      <div class="card">
+        <h3>Movimiento sobre la curva</h3>
+        <p>Ocurre cuando cambia el <b>precio del mismo bien</b>. Ej.: el café sube de $1.200 a $2.000.</p>
+      </div>
+      <div class="card">
+        <h3>Desplazamiento de la curva</h3>
+        <p>Ocurre cuando cambia <b>otro factor</b>:</p>
+        <ul class="bullets">
+          <li>Ingreso y riqueza</li>
+          <li>Gustos y preferencias</li>
+          <li>Disponibilidad y precio de bienes relacionados</li>
+          <li>Número y escala de compradores</li>
+          <li>Expectativas sobre el futuro</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout"><b>Regla clave:</b> si cambia el precio del mismo bien, NO se desplaza la curva — solo hay movimiento sobre ella.</div>
+  </section>
+
+  <!-- ================= OFERTA ================= -->
+  <section id="oferta">
+    <h2><span class="step">4</span> Ley de la oferta</h2>
+    <p class="lead">Manteniendo todo lo demás constante, cuando el precio de un bien aumenta, la cantidad ofrecida tiende a aumentar.</p>
+
+    <div class="diagram-box">
+      <svg viewBox="0 0 500 340" xmlns="http://www.w3.org/2000/svg">
+        <line x1="70" y1="20" x2="70" y2="310" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <line x1="70" y1="310" x2="470" y2="310" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="30" y="18" font-size="12" fill="currentColor" opacity="0.6">Precio</text>
+        <text x="440" y="326" font-size="12" fill="currentColor" opacity="0.6">Café/sem.</text>
+        <line x1="70" y1="273.75" x2="396" y2="56.25" stroke="var(--supply)" stroke-width="3"/>
+        <text x="400" y="60" font-size="13" fill="var(--supply)" font-weight="700">O</text>
+        <text x="30" y="60" font-size="11" fill="currentColor" opacity="0.55">$7.000</text>
+        <text x="30" y="278" font-size="11" fill="currentColor" opacity="0.55">$1.000</text>
+        <text x="60" y="325" font-size="11" fill="currentColor" opacity="0.55">0</text>
+        <text x="390" y="325" font-size="11" fill="currentColor" opacity="0.55">6</text>
+      </svg>
+      <div class="legend"><span><span class="swatch" style="background:var(--supply)"></span>Oferta individual (Alpha) — mercado del café</span></div>
+    </div>
+
+    <table>
+      <thead><tr><th>Precio</th><th class="num">Oferta (café/semana)</th></tr></thead>
+      <tbody>
+        <tr><td>$1.000</td><td class="num">0</td></tr>
+        <tr><td>$2.000</td><td class="num">1</td></tr>
+        <tr><td>$3.000</td><td class="num">2</td></tr>
+        <tr><td>$4.000</td><td class="num">3</td></tr>
+        <tr><td>$5.000</td><td class="num">4</td></tr>
+        <tr><td>$6.000</td><td class="num">5</td></tr>
+        <tr><td>$7.000</td><td class="num">6</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subhead">Oferta individual y oferta de mercado</h3>
+    <p>La oferta de mercado suma las cantidades que todos los vendedores quieren vender a cada precio. Concepto: <b>disposición a aceptar</b>.</p>
+    <table>
+      <thead><tr><th>Precio</th><th class="num">Alpha</th><th class="num">Beta</th><th class="num">Gamma</th><th class="num">Oferta total</th></tr></thead>
+      <tbody>
+        <tr><td>$1.000</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num total">0</td></tr>
+        <tr><td>$2.000</td><td class="num">1</td><td class="num">2</td><td class="num">5</td><td class="num total">8</td></tr>
+        <tr><td>$3.000</td><td class="num">2</td><td class="num">4</td><td class="num">10</td><td class="num total">16</td></tr>
+        <tr><td>$4.000</td><td class="num">3</td><td class="num">6</td><td class="num">15</td><td class="num total">24</td></tr>
+        <tr><td>$5.000</td><td class="num">4</td><td class="num">8</td><td class="num">20</td><td class="num total">32</td></tr>
+        <tr><td>$6.000</td><td class="num">5</td><td class="num">10</td><td class="num">25</td><td class="num total">40</td></tr>
+        <tr><td>$7.000</td><td class="num">6</td><td class="num">12</td><td class="num">30</td><td class="num total">48</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subhead">Movimiento vs. desplazamiento de la oferta</h3>
+    <div class="grid2">
+      <div class="card">
+        <h3>Movimiento sobre la curva</h3>
+        <p>Ocurre cuando cambia el <b>precio del mismo bien</b>. Ej.: el café sube de $1.200 a $2.000.</p>
+      </div>
+      <div class="card">
+        <h3>Desplazamiento de la curva</h3>
+        <p>Ocurre cuando cambia <b>otro factor</b>:</p>
+        <ul class="bullets">
+          <li>Precio de los factores usados para producir el bien</li>
+          <li>Tecnología utilizada para producir el bien</li>
+          <li>Número y escala de los vendedores</li>
+          <li>Previsión de los vendedores sobre el futuro</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PRECIO ================= -->
+  <section id="precio">
+    <h2><span class="step">5</span> El precio como señal e incentivo</h2>
+    <p class="lead">El precio coordina las decisiones de compradores y vendedores sin que exista una orden central.</p>
+
+    <div class="grid3">
+      <div class="card"><h3>📡 Informa</h3><p>Revela la escasez relativa del bien.</p></div>
+      <div class="card"><h3>🎯 Incentiva</h3><p>Guía las decisiones de compradores y vendedores.</p></div>
+      <div class="card"><h3>🔗 Coordina</h3><p>Permite que decisiones descentralizadas se ajusten entre sí.</p></div>
+    </div>
+
+    <div class="diagram-box">
+      <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="30" y="110" width="140" height="70" rx="10" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="55" y="140" font-size="13" fill="currentColor" font-weight="700">Compradores</text>
+        <text x="45" y="160" font-size="11.5" fill="currentColor" opacity="0.6">Deciden cuánto comprar</text>
+
+        <rect x="180" y="110" width="140" height="70" rx="10" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/>
+        <text x="215" y="140" font-size="13" fill="var(--accent-2)" font-weight="700">Precio</text>
+        <text x="205" y="160" font-size="11.5" fill="var(--accent-2)" opacity="0.8">Señal común</text>
+
+        <rect x="330" y="110" width="140" height="70" rx="10" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.5"/>
+        <text x="355" y="140" font-size="13" fill="currentColor" font-weight="700">Vendedores</text>
+        <text x="350" y="160" font-size="11.5" fill="currentColor" opacity="0.6">Deciden cuánto vender</text>
+
+        <line x1="170" y1="145" x2="180" y2="145" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrow)"/>
+        <line x1="320" y1="145" x2="330" y2="145" stroke="var(--accent)" stroke-width="2" marker-end="url(#arrow)"/>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="var(--accent)"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="card">
+      <h3>Cierre del bloque</h3>
+      <p>Demanda y oferta deben analizarse conjuntamente. Compradores → demanda; vendedores → oferta; precio → señal; mercado competitivo → muchos agentes responden al precio.</p>
+    </div>
+
+    <div class="callout next"><b>Próximo bloque (Parte 2):</b> ¿qué precio logra coordinar simultáneamente a compradores y vendedores? — el equilibrio de mercado aún no se vio en esta parte, queda como pregunta abierta.</div>
+  </section>
+
+  <!-- ================= EJERCICIOS ================= -->
+  <section id="ejercicios">
+    <h2><span class="step">6</span> Guía de ejercicios</h2>
+    <p class="lead">18 ejercicios con solución paso a paso. Intenta resolver antes de mirar la respuesta.</p>
+    <div id="exContainer"></div>
+  </section>
+
+  <!-- ================= MAPA CONCEPTUAL ================= -->
+  <section id="mapa">
+    <h2><span class="step">7</span> Mapa conceptual</h2>
+    <p class="lead">Cómo se conectan los conceptos de las dos clases.</p>
+    <div class="card" style="text-align:center; margin-bottom:20px;">
+      <div style="font-weight:800; color:var(--accent-2); font-size:15px;">PEP 2 — Introducción a la Economía</div>
+      <div class="muted" style="font-size:12.5px;">Clase 3 (Unidad 1) y Clase 4 (Unidad 2, Parte 1)</div>
+    </div>
+    <div class="grid2">
+      <div class="map-col u1">
+        <div class="map-head u1">Unidad 1 · Conceptos fundamentales</div>
+        <div class="map-stack">
+          <div class="map-leaf">
+            <div class="leaf-title">Escasez</div>
+            <ul><li>Deseos ilimitados vs. recursos escasos</li><li>Esa brecha es el origen de la economía</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Restricciones y disyuntivas</div>
+            <ul><li>Tiempo · Presupuesto · Capacidad</li><li>Trade-off: más de algo = menos de otra cosa</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Costo de oportunidad</div>
+            <ul><li>Valor de la MEJOR alternativa no elegida</li><li>No es solo dinero · Precio ≠ Costo</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">FPP</div>
+            <ul><li>Combinaciones eficientes de 2 bienes</li><li>Zonas: A eficiente · B ineficiente · C inviable</li><li>Pendiente = costo de oportunidad</li></ul>
+          </div>
+        </div>
+      </div>
+      <div class="map-col u2">
+        <div class="map-head u2">Unidad 2 · Oferta y demanda</div>
+        <div class="map-stack">
+          <div class="map-leaf">
+            <div class="leaf-title">Mercado y agentes</div>
+            <ul><li>Compradores ↔ vendedores intercambian un bien</li><li>Comprador→demanda · Vendedor→oferta · Mercado→equilibrio</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Mercado competitivo</div>
+            <ul><li>Muchos compradores/vendedores · bienes homogéneos</li><li>Información perfecta · sin barreras</li><li>→ Agentes precio-aceptantes</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Ley de la demanda</div>
+            <ul><li>Precio ↑ → cantidad demandada ↓</li><li>Movimiento: cambia el precio</li><li>Desplaz.: ingreso, gustos, bienes relac., compradores, expectativas</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">Ley de la oferta</div>
+            <ul><li>Precio ↑ → cantidad ofrecida ↑</li><li>Movimiento: cambia el precio</li><li>Desplaz.: factores, tecnología, vendedores, previsión</li></ul>
+          </div>
+          <div class="map-leaf">
+            <div class="leaf-title">El precio</div>
+            <ul><li>Informa la escasez relativa</li><li>Incentiva a compradores y vendedores</li><li>Coordina sin autoridad central</li></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GLOSARIO ================= -->
+  <section id="glosario">
+    <h2><span class="step">8</span> Glosario — toca para ver la definición</h2>
+    <p class="lead">Repasa los conceptos clave antes de la prueba.</p>
+    <div class="flip-grid" id="flipGrid"></div>
+  </section>
+
+  <!-- ================= PLAN DE REPASO ================= -->
+  <section id="plan">
+    <h2><span class="step">9</span> Plan de repaso</h2>
+    <p class="lead">Desde hoy jueves 20 hasta la prueba, martes 25 de agosto de 2026. Marca las tareas a medida que las completas.</p>
+    <div id="planContainer"></div>
+    <div class="callout"><b>Cómo usarlo:</b> sesiones cortas (35–70 min) repartidas en varios días rinden más que una sola maratón. Si un día te falta tiempo, prioriza los ejercicios por sobre releer el resumen.</div>
+  </section>
+
+  <!-- ================= QUIZ ================= -->
+  <section id="quiz">
+    <h2><span class="step">10</span> Autoevaluación rápida</h2>
+    <p class="lead">Responde y luego pulsa "Revisar respuestas" para ver tu puntaje.</p>
+    <div id="quizContainer"></div>
+    <div class="quiz-actions">
+      <button class="primary" id="checkQuiz">Revisar respuestas</button>
+      <span id="quizScore"></span>
+    </div>
+  </section>
+
+</div>
+
+<footer>Resumen de estudio generado a partir de las diapositivas de Clase 3 y Clase 4 (Semestre 1, 2026) — Departamento de Economía, USACH. Repasa siempre con tus apuntes y la guía de ejercicios oficial.</footer>
+
+<script>
+  // ---- Active nav highlight ----
+  var navLinks = document.querySelectorAll('#tabNav a');
+  var sections = Array.from(navLinks).map(function(l){ return document.querySelector(l.getAttribute('href')); });
+  function onScroll(){
+    var pos = window.scrollY + 120;
+    var current = sections[0];
+    sections.forEach(function(s){ if(s.offsetTop <= pos) current = s; });
+    navLinks.forEach(function(l){ l.classList.remove('active'); });
+    var idx = sections.indexOf(current);
+    if(idx >= 0) navLinks[idx].classList.add('active');
+  }
+  document.addEventListener('scroll', onScroll);
+  onScroll();
+
+  // ---- Glossary flip cards ----
+  var terms = [
+    ["Escasez", "Los recursos (tiempo, dinero, trabajo, tierra) son limitados frente a los deseos ilimitados de las personas."],
+    ["Restricción", "Límite que enfrenta una persona o economía: de tiempo, de presupuesto o de capacidad productiva."],
+    ["Disyuntiva (trade-off)", "Situación en que obtener más de algo implica necesariamente obtener menos de otra cosa."],
+    ["Costo de oportunidad", "El valor de la mejor alternativa no elegida. No es solo el gasto monetario."],
+    ["FPP", "Frontera de Posibilidades de Producción: combinaciones máximas de dos bienes que se pueden producir usando eficientemente los recursos."],
+    ["Punto eficiente", "Está sobre la FPP: no se puede producir más de un bien sin sacrificar el otro."],
+    ["Punto ineficiente", "Está bajo la FPP: hay recursos ociosos o mal asignados."],
+    ["Punto inviable", "Está fuera de la FPP: no alcanzable con los recursos y tecnología actuales."],
+    ["Mercado", "Conjunto de compradores y vendedores que interactúan para intercambiar un bien o servicio."],
+    ["Mercado competitivo", "Muchos compradores y vendedores, bienes homogéneos, información perfecta, sin barreras de entrada/salida."],
+    ["Agente precio-aceptante", "Ningún comprador ni vendedor tiene poder para modificar el precio de mercado por sí solo."],
+    ["Ley de la demanda", "Si el precio de un bien sube (todo lo demás constante), la cantidad demandada tiende a bajar."],
+    ["Ley de la oferta", "Si el precio de un bien sube (todo lo demás constante), la cantidad ofrecida tiende a subir."],
+    ["Movimiento sobre la curva", "Cambio en la cantidad demandada/ofrecida causado solo por un cambio en el precio del mismo bien."],
+    ["Desplazamiento de la curva", "La curva completa se mueve porque cambió un factor distinto del precio del bien (ingreso, gustos, tecnología, etc.)."],
+    ["Precio como señal", "El precio informa la escasez relativa, incentiva decisiones y coordina a compradores y vendedores sin autoridad central."]
+  ];
+  var grid = document.getElementById('flipGrid');
+  terms.forEach(function(t){
+    var card = document.createElement('div');
+    card.className = 'flip-card';
+    card.innerHTML = '<div class="flip-inner"><div class="flip-front">' + t[0] + '</div><div class="flip-back">' + t[1] + '</div></div>';
+    card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+    grid.appendChild(card);
+  });
+
+  // ---- Ejercicios ----
+  var ejercicios = [
+    { block: "Bloque 1 · Costo de oportunidad", items: [
+      ["Juan puede trabajar ganando $8.000 por hora, o dedicar ese tiempo a estudiar. Si decide estudiar 3 horas en vez de trabajar, ¿cuál es el costo de oportunidad de esa decisión?",
+       "El costo de oportunidad es el valor de la mejor alternativa sacrificada: el sueldo que dejó de ganar. 3 horas × $8.000 = <b>$24.000</b>."],
+      ["María tiene $10.000. Puede comprar un libro que cuesta $10.000, o dos entradas de cine de $5.000 cada una. Decide comprar el libro. ¿Cuál es el costo de oportunidad de su decisión?",
+       "Las dos entradas de cine (o el disfrute de ver esas películas), que era la mejor alternativa que dejó de elegir con ese mismo dinero."],
+      ["Pedro recibió una entrada gratis a un concierto y dice: “ir al concierto no tiene costo de oportunidad, porque no pagué nada por la entrada”. ¿Está en lo correcto? Justifique.",
+       "No. El precio monetario ($0) no es lo mismo que el costo de oportunidad. Asistir igual consume tiempo, y el costo de oportunidad es el valor de la mejor alternativa que Pedro deja de hacer con ese tiempo. Precio ≠ Costo."],
+      ["Marca la alternativa correcta: el costo de oportunidad de una decisión corresponde a… (a) la suma de todas las alternativas dejadas de elegir; (b) el valor de la mejor alternativa no elegida; (c) el gasto monetario directo; (d) el tiempo que demora decidir.",
+       "<b>(b)</b> El valor de la mejor alternativa no elegida. Solo importa la mejor alternativa sacrificada, no todas las perdidas."],
+    ]},
+    { block: "Bloque 2 · Frontera de Posibilidades de Producción (FPP)", items: [
+      ["Con la FPP: X=0→Y=10, X=1→Y=9,5, X=2→Y=8,5, X=3→Y=7, X=4→Y=5, X=5→Y=2,5. Clasifica cada punto como eficiente, ineficiente o inviable: (a) X=2,Y=8,5 — (b) X=2,Y=6 — (c) X=4,Y=9.",
+       "(a) <b>Eficiente</b>: coincide con un punto de la tabla, está sobre la curva. (b) <b>Ineficiente</b>: con X=2 se podría llegar a Y=8,5, así que Y=6 deja recursos ociosos. (c) <b>Inviable</b>: con X=4 el máximo es Y=5, así que Y=9 no es alcanzable."],
+      ["Calcula el costo de oportunidad de producir la tercera unidad del Bien X (pasar de X=2 a X=3).",
+       "ΔY = 7 − 8,5 = −1,5. ΔX = 1. El costo de oportunidad es <b>1,5 unidades de Bien Y</b> por cada unidad adicional de Bien X."],
+      ["Verdadero o falso, justificando: “La FPP indica cuál combinación de bienes debería elegir la sociedad”.",
+       "<b>Falso.</b> La FPP muestra qué combinaciones son posibles, no cuál elegir — esa es una decisión posterior de la sociedad."],
+    ]},
+    { block: "Bloque 3 · Mercado y mercado competitivo", items: [
+      ["Explica qué diferencia a un comprador de un vendedor en términos de la variable que cada uno decide.",
+       "El comprador decide cuánto comprar (cantidad demandada); el vendedor decide cuánto vender (cantidad ofrecida). El mercado determina precio y cantidad transada."],
+      ["Enumera los cuatro supuestos mínimos de un mercado competitivo.",
+       "1) Muchos compradores y vendedores (mercado atomizado). 2) Bienes homogéneos. 3) Información perfecta. 4) Sin barreras a la entrada ni a la salida."],
+      ["¿Por qué se dice que los agentes de un mercado competitivo son “precio-aceptantes”?",
+       "Porque con muchos compradores y vendedores y bienes homogéneos, ningún agente individual puede influir por sí solo en el precio: todos lo toman como un dato dado."],
+    ]},
+    { block: "Bloque 4 · Ley de la demanda", items: [
+      ["Con la demanda de Ana ($1.000→6 … $7.000→0, bajando de a 1 cada $1.000), si el precio baja de $5.000 a $3.000, ¿en cuánto aumenta la cantidad demandada?",
+       "A $5.000 demanda 2 cafés; a $3.000 demanda 4. Aumenta en <b>2 cafés</b>. Es un movimiento sobre la curva (cambió el precio del mismo bien)."],
+      ["Clasifica como movimiento o desplazamiento: (a) el café sube de $2.000 a $4.000; (b) los estudiantes reciben una beca; (c) aumenta el número de estudiantes; (d) baja el precio del té (sustituto).",
+       "(a) <b>Movimiento</b> (cambió el precio del mismo bien). (b) <b>Desplazamiento</b> (cambia el ingreso). (c) <b>Desplazamiento</b> (cambia el número de compradores). (d) <b>Desplazamiento</b> (bien relacionado)."],
+      ["Un cuarto comprador, Daniel, entra con demanda $1.000→3, $2.000→2, $3.000→2, $4.000→1, $5.000→1, $6.000→0, $7.000→0. Si la demanda total anterior era 48,40,32,24,16,8,0, ¿cuál es la nueva demanda total?",
+       "Sumando: <b>51, 42, 34, 25, 17, 8, 0</b> (de $1.000 a $7.000). La demanda de mercado se obtiene sumando horizontalmente las cantidades individuales."],
+    ]},
+    { block: "Bloque 5 · Ley de la oferta", items: [
+      ["Con la oferta de Alpha ($1.000→0 … $7.000→6, subiendo de a 1 cada $1.000), si el precio sube de $3.000 a $6.000, ¿en cuánto aumenta la cantidad ofrecida?",
+       "A $3.000 ofrece 2 cafés; a $6.000 ofrece 5. Aumenta en <b>3 cafés</b>. Es un movimiento sobre la curva de oferta."],
+      ["Clasifica como movimiento o desplazamiento: (a) sube el precio de los granos de café; (b) el café mismo sube de precio; (c) entra una nueva cafetería; (d) mejora la tecnología de las máquinas.",
+       "(a) <b>Desplazamiento</b> (precio de un factor productivo). (b) <b>Movimiento</b> (cambió el precio del mismo bien). (c) <b>Desplazamiento</b> (número de vendedores). (d) <b>Desplazamiento</b> (tecnología)."],
+      ["Si Gamma (oferta 0,5,10,15,20,25,30) deja de vender, y la oferta total anterior era 0,8,16,24,32,40,48, ¿cuál es la nueva oferta total sin Gamma?",
+       "Restando: <b>0, 3, 6, 9, 12, 15, 18</b>. Es un desplazamiento de la oferta de mercado hacia la izquierda (disminuye el número de vendedores)."],
+    ]},
+    { block: "Bloque 6 · El precio como señal", items: [
+      ["Explica, con un ejemplo, cómo el precio “informa” sobre la escasez relativa de un bien.",
+       "Si un bien escasea, su precio tiende a subir, informando a compradores y vendedores sin que nadie lo anuncie. Ej.: una helada reduce la cosecha de café → sube su precio → compradores moderan consumo y productores ofrecen más."],
+      ["Verdadero o falso, justificando: “Para que el mercado funcione, un ente central debe calcular el precio y notificarlo”.",
+       "<b>Falso.</b> En un mercado competitivo el precio surge de la interacción descentralizada entre muchos compradores y vendedores; coordina sin necesidad de una autoridad central."],
+    ]},
+  ];
+
+  var exContainer = document.getElementById('exContainer');
+  var exCounter = 0;
+  ejercicios.forEach(function(block){
+    var h = document.createElement('h3');
+    h.className = 'subhead';
+    h.textContent = block.block;
+    exContainer.appendChild(h);
+    block.items.forEach(function(item){
+      exCounter++;
+      var card = document.createElement('div');
+      card.className = 'ex-card';
+      var solId = 'sol-' + exCounter;
+      card.innerHTML =
+        '<div class="ex-num">Ejercicio ' + exCounter + '</div>' +
+        '<p class="ex-q">' + item[0] + '</p>' +
+        '<button class="ex-toggle" data-target="' + solId + '">Ver solución</button>' +
+        '<div class="ex-sol" id="' + solId + '"><b>Solución:</b> ' + item[1] + '</div>';
+      exContainer.appendChild(card);
+    });
+  });
+  exContainer.addEventListener('click', function(e){
+    if(e.target.classList.contains('ex-toggle')){
+      var sol = document.getElementById(e.target.dataset.target);
+      var open = sol.classList.toggle('open');
+      e.target.textContent = open ? 'Ocultar solución' : 'Ver solución';
+    }
+  });
+
+  // ---- Plan de repaso ----
+  var plan = [
+    { dow:'Jue', date:'20', topic:'Unidad 1 completa: escasez, restricciones y FPP', dur:'≈ 70 min', tasks:[
+      'Lee el resumen — Unidad 1 completa',
+      'Resuelve los ejercicios 1 a 7 de la Guía (costo de oportunidad y FPP)',
+      'Mira el mapa conceptual — rama Unidad 1'] },
+    { dow:'Vie', date:'21', topic:'Mercado y ley de la demanda', dur:'≈ 60 min', tasks:[
+      'Lee el resumen — mercado, mercado competitivo y ley de la demanda',
+      'Resuelve los ejercicios 8 a 13 de la Guía',
+      'Repasa las flashcards / glosario 1 a 13'] },
+    { dow:'Sáb', date:'22', topic:'Ley de la oferta y el precio como señal', dur:'≈ 60 min', tasks:[
+      'Lee el resumen — ley de la oferta y el rol del precio',
+      'Resuelve los ejercicios 14 a 18 de la Guía',
+      'Repasa las flashcards / glosario 14 a 20'] },
+    { dow:'Dom', date:'23', topic:'Repaso activo y autoevaluación', dur:'≈ 50 min', tasks:[
+      'Rinde la autoevaluación de esta página (2 veces, sin mirar apuntes la segunda vez)',
+      'Revisa el mapa conceptual completo de un vistazo, en voz alta',
+      'Vuelve a hacer solo los ejercicios que te costaron más'] },
+    { dow:'Lun', date:'24', topic:'Repaso final ligero', dur:'≈ 35 min', tasks:[
+      'Repasa todas las flashcards una vez, rápido',
+      'Repite la autoevaluación una última vez',
+      'Nada de estudio nuevo en la noche — prioriza dormir bien'] },
+    { dow:'Mar', date:'25', topic:'🎯 Día del PEP 2', dur:null, exam:true, tasks:[
+      'Repaso rápido de 10 min por la mañana: glosario y mapa conceptual',
+      'Desayuna y llega con tiempo — no estudies material nuevo antes de entrar'] },
+  ];
+  var planContainer = document.getElementById('planContainer');
+  plan.forEach(function(d, di){
+    var div = document.createElement('div');
+    div.className = 'plan-day' + (d.exam ? ' exam' : '');
+    var tasksHtml = d.tasks.map(function(t, ti){
+      return '<label><input type="checkbox" id="pt-'+di+'-'+ti+'"> <span>'+t+'</span></label>';
+    }).join('');
+    div.innerHTML =
+      '<div class="plan-daylabel"><div class="dow">'+d.dow+'</div><div class="date">'+d.date+'</div></div>' +
+      '<div><div class="plan-topic">'+d.topic+'</div><div class="plan-tasks">'+tasksHtml+'</div>' +
+      (d.dur ? '<span class="plan-dur">'+d.dur+'</span>' : '') + '</div>';
+    planContainer.appendChild(div);
+  });
+
+  // ---- Quiz ----
+  var quiz = [
+    {
+      q: "El costo de oportunidad de una decisión corresponde a...",
+      opts: ["El gasto monetario total realizado", "El valor de la mejor alternativa no elegida", "La suma de todas las alternativas perdidas", "El tiempo que demora decidir"],
+      correct: 1
+    },
+    {
+      q: "Facebook no cobra dinero por usarlo. ¿Es realmente \"gratis\"?",
+      opts: ["Sí, porque el precio monetario es $0", "No, porque igual existe un costo de oportunidad: el tiempo y la mejor alternativa sacrificada", "Sí, porque no hay ningún costo asociado", "No, porque cobra un impuesto oculto"],
+      correct: 1
+    },
+    {
+      q: "Un punto UBICADO BAJO la Frontera de Posibilidades de Producción (FPP) es...",
+      opts: ["Eficiente", "Inviable", "Ineficiente (hay recursos ociosos)", "El equilibrio de mercado"],
+      correct: 2
+    },
+    {
+      q: "La pendiente de la FPP mide...",
+      opts: ["El precio de los bienes", "El costo de oportunidad de producir una unidad adicional de un bien", "La cantidad de recursos ociosos", "El nivel de competencia del mercado"],
+      correct: 1
+    },
+    {
+      q: "En un mercado competitivo, los agentes son...",
+      opts: ["Formadores de precio", "Tomadores de precio (precio-aceptantes)", "Monopolistas", "Reguladores del Estado"],
+      correct: 1
+    },
+    {
+      q: "Según la ley de la demanda, si el precio de un bien SUBE (todo lo demás constante)...",
+      opts: ["La cantidad demandada tiende a subir", "La cantidad demandada tiende a bajar", "La curva de demanda se desplaza a la derecha", "No hay ningún efecto"],
+      correct: 1
+    },
+    {
+      q: "Si el ingreso de los compradores aumenta, ¿qué le ocurre a la curva de demanda?",
+      opts: ["Hay un movimiento sobre la misma curva", "La curva de demanda se desplaza (cambió un factor distinto del precio)", "La curva de oferta se desplaza", "No cambia nada"],
+      correct: 1
+    },
+    {
+      q: "¿Cuál de estos factores desplaza la curva de OFERTA (y no la de demanda)?",
+      opts: ["El ingreso de los compradores", "Los gustos y preferencias", "La tecnología utilizada para producir el bien", "El número de compradores"],
+      correct: 2
+    },
+    {
+      q: "El rol del precio en un mercado competitivo es...",
+      opts: ["Solo recaudar impuestos para el Estado", "Informar, incentivar y coordinar decisiones de compradores y vendedores", "Fijar por ley la cantidad que se puede producir", "Eliminar la escasez de recursos"],
+      correct: 1
+    }
+  ];
+
+  var qc = document.getElementById('quizContainer');
+  quiz.forEach(function(item, qi){
+    var div = document.createElement('div');
+    div.className = 'quiz-q';
+    var optsHtml = item.opts.map(function(o, oi){
+      return '<label class="opt" data-qi="'+qi+'" data-oi="'+oi+'">' +
+             '<input type="radio" name="q'+qi+'" value="'+oi+'"> <span>'+o+'</span></label>';
+    }).join('');
+    div.innerHTML = '<p class="qtext">' + (qi+1) + '. ' + item.q + '</p><div class="quiz-opts">' + optsHtml + '</div>';
+    qc.appendChild(div);
+  });
+
+  document.getElementById('checkQuiz').addEventListener('click', function(){
+    var score = 0;
+    quiz.forEach(function(item, qi){
+      var selected = document.querySelector('input[name="q'+qi+'"]:checked');
+      var opts = document.querySelectorAll('.opt[data-qi="'+qi+'"]');
+      opts.forEach(function(o){
+        o.classList.remove('correct','incorrect');
+        var oi = parseInt(o.dataset.oi, 10);
+        if(oi === item.correct) o.classList.add('correct');
+        else if(selected && parseInt(selected.value,10) === oi) o.classList.add('incorrect');
+      });
+      if(selected && parseInt(selected.value,10) === item.correct) score++;
+    });
+    document.getElementById('quizScore').textContent = 'Puntaje: ' + score + ' / ' + quiz.length;
+  });
+</script>
+</body>
+</html>

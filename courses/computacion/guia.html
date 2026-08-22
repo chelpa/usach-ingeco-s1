@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía de estudio — Trabajo Final R 2026</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  p{ color: inherit; }
+  :root{
+    --bg:#0f1115;
+    --panel:#171a21;
+    --panel-2:#1d2129;
+    --text:#e8e9ec;
+    --muted:#9aa1ad;
+    --accent:#5b9dff;
+    --accent-2:#7fd8a6;
+    --code-bg:#11141a;
+    --border:#2a2f3a;
+    --danger:#ff8a80;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f6f7f9;
+      --panel:#ffffff;
+      --panel-2:#f0f2f5;
+      --text:#1c2026;
+      --muted:#5a6270;
+      --accent:#2563eb;
+      --accent-2:#0e8f5f;
+      --code-bg:#f3f4f7;
+      --border:#e2e5eb;
+      --danger:#c62828;
+    }
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+  }
+  .layout{
+    display:grid;
+    grid-template-columns:260px 1fr;
+    min-height:100vh;
+  }
+  nav{
+    position:sticky;
+    top:100px;
+    height:calc(100vh - 100px);
+    overflow-y:auto;
+    padding:28px 18px;
+    background:var(--panel);
+    border-right:1px solid var(--border);
+  }
+  nav .brand{
+    font-size:13px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  nav h1{
+    font-size:18px;
+    margin:0 0 20px;
+    line-height:1.35;
+  }
+  nav ul{
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  nav li{margin-bottom:2px;}
+  nav a{
+    display:block;
+    padding:7px 10px;
+    border-radius:8px;
+    color:var(--muted);
+    text-decoration:none;
+    font-size:13.5px;
+  }
+  nav a:hover{background:var(--panel-2); color:var(--text);}
+  nav .section-label{
+    margin:18px 0 6px;
+    padding:0 10px;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--muted);
+  }
+  main{
+    padding:48px clamp(20px,5vw,72px);
+    max-width:920px;
+  }
+  header.hero{
+    margin-bottom:40px;
+  }
+  header.hero .tag{
+    display:inline-block;
+    font-size:12px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--accent);
+    background:rgba(91,157,255,.12);
+    padding:4px 10px;
+    border-radius:999px;
+    margin-bottom:14px;
+  }
+  header.hero h1{
+    font-size:clamp(28px,4vw,38px);
+    margin:0 0 12px;
+  }
+  header.hero p{
+    color:var(--muted);
+    font-size:16px;
+    max-width:64ch;
+  }
+  section{
+    margin-bottom:52px;
+    scroll-margin-top:24px;
+  }
+  section h2{
+    font-size:22px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:10px;
+    margin-bottom:18px;
+  }
+  section h3{
+    font-size:17px;
+    margin:28px 0 10px;
+    color:var(--accent);
+  }
+  p{margin:0 0 14px;}
+  .muted{color:var(--muted);}
+  .card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px 22px;
+    margin-bottom:16px;
+  }
+  .flow{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px 22px;
+    margin-bottom:20px;
+  }
+  .flow .step{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:14.5px;
+  }
+  .flow .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--accent);
+    flex-shrink:0;
+  }
+  .flow .arrow{
+    color:var(--muted);
+    padding-left:3px;
+    font-size:13px;
+  }
+  pre{
+    background:var(--code-bg);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:16px 18px;
+    overflow-x:auto;
+    font-size:13.5px;
+    line-height:1.55;
+    margin:0 0 16px;
+  }
+  code{
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  p code, li code, td code{
+    background:var(--code-bg);
+    border:1px solid var(--border);
+    border-radius:5px;
+    padding:1px 6px;
+    font-size:.92em;
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:16px;
+    font-size:14px;
+  }
+  th,td{
+    text-align:left;
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+  }
+  th{
+    color:var(--muted);
+    font-weight:600;
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+  }
+  tr:last-child td{border-bottom:none;}
+  ul.checklist{
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  ul.checklist li{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+    font-size:14.5px;
+  }
+  ul.checklist li:last-child{border-bottom:none;}
+  ul.checklist .box{
+    flex-shrink:0;
+    width:18px;height:18px;
+    border:1.5px solid var(--accent);
+    border-radius:5px;
+    margin-top:2px;
+  }
+  .point{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-left:3px solid var(--accent);
+    border-radius:10px;
+    padding:18px 22px;
+    margin-bottom:18px;
+  }
+  .point .meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:10px;
+  }
+  .point .meta h3{margin:0; color:var(--text); font-size:16px;}
+  .pts{
+    font-size:12px;
+    color:var(--accent-2);
+    background:rgba(127,216,166,.12);
+    padding:3px 9px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .tip{
+    font-size:13.5px;
+    color:var(--muted);
+    background:var(--panel-2);
+    border-radius:8px;
+    padding:10px 14px;
+    margin-top:10px;
+  }
+  .warn-list{
+    padding-left:20px;
+  }
+  .warn-list li{
+    margin-bottom:10px;
+    font-size:14.5px;
+  }
+  .study-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:16px;
+  }
+  .study-card h4{
+    margin:0 0 8px;
+    font-size:14.5px;
+    color:var(--accent);
+  }
+  .study-card p{
+    font-size:13.8px;
+    color:var(--muted);
+    margin:0;
+  }
+  footer{
+    padding:30px 0 60px;
+    color:var(--muted);
+    font-size:13px;
+    border-top:1px solid var(--border);
+    margin-top:20px;
+  }
+  @media (max-width: 860px){
+    .layout{grid-template-columns:1fr;}
+    nav{
+      position:static;
+      height:auto;
+      border-right:none;
+      border-bottom:1px solid var(--border);
+    }
+    main{padding:32px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<script src="../../assets/nav.js" data-base="../../" data-course="computacion"></script>
+<div class="layout">
+  <nav>
+    <div class="brand">USACH · Computación</div>
+    <h1>Guía de estudio<br>Trabajo Final R</h1>
+    <div class="section-label">General</div>
+    <ul>
+      <li><a href="#intro">Cómo usar esta guía</a></li>
+      <li><a href="#dataset">El dataset</a></li>
+      <li><a href="#flujo">Flujo completo</a></li>
+    </ul>
+    <div class="section-label">Punto por punto</div>
+    <ul>
+      <li><a href="#p1">1. Librerías</a></li>
+      <li><a href="#p2">2. Importar Excel</a></li>
+      <li><a href="#p3">3. Explorar</a></li>
+      <li><a href="#p4">4. Mayores de edad</a></li>
+      <li><a href="#p5">5. dias_proyectados</a></li>
+      <li><a href="#p6">6. Renombrar</a></li>
+      <li><a href="#p7">7. Eliminar NA</a></li>
+      <li><a href="#p8">8. costo_total</a></li>
+      <li><a href="#p9">9. Ordenar</a></li>
+      <li><a href="#p10">10. Agrupar por sede</a></li>
+      <li><a href="#p11">11. Gráfico de barras</a></li>
+      <li><a href="#p12">12. Exportar Excel</a></li>
+      <li><a href="#p13">13. Subir a uvirtual</a></li>
+    </ul>
+    <div class="section-label">Repaso</div>
+    <ul>
+      <li><a href="#chuleta">Chuleta de funciones</a></li>
+      <li><a href="#errores">Errores comunes</a></li>
+      <li><a href="#estudio">Formas de estudiar</a></li>
+      <li><a href="#checklist">Checklist final</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <header class="hero" id="intro">
+      <span class="tag">Análisis de préstamos de biblioteca</span>
+      <h1>Guía de estudio — Trabajo Final R 2026</h1>
+      <p>Armada a partir de tu apunte de curso ("Apunte R Taller"), tu script de ejemplo <code>Sesión 14 agosto.R</code> y el enunciado del trabajo final. Úsala para repasar antes de escribir el script definitivo — no para copiarla tal cual: entiende cada paso y escríbelo tú mismo en RStudio, porque el punto 13 te pide responder preguntas sobre lo que hiciste.</p>
+      <div class="card">
+        <strong>Lo más importante:</strong> tu archivo <code>Sesión 14 agosto.R</code> es prácticamente un "trabajo final tipo" ya resuelto, pero con datos distintos (<code>datos</code>, <code>ventas</code>). Sigue la misma estructura exacta que te piden ahora. Tenlo abierto al lado del enunciado: por cada punto vas a encontrar el bloque equivalente en ese script.
+      </div>
+    </header>
+
+    <section id="dataset">
+      <h2>El dataset: prestamos_biblioteca.xlsx</h2>
+      <p>Tiene 12 registros y estas columnas exactas (respeta mayúsculas/minúsculas al escribir código):</p>
+      <table>
+        <thead><tr><th>Columna</th><th>Contenido</th><th>Ejemplo</th></tr></thead>
+        <tbody>
+          <tr><td><code>estudiante</code></td><td>nombre del estudiante</td><td>"Ana Pérez"</td></tr>
+          <tr><td><code>carrera</code></td><td>carrera que cursa</td><td>"Ingeniería"</td></tr>
+          <tr><td><code>edad</code></td><td>edad en años</td><td>21</td></tr>
+          <tr><td><code>libro</code></td><td>libro pedido en préstamo</td><td>"Cálculo I"</td></tr>
+          <tr><td><code>dias_prestamo</code></td><td>días que duró el préstamo</td><td>7</td></tr>
+          <tr><td><code>multa</code></td><td>monto de multa (0 si no hay)</td><td>1500</td></tr>
+          <tr><td><code>sede</code></td><td>sede de la biblioteca</td><td>"Santiago"</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="flujo">
+      <h2>El flujo completo (mapa mental)</h2>
+      <div class="flow">
+        <div class="step"><span class="dot"></span>Cargar librerías</div>
+        <div class="arrow">↓</div>
+        <div class="step"><span class="dot"></span>Importar Excel → objeto "prestamos"</div>
+        <div class="arrow">↓</div>
+        <div class="step"><span class="dot"></span>Explorar (View, summary, head, tail)</div>
+        <div class="arrow">↓</div>
+        <div class="step"><span class="dot"></span>Filtrar y seleccionar (mayores de edad)</div>
+        <div class="arrow">↓</div>
+        <div class="step"><span class="dot"></span>Crear variables (mutate) y renombrar (rename)</div>
+        <div class="arrow">↓</div>
+        <div class="step"><span class="dot"></span>Limpiar NA (drop_na)</div>
+        <div class="arrow">↓</div>
+        <div class="step"><span class="dot"></span>Calcular costo_total y ordenar (arrange)</div>
+        <div class="arrow">↓</div>
+        <div class="step"><span class="dot"></span>Agrupar y resumir (group_by + summarise)</div>
+        <div class="arrow">↓</div>
+        <div class="step"><span class="dot"></span>Graficar (ggplot2)</div>
+        <div class="arrow">↓</div>
+        <div class="step"><span class="dot"></span>Exportar a Excel (write_xlsx)</div>
+      </div>
+      <p class="muted">Este es el mismo flujo del Capítulo 1 de tu apunte, aplicado paso a paso.</p>
+    </section>
+
+    <section id="puntos">
+      <h2>Punto por punto</h2>
+
+      <div class="point" id="p1">
+        <div class="meta"><h3>1. Cargar librerías</h3><span class="pts">1 pto</span></div>
+        <p>Necesitas leer Excel, manipular datos y graficar:</p>
+        <pre><code>library(readxl)   # leer Excel
+library(dplyr)    # filter, select, mutate, arrange, group_by, summarise
+library(tidyr)    # drop_na
+library(ggplot2)  # gráficos
+library(writexl)  # exportar a Excel (instalar antes con install.packages("writexl"))
+
+# alternativa: library(tidyverse) carga dplyr+tidyr+ggplot2+readr de una vez,
+# pero igual necesitas readxl y writexl aparte porque no vienen en el núcleo de tidyverse</code></pre>
+      </div>
+
+      <div class="point" id="p2">
+        <div class="meta"><h3>2. Importar el Excel</h3><span class="pts">1 pto</span></div>
+        <pre><code>prestamos &lt;- read_excel("prestamos_biblioteca.xlsx")</code></pre>
+        <div class="tip">Recuerda: la ruta debe apuntar a donde tengas guardado el archivo en tu computador (o usar un proyecto de RStudio para que la ruta sea relativa).</div>
+      </div>
+
+      <div class="point" id="p3">
+        <div class="meta"><h3>3. Explorar los datos</h3><span class="pts">1 pto</span></div>
+        <p>Cuatro funciones, una por cada sub-punto:</p>
+        <pre><code>View(prestamos)      # a) ver la base completa en una pestaña
+summary(prestamos)   # b) resumen estadístico (min, max, promedio, cuartiles)
+head(prestamos)      # c) primeras filas
+tail(prestamos)      # d) últimas filas</code></pre>
+      </div>
+
+      <div class="point" id="p4">
+        <div class="meta"><h3>4. Estudiantes mayores de edad</h3><span class="pts">2 ptos</span></div>
+        <p>Combina <code>filter()</code> (filas) + <code>select()</code> (columnas), y guarda en un objeto nuevo:</p>
+        <pre><code>prestamos_mayores &lt;- prestamos %&gt;%
+  filter(edad &gt;= 18) %&gt;%
+  select(estudiante, edad)</code></pre>
+      </div>
+
+      <div class="point" id="p5">
+        <div class="meta"><h3>5. Crear dias_proyectados</h3><span class="pts">2 ptos</span></div>
+        <p><code>mutate()</code> crea variables nuevas a partir de otras. Ojo: se trabaja sobre <code>prestamos</code> (el objeto original), no sobre <code>prestamos_mayores</code>:</p>
+        <pre><code>prestamos_dias &lt;- prestamos %&gt;%
+  mutate(dias_proyectados = dias_prestamo + 2)</code></pre>
+      </div>
+
+      <div class="point" id="p6">
+        <div class="meta"><h3>6. Renombrar la variable</h3><span class="pts">1 pto</span></div>
+        <p><code>rename()</code> sigue el orden <code>nombre_nuevo = nombre_viejo</code>, y se aplica sobre <code>prestamos_dias</code>:</p>
+        <pre><code>prestamos_dias &lt;- prestamos_dias %&gt;%
+  rename(periodo_prestamo = dias_proyectados)</code></pre>
+      </div>
+
+      <div class="point" id="p7">
+        <div class="meta"><h3>7. Eliminar filas con NA</h3><span class="pts">2 ptos</span></div>
+        <p><code>drop_na()</code> sin argumentos elimina cualquier fila que tenga al menos un valor faltante, en cualquier columna. Se aplica sobre el <code>prestamos</code> original:</p>
+        <pre><code>prestamos_limpios &lt;- prestamos %&gt;%
+  drop_na()</code></pre>
+      </div>
+
+      <div class="point" id="p8">
+        <div class="meta"><h3>8. Crear costo_total</h3><span class="pts">2 ptos</span></div>
+        <p>Otra vez <code>mutate()</code>, ahora con una fórmula de dos variables, sobre <code>prestamos_limpios</code>:</p>
+        <pre><code>prestamos_limpios &lt;- prestamos_limpios %&gt;%
+  mutate(costo_total = dias_prestamo * 500 + multa)</code></pre>
+      </div>
+
+      <div class="point" id="p9">
+        <div class="meta"><h3>9. Ordenar por costo_total descendente</h3><span class="pts">2 ptos</span></div>
+        <p><code>arrange(desc(...))</code> ordena de mayor a menor:</p>
+        <pre><code>prestamos_limpios &lt;- prestamos_limpios %&gt;%
+  arrange(desc(costo_total))</code></pre>
+      </div>
+
+      <div class="point" id="p10">
+        <div class="meta"><h3>10. Agrupar por sede</h3><span class="pts">2 ptos</span></div>
+        <p><code>group_by()</code> + <code>summarise()</code>, usando el <code>prestamos</code> original (no el limpio):</p>
+        <pre><code>prestamos %&gt;%
+  group_by(sede) %&gt;%
+  summarise(
+    promedio_dias = mean(dias_prestamo, na.rm = TRUE),
+    cantidad = n()
+  )</code></pre>
+        <div class="tip"><code>na.rm = TRUE</code> es útil por si <code>prestamos</code> original todavía tiene NA en <code>dias_prestamo</code> (evita que el promedio salga NA).</div>
+      </div>
+
+      <div class="point" id="p11">
+        <div class="meta"><h3>11. Gráfico de barras</h3><span class="pts">2 ptos</span></div>
+        <p>Calcado del gráfico que ya hiciste en <code>Sesión 14 agosto.R</code> (el de <code>ventas</code>/<code>producto</code>/<code>cantidad</code>), solo cambiando las variables:</p>
+        <pre><code>ggplot(prestamos, aes(x = libro, y = dias_prestamo)) +
+  geom_col(fill = "steelblue") +   # elige el color que quieras
+  labs(
+    title = "Días de préstamo por libro",
+    x = "Libro",
+    y = "Días de préstamo"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.title = element_text(hjust = 0.5)
+  )</code></pre>
+        <div class="tip"><code>hjust = 0.5</code> es lo que centra el título y los títulos de los ejes — es el requisito que más se olvida.</div>
+      </div>
+
+      <div class="point" id="p12">
+        <div class="meta"><h3>12. Exportar a Excel</h3><span class="pts">1 pto</span></div>
+        <p>Igual que el "Paso 5" de tu script de ejemplo:</p>
+        <pre><code>write_xlsx(prestamos_limpios, "prestamos_procesados.xlsx")</code></pre>
+      </div>
+
+      <div class="point" id="p13">
+        <div class="meta"><h3>13. Subir a uvirtual y responder preguntas</h3><span class="pts">5 ptos</span></div>
+        <p>Esto no es código: es subir el script <code>.R</code> completo (con todos los bloques anteriores en orden, de arriba hacia abajo, corriendo sin errores) y contestar las preguntas de uvirtual. Vale 5 puntos, así que conviene:</p>
+        <ul class="warn-list">
+          <li>Correr el script completo de una sola vez ("Run All" en RStudio) antes de subirlo, para confirmar que no hay errores.</li>
+          <li>Guardar el archivo <code>.R</code> con un nombre claro (ej. <code>TrabajoFinal_TuApellido.R</code>).</li>
+          <li>Revisar que los nombres de objetos coincidan exactamente con lo pedido (<code>prestamos</code>, <code>prestamos_mayores</code>, <code>prestamos_dias</code>, <code>prestamos_limpios</code>).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="chuleta">
+      <h2>Chuleta de funciones</h2>
+      <table>
+        <thead><tr><th>Función</th><th>Paquete</th><th>Para qué sirve</th></tr></thead>
+        <tbody>
+          <tr><td><code>read_excel()</code></td><td>readxl</td><td>importar un Excel</td></tr>
+          <tr><td><code>View()</code></td><td>base</td><td>ver la tabla completa</td></tr>
+          <tr><td><code>summary()</code></td><td>base</td><td>resumen estadístico</td></tr>
+          <tr><td><code>head()</code> / <code>tail()</code></td><td>base</td><td>primeras / últimas filas</td></tr>
+          <tr><td><code>filter()</code></td><td>dplyr</td><td>quedarse con ciertas filas según condición</td></tr>
+          <tr><td><code>select()</code></td><td>dplyr</td><td>quedarse con ciertas columnas</td></tr>
+          <tr><td><code>mutate()</code></td><td>dplyr</td><td>crear una columna nueva</td></tr>
+          <tr><td><code>rename()</code></td><td>dplyr</td><td>cambiar el nombre de una columna</td></tr>
+          <tr><td><code>arrange()</code> / <code>desc()</code></td><td>dplyr</td><td>ordenar filas (ascendente / descendente)</td></tr>
+          <tr><td><code>drop_na()</code></td><td>tidyr</td><td>eliminar filas con NA</td></tr>
+          <tr><td><code>group_by()</code></td><td>dplyr</td><td>agrupar filas según una variable categórica</td></tr>
+          <tr><td><code>summarise()</code></td><td>dplyr</td><td>calcular un indicador por grupo (mean, sum, n()...)</td></tr>
+          <tr><td><code>ggplot()</code> + <code>geom_col()</code></td><td>ggplot2</td><td>gráfico de barras</td></tr>
+          <tr><td><code>write_xlsx()</code></td><td>writexl</td><td>exportar un data frame a Excel</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="errores">
+      <h2>Errores comunes que bajan nota</h2>
+      <ul class="warn-list">
+        <li>Trabajar sobre el objeto equivocado (por ejemplo, aplicar el punto 8 sobre <code>prestamos</code> en vez de <code>prestamos_limpios</code>). El enunciado especifica sobre qué objeto trabajar en cada punto — léelo dos veces antes de escribir el código.</li>
+        <li>Olvidar <code>&lt;-</code> al guardar el resultado en el objeto nuevo (sin eso, el cálculo se muestra en pantalla pero no queda guardado).</li>
+        <li>Usar <code>=</code> en vez de <code>==</code> dentro de <code>filter()</code> (para comparar se usa doble igual).</li>
+        <li>Escribir mal el nombre de una columna (por ejemplo <code>Edad</code> en vez de <code>edad</code> — R distingue mayúsculas de minúsculas).</li>
+        <li>Olvidar <code>theme(plot.title = element_text(hjust = 0.5))</code> para centrar el título del gráfico.</li>
+        <li>No correr el script completo de principio a fin antes de entregar (algo que funcionó suelto puede fallar si el orden de los bloques está mezclado).</li>
+      </ul>
+    </section>
+
+    <section id="estudio">
+      <h2>Otras formas de estudiar y repasar</h2>
+      <p class="muted">Más allá de leer el apunte, esto es lo que más te va a servir con el tiempo que tengas antes de la entrega:</p>
+      <div class="study-grid">
+        <div class="card study-card">
+          <h4>Practica con tus propios datos</h4>
+          <p>Toma <code>empleados.xlsx</code>, <code>ventas.xlsx</code> o <code>colegios_chile.xlsx</code> y repite los mismos 13 pasos con esas bases. Si lo logras sin mirar la guía, ya lo aprendiste de verdad.</p>
+        </div>
+        <div class="card study-card">
+          <h4>Recreación activa (active recall)</h4>
+          <p>Cierra el apunte y escribe de memoria la línea de código para cada función de la chuleta. Compara después y anota solo lo que fallaste.</p>
+        </div>
+        <div class="card study-card">
+          <h4>Explica el código en voz alta</h4>
+          <p>Para cada bloque con pipe, di en voz alta qué hace cada línea antes de ejecutarla. Si no puedes explicarlo, probablemente lo copiaste sin entenderlo.</p>
+        </div>
+        <div class="card study-card">
+          <h4>Compara con "Sesión 14 agosto.R"</h4>
+          <p>Misma estructura, datos distintos: úsalo como plantilla y verifica que no te falte ningún paso del flujo completo.</p>
+        </div>
+        <div class="card study-card">
+          <h4>Resuelve primero los PDFs de ejercicios</h4>
+          <p>Los de "ejercicio de la semana" son más cortos y cubren las mismas funciones — buen calentamiento antes del trabajo completo.</p>
+        </div>
+        <div class="card study-card">
+          <h4>Practica variaciones</h4>
+          <p>Una vez que te salga agrupar por <code>sede</code>, inténtalo por <code>carrera</code> o por <code>libro</code>. Cambiar la variable fija la lógica, no una línea memorizada.</p>
+        </div>
+        <div class="card study-card">
+          <h4>Autoevalúate con preguntas tipo</h4>
+          <p>El punto 13 vale 5 puntos por responder preguntas. Pregúntate por qué usaste cada función y qué pasaría si cambiaras el objeto sobre el que trabajas.</p>
+        </div>
+        <div class="card study-card">
+          <h4>Repaso espaciado</h4>
+          <p>Revisa la chuleta hoy, y de nuevo mañana sin mirar el resto de la guía — la repetición espaciada fija mejor los comandos que una sola sesión larga.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="checklist">
+      <h2>Checklist final antes de subir a uvirtual</h2>
+      <div class="card">
+        <ul class="checklist">
+          <li><span class="box"></span>Las librerías cargan sin error (<code>readxl</code>, <code>dplyr</code>, <code>tidyr</code>, <code>ggplot2</code>, <code>writexl</code> — o <code>tidyverse</code> + las otras dos).</li>
+          <li><span class="box"></span>El objeto <code>prestamos</code> se creó correctamente desde <code>prestamos_biblioteca.xlsx</code>.</li>
+          <li><span class="box"></span><code>prestamos_mayores</code> tiene solo <code>estudiante</code> y <code>edad</code>, y solo estudiantes de 18 años o más.</li>
+          <li><span class="box"></span><code>prestamos_dias</code> tiene la columna <code>periodo_prestamo</code> (no <code>dias_proyectados</code>).</li>
+          <li><span class="box"></span><code>prestamos_limpios</code> no tiene filas con NA, tiene <code>costo_total</code>, y está ordenado de mayor a menor costo.</li>
+          <li><span class="box"></span>El gráfico de barras tiene título, nombres de ejes, color de barras, <code>theme_minimal()</code>, y título y ejes centrados.</li>
+          <li><span class="box"></span>Se generó el archivo <code>prestamos_procesados.xlsx</code>.</li>
+          <li><span class="box"></span>El script completo corre de principio a fin sin errores (probado con "Run All").</li>
+          <li><span class="box"></span>Archivo <code>.R</code> guardado con nombre identificable y listo para subir.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>
+      Guía de estudio generada a partir de tu Apunte R Taller, tu script "Sesión 14 agosto.R" y el enunciado del Trabajo Final R 2026 — Proyecto "computación".
+    </footer>
+  </main>
+</div>
+</body>
+</html>

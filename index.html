@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Semestre — Apuntes y resúmenes</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<script src="assets/nav.js" data-base="./" data-course=""></script>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow-rule"></div>
+    <div class="eyebrow">Bienvenido a</div>
+    <h1 class="title">Apuntes y res&uacute;menes<br>del <span class="accent">semestre</span></h1>
+    <div class="subtitle">Res&uacute;menes de estudio, gu&iacute;as de repaso y ejercicios resueltos para cada ramo. Elige un curso del men&uacute; de arriba o desde las tarjetas de abajo.</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <h2 class="section-heading">Mis ramos</h2>
+  <div id="course-grid" class="course-grid"></div>
+
+  <footer class="site-footer">
+    Sitio personal de apuntes · actualizado a mano curso por curso.
+  </footer>
+</div>
+
+<script>
+  // Builds the landing cards from the same course list used by the navbar
+  // (window.SITE_COURSES is set by assets/nav.js). Each course folder can
+  // define window.COURSE_STATUS-like info later; for now we just check
+  // a hardcoded "ready" list so cards show "Disponible" vs "Próximamente".
+  var READY = ["maye1", "economia", "administracion", "computacion"]; // add a course id here once it has real content
+
+  var grid = document.getElementById("course-grid");
+  window.SITE_COURSES.forEach(function (c) {
+    var isReady = READY.indexOf(c.id) !== -1;
+    var a = document.createElement("a");
+    a.className = "course-card";
+    a.href = "courses/" + c.id + "/index.html";
+    a.innerHTML =
+      '<span class="short">' + c.short + "</span>" +
+      '<div class="name">' + c.name + "</div>" +
+      '<div class="status' + (isReady ? " ready" : "") + '">' +
+      (isReady ? "✓ Material disponible" : "Próximamente") +
+      "</div>";
+    grid.appendChild(a);
+  });
+</script>
+
+</body>
+</html>

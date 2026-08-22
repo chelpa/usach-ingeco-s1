@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resumen PEP 2 — Límites | MAyE I</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/study.css">
+</head>
+<body>
+
+<script src="../../assets/nav.js" data-base="../../" data-course="maye1"></script>
+
+<header class="hero hero-page">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="index.html">MAyE I</a> / Resumen PEP 2</div>
+    <div class="eyebrow-rule"></div>
+    <div class="eyebrow">Matemáticas para la Administración y Economía I</div>
+    <h1 class="title">Resumen y Plan de Estudio — PEP 2</h1>
+    <div class="subtitle">Límites, límites laterales, límites al infinito, Teorema del Sándwich, cambio de variable y límites exponenciales/logarítmicos.</div>
+    <div class="hero-meta">
+      <span class="pill">📅 Prueba: miércoles 26 de agosto de 2026</span>
+      <span class="pill">⏱️ Duración: 80 minutos</span>
+      <span class="pill">🗓️ Preparado desde: miércoles 19 de agosto</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <h2>Contenidos</h2>
+  <ol>
+    <li><a href="#temario">Temario oficial</a></li>
+    <li><a href="#conceptos">1. Concepto de límite y límites laterales</a></li>
+    <li><a href="#algebra">2. Álgebra de límites y formas indeterminadas</a></li>
+    <li><a href="#infinito">3. Límites al infinito y límites notables algebraicos</a></li>
+    <li><a href="#sandwich">4. Teorema del Sándwich</a></li>
+    <li><a href="#cambio">5. Cambio de variable</a></li>
+    <li><a href="#exp">6. Límites exponenciales (número e)</a></li>
+    <li><a href="#log">7. Límites logarítmicos</a></li>
+    <li><a href="#formulario">Formulario rápido (todo en una hoja)</a></li>
+    <li><a href="#ejercicios">Ejercicios de práctica con solución</a></li>
+    <li><a href="#plan">Plan de repaso día a día</a></li>
+    <li><a href="#tecnicas">Técnicas de estudio y repaso</a></li>
+  </ol>
+</nav>
+
+<section id="temario">
+  <h2 class="section-title"><span class="num">✓</span>Temario oficial del PEP 2</h2>
+  <div class="card">
+    <p style="margin:0 0 8px;">Según la planificación de la coordinación de Matemática (documento "Fechas y temarios"), el PEP 2 cubre exactamente:</p>
+    <ul style="color:var(--ink-soft); margin:0;">
+      <li>Cálculo de límites, límites laterales y límites al infinito.</li>
+      <li>Cálculo de límites por Teorema del Sándwich y cambio de variable.</li>
+      <li>Límites exponenciales y logarítmicos.</li>
+    </ul>
+  </div>
+  <div class="warn"><strong>No entra en el PEP 2:</strong> continuidad ni asíntotas (esos son temas de clases posteriores, 21 y 22) — no pierdas tiempo repasándolos para esta prueba.</div>
+</section>
+
+<section id="conceptos">
+  <h2 class="section-title"><span class="num">1</span>Concepto de límite y límites laterales</h2>
+
+  <h3 class="sub">Idea intuitiva</h3>
+  <p><span class="limw"><span>lim</span><span class="bot">x→a</span></span><span class="eq">f(x) = L</span> significa que podemos hacer que <span class="eq">f(x)</span> esté tan cerca de <span class="eq">L</span> como queramos, tomando <span class="eq">x</span> suficientemente cerca de <span class="eq">a</span> (sin necesidad de que <span class="eq">x = a</span>, y sin importar si <span class="eq">a</span> pertenece al dominio de <span class="eq">f</span>).</p>
+
+  <div class="tip"><strong>Clave para la prueba:</strong> el límite describe el comportamiento de f <em>cerca</em> del punto, no el valor de f en el punto. f(a) puede no existir o ser distinto de L.</div>
+
+  <h3 class="sub">Definición formal (épsilon-delta)</h3>
+  <div class="formula-card" style="text-align:center;">
+    <div class="eqblock">
+      <span class="limw"><span>lim</span><span class="bot">x→a</span></span>f(x) = L &nbsp;⇔&nbsp; ∀ ε&gt;0, ∃ δ&gt;0 : 0&lt;|x−a|&lt;δ ⇒ |f(x)−L|&lt;ε
+    </div>
+  </div>
+  <p>No suele pedirse demostrar con esta definición en el PEP, pero conviene entender la idea: para cualquier margen de error ε, existe un radio δ alrededor de a que garantiza que f(x) cae dentro del margen.</p>
+
+  <h3 class="sub">Límites laterales</h3>
+  <div class="grid2">
+    <div class="formula-card"><div class="label">Por la derecha</div><span class="eqblock" style="margin:0;"><span class="limw"><span>lim</span><span class="bot">x→a⁺</span></span>f(x) = L</span></div>
+    <div class="formula-card"><div class="label">Por la izquierda</div><span class="eqblock" style="margin:0;"><span class="limw"><span>lim</span><span class="bot">x→a⁻</span></span>f(x) = L</span></div>
+  </div>
+  <div class="formula-card" style="text-align:center;">
+    <div class="label">Criterio de existencia</div>
+    <div class="eqblock">
+      <span class="limw"><span>lim</span><span class="bot">x→a</span></span>f(x) = L &nbsp;⇔&nbsp; <span class="limw"><span>lim</span><span class="bot">x→a⁻</span></span>f(x) = <span class="limw"><span>lim</span><span class="bot">x→a⁺</span></span>f(x) = L
+    </div>
+  </div>
+  <p>Se usan sobre todo en funciones por tramos, con valor absoluto, o con raíces/denominadores que cambian de signo en a. Si los laterales difieren, el límite <strong>no existe</strong>.</p>
+</section>
+
+<section id="algebra">
+  <h2 class="section-title"><span class="num">2</span>Álgebra de límites y formas indeterminadas</h2>
+  <p>Si <span class="limw"><span>lim</span><span class="bot">x→a</span></span> f(x) = L y <span class="limw"><span>lim</span><span class="bot">x→a</span></span> g(x) = M (ambos existen), entonces:</p>
+  <table>
+    <tr><th>Operación</th><th>Resultado</th></tr>
+    <tr><td>Suma / resta</td><td><span class="eq">lim [f(x) ± g(x)] = L ± M</span></td></tr>
+    <tr><td>Escalar</td><td><span class="eq">lim [λ·f(x)] = λ·L</span></td></tr>
+    <tr><td>Producto</td><td><span class="eq">lim [f(x)·g(x)] = L·M</span></td></tr>
+    <tr><td>Cociente</td><td><span class="eq">lim f(x)⁄g(x) = L⁄M</span>, si M ≠ 0</td></tr>
+    <tr><td>Potencia</td><td><span class="eq">lim [f(x)]<sup>n</sup> = L<sup>n</sup></span></td></tr>
+    <tr><td>Raíz</td><td><span class="eq"><sup>n</sup>√ lim f(x) = <sup>n</sup>√L</span> (si n es par, se requiere L &gt; 0)</td></tr>
+  </table>
+  <div class="warn"><strong>Ojo:</strong> estas propiedades solo valen si los límites de f y g existen por separado. Si al evaluar obtienes k⁄0 con k≠0, el límite <strong>no existe</strong> (diverge).</div>
+
+  <h3 class="sub">Formas indeterminadas</h3>
+  <p>No permiten concluir nada por sí solas — hay que trabajar algebraicamente el límite:</p>
+  <div class="card" style="text-align:center; font-size:18px; color:var(--teal-dark); display:flex; flex-wrap:wrap; gap:22px; justify-content:center; font-family:var(--serif); font-style:italic;">
+    <span>0⁄0</span><span>∞⁄∞</span><span>∞ − ∞</span><span>0·∞</span><span>1<sup>∞</sup></span><span>∞<sup>0</sup></span><span>0<sup>0</sup></span>
+  </div>
+</section>
+
+<section id="infinito">
+  <h2 class="section-title"><span class="num">3</span>Límites al infinito y límites notables algebraicos</h2>
+  <h3 class="sub">Fórmulas básicas</h3>
+  <div class="grid2">
+    <div class="formula-card"><div class="eqblock" style="margin:0;"><span class="limw"><span>lim</span><span class="bot">x→∞</span></span>1⁄x = 0 &nbsp;&nbsp; <span class="limw"><span>lim</span><span class="bot">x→∞</span></span>(1⁄x)<sup>n</sup> = 0</div></div>
+    <div class="formula-card"><div class="eqblock" style="margin:0;"><span class="limw"><span>lim</span><span class="bot">n→∞</span></span>r<sup>n</sup> = 0, si |r| &lt; 1</div></div>
+  </div>
+
+  <h3 class="sub">Límite notable de potencias</h3>
+  <div class="formula-card" style="text-align:center;">
+    <div class="eqblock">
+      <span class="limw"><span>lim</span><span class="bot">x→a</span></span><span class="frac"><span class="num">x<sup>n</sup> − a<sup>n</sup></span><span class="den">x − a</span></span> = n·a<sup>n−1</sup>, &nbsp; n ∈ ℤ⁺
+    </div>
+  </div>
+
+  <h3 class="sub">Cociente de polinomios en el infinito (la regla más usada)</h3>
+  <div class="formula-card" style="text-align:center;">
+    <div class="cases" style="font-size:16px;">
+      <span class="limw"><span>lim</span><span class="bot">x→∞</span></span><span class="frac"><span class="num">P(x)</span><span class="den">Q(x)</span></span>
+      <span>=</span>
+      <span class="brace">{</span>
+      <table class="cases-table">
+        <tr><td><span class="frac"><span class="num">a<sub>n</sub></span><span class="den">b<sub>m</sub></span></span></td><td>si deg P = deg Q</td></tr>
+        <tr><td>0</td><td>si deg P &lt; deg Q</td></tr>
+        <tr><td>±∞</td><td>si deg P &gt; deg Q</td></tr>
+      </table>
+    </div>
+  </div>
+  <p>donde a<sub>n</sub>, b<sub>m</sub> son los coeficientes líderes de P y Q. Truco rápido: divide numerador y denominador por la mayor potencia de x presente.</p>
+
+  <div class="tip"><strong>Atajo mental:</strong> compara solo los grados. Si el numerador "pesa más", el límite es infinito; si el denominador "pesa más", tiende a 0; si pesan igual, es el cociente de los coeficientes líderes.</div>
+</section>
+
+<section id="sandwich">
+  <h2 class="section-title"><span class="num">4</span>Teorema del Sándwich (Emparedado)</h2>
+  <div class="formula-card" style="text-align:center;">
+    <div class="eqblock" style="font-size:16.5px;">
+      Si <span class="eq">g(x) ≤ f(x) ≤ h(x)</span> cerca de a (excepto quizás en a), y <span class="limw"><span>lim</span><span class="bot">x→a</span></span>g(x) = <span class="limw"><span>lim</span><span class="bot">x→a</span></span>h(x) = L, entonces <span class="limw"><span>lim</span><span class="bot">x→a</span></span>f(x) = L.
+    </div>
+  </div>
+  <p>Se usa típicamente cuando f contiene una función acotada difícil de evaluar directamente (como sin o cos de algo que no converge), o cuando el enunciado ya te da las cotas g(x) y h(x).</p>
+  <div class="warn"><strong>Condición indispensable:</strong> ambas cotas deben tener <em>el mismo límite</em> en el punto de interés. Si g y h convergen a valores distintos, el teorema no aplica y no puedes concluir nada.</div>
+  <div class="tip"><strong>Truco típico:</strong> para sin(·) o cos(·), usa que siempre están entre −1 y 1: −1 ≤ sin(algo) ≤ 1, y multiplica la desigualdad por lo que corresponda.</div>
+</section>
+
+<section id="cambio">
+  <h2 class="section-title"><span class="num">5</span>Cambio de variable</h2>
+  <div class="formula-card" style="text-align:center;">
+    <div class="eqblock" style="font-size:16.5px;">
+      Si <span class="limw"><span>lim</span><span class="bot">x→a</span></span>f(x) = L y <span class="limw"><span>lim</span><span class="bot">x→x₀</span></span>g(x) = a (con g(x) ≠ a cerca de x₀), entonces <span class="limw"><span>lim</span><span class="bot">x→x₀</span></span>(f∘g)(x) = L.
+    </div>
+  </div>
+  <p>En la práctica: cuando tienes raíces de distinto índice (√, ∛, ⁴√...), define u como la raíz de menor índice común (o el índice que "limpia" todas las raíces a la vez), despeja x en función de u, sustituye, y factoriza.</p>
+  <div class="tip"><strong>Procedimiento paso a paso:</strong> (1) identifica qué raíz conviene igualar a u; (2) despeja x = u<sup>n</sup>; (3) determina a qué valor tiende u cuando x→x₀; (4) reescribe todo el límite en términos de u; (5) factoriza y simplifica (suele aparecer una diferencia de cubos/potencias).</div>
+</section>
+
+<section id="exp">
+  <h2 class="section-title"><span class="num">6</span>Límites exponenciales (número e)</h2>
+  <div class="formula-card" style="text-align:center;">
+    <div class="eqblock" style="font-size:17px;">
+      <span class="limw"><span>lim</span><span class="bot">x→∞</span></span>(1 + <span class="frac" style="font-size:.8em;"><span class="num">1</span><span class="den">x</span></span>)<sup>x</sup> = e &nbsp;&nbsp;&nbsp;
+      <span class="limw"><span>lim</span><span class="bot">x→0⁺</span></span>(1+x)<sup>1⁄x</sup> = e &nbsp;&nbsp;&nbsp;
+      <span class="limw"><span>lim</span><span class="bot">x→∞</span></span>(1 + <span class="frac" style="font-size:.8em;"><span class="num">a</span><span class="den">x</span></span>)<sup>x</sup> = e<sup>a</sup>
+    </div>
+  </div>
+  <p>Estas tres son la misma idea escrita de formas distintas (se obtienen unas de otras con cambio de variable). Si ves una potencia con exponente que tiende a infinito y base que tiende a 1 (forma 1<sup>∞</sup>), es señal de usar estas fórmulas.</p>
+  <div class="tip">
+    <strong>Método general para (P(x)⁄Q(x))<sup>h(x)</sup> tipo 1<sup>∞</sup>:</strong>
+    escribe la base como 1 + algo⁄algo, arma el exponente recíproco de ese "algo" (multiplicando y dividiendo), y lo que sobre en el exponente se multiplica aparte. El resultado siempre es e<sup>(ese sobrante)</sup>.
+  </div>
+</section>
+
+<section id="log">
+  <h2 class="section-title"><span class="num">7</span>Límites logarítmicos</h2>
+  <div class="formula-card" style="text-align:center;">
+    <div class="eqblock">
+      <span class="limw"><span>lim</span><span class="bot">x→0</span></span><span class="frac"><span class="num">a<sup>kx</sup> − 1</span><span class="den">x</span></span> = k·ln(a), &nbsp; a&gt;0, a≠1, k≠0
+    </div>
+  </div>
+  <div class="formula-card" style="text-align:center;">
+    <div class="eqblock">
+      <span class="limw"><span>lim</span><span class="bot">x→0</span></span><span class="frac"><span class="num">e<sup>kx</sup> − 1</span><span class="den">x</span></span> = k &nbsp; (caso particular con a = e, ln e = 1)
+    </div>
+  </div>
+  <p>Estos límites notables se derivan del límite fundamental de e. Aparecen mucho combinados con suma/resta de exponenciales — separa en dos límites y aplica la fórmula a cada uno.</p>
+</section>
+
+<section id="formulario">
+  <h2 class="section-title"><span class="num">📋</span>Formulario rápido — todo en una hoja</h2>
+  <div class="card">
+    <table>
+      <tr><th>Tema</th><th>Fórmula</th></tr>
+      <tr><td>Notable de potencias</td><td><span class="eq">lim (x<sup>n</sup>−a<sup>n</sup>)⁄(x−a) = n·a<sup>n−1</sup></span></td></tr>
+      <tr><td>Polinomios en ∞</td><td>compara grados de P y Q</td></tr>
+      <tr><td>Sándwich</td><td><span class="eq">g≤f≤h, lim g=lim h=L ⇒ lim f=L</span></td></tr>
+      <tr><td>Cambio de variable</td><td><span class="eq">u=g(x)</span> para limpiar raíces de distinto índice</td></tr>
+      <tr><td>Exponencial (e)</td><td><span class="eq">(1+a⁄x)<sup>x</sup> → e<sup>a</sup></span> &nbsp;/&nbsp; <span class="eq">(1+x)<sup>1⁄x</sup> → e</span></td></tr>
+      <tr><td>Logarítmico</td><td><span class="eq">(a<sup>kx</sup>−1)⁄x → k·ln a</span> &nbsp;/&nbsp; <span class="eq">(e<sup>kx</sup>−1)⁄x → k</span></td></tr>
+    </table>
+  </div>
+  <div class="tip"><strong>Sugerencia:</strong> copia esta tabla a mano en una hoja aparte el día antes de la prueba — el acto de reescribirla ayuda más que solo leerla (ver sección de técnicas de estudio).</div>
+</section>
+
+<section id="ejercicios">
+  <h2 class="section-title"><span class="num">✎</span>Ejercicios de práctica con solución</h2>
+  <p>Intenta resolver cada uno tapando la solución antes de revisarla (haz clic en "Ver solución" solo después de intentarlo).</p>
+
+  <h3 class="sub">A. Límites básicos y laterales</h3>
+
+  <div class="ex">
+    <div class="q"><span class="badge">1</span>Calcule <span class="limw"><span>lim</span><span class="bot">x→3</span></span><span class="frac"><span class="num">x²−9</span><span class="den">x−3</span></span></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Factorizando: <span class="frac"><span class="num">x²−9</span><span class="den">x−3</span></span> = <span class="frac"><span class="num">(x−3)(x+3)</span><span class="den">x−3</span></span> = x+3 para x≠3.<br>
+      <span class="limw"><span>lim</span><span class="bot">x→3</span></span>(x+3) = 6.
+    </div></details>
+  </div>
+
+  <div class="ex">
+    <div class="q"><span class="badge">2</span>Sea f(x) = <span class="frac"><span class="num">|x−2|</span><span class="den">x−2</span></span>. Calcule los límites laterales en x=2 y determine si <span class="limw"><span>lim</span><span class="bot">x→2</span></span>f(x) existe.</div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Si x&gt;2: |x−2|=x−2 ⇒ f(x)=1, entonces <span class="limw"><span>lim</span><span class="bot">x→2⁺</span></span>f(x)=1.<br>
+      Si x&lt;2: |x−2|=−(x−2) ⇒ f(x)=−1, entonces <span class="limw"><span>lim</span><span class="bot">x→2⁻</span></span>f(x)=−1.<br>
+      Como 1≠−1, <span class="limw"><span>lim</span><span class="bot">x→2</span></span>f(x) <strong>no existe</strong>.
+    </div></details>
+  </div>
+
+  <div class="ex">
+    <div class="q"><span class="badge">3</span>Sea f(x) = <span class="cases"><span class="brace">{</span><table class="cases-table"><tr><td>x+1</td><td>x&lt;1</td></tr><tr><td>3−x</td><td>x≥1</td></tr></table></span>. Calcule <span class="limw"><span>lim</span><span class="bot">x→1</span></span>f(x).</div>
+    <details><summary>Ver solución</summary><div class="sol">
+      <span class="limw"><span>lim</span><span class="bot">x→1⁻</span></span>(x+1)=2 &nbsp;y&nbsp; <span class="limw"><span>lim</span><span class="bot">x→1⁺</span></span>(3−x)=2.<br>
+      Como ambos laterales coinciden, <span class="limw"><span>lim</span><span class="bot">x→1</span></span>f(x) = 2.
+    </div></details>
+  </div>
+
+  <h3 class="sub">B. Límites al infinito y notables algebraicos</h3>
+
+  <div class="ex">
+    <div class="q"><span class="badge">4</span><span class="limw"><span>lim</span><span class="bot">x→∞</span></span><span class="frac"><span class="num">3x³−2x+1</span><span class="den">5x³+4x²−7</span></span></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Mismo grado (3) en numerador y denominador ⇒ el límite es el cociente de coeficientes líderes: <span class="frac"><span class="num">3</span><span class="den">5</span></span>.
+    </div></details>
+  </div>
+
+  <div class="ex">
+    <div class="q"><span class="badge">5</span><span class="limw"><span>lim</span><span class="bot">x→∞</span></span><span class="frac"><span class="num">2x²+3</span><span class="den">x³−1</span></span></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      deg P = 2 &lt; 3 = deg Q ⇒ el límite es 0.
+    </div></details>
+  </div>
+
+  <div class="ex">
+    <div class="q"><span class="badge">6</span><span class="limw"><span>lim</span><span class="bot">x→2</span></span><span class="frac"><span class="num">x³−8</span><span class="den">x−2</span></span></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Límite notable con n=3, a=2: n·a<sup>n−1</sup> = 3·2² = 12.
+    </div></details>
+  </div>
+
+  <h3 class="sub">C. Teorema del Sándwich</h3>
+
+  <div class="ex">
+    <div class="q"><span class="badge">7</span>Use el Teorema del Sándwich para calcular <span class="limw"><span>lim</span><span class="bot">x→0</span></span>x² sin(1⁄x)</div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Como −1 ≤ sin(1⁄x) ≤ 1 para todo x≠0, multiplicando por x²≥0:<br>
+      −x² ≤ x²sin(1⁄x) ≤ x².<br>
+      Como <span class="limw"><span>lim</span><span class="bot">x→0</span></span>(−x²) = <span class="limw"><span>lim</span><span class="bot">x→0</span></span>x² = 0, por el Sándwich el límite es 0.
+    </div></details>
+  </div>
+
+  <div class="ex">
+    <div class="q"><span class="badge">8</span>Si 2x−1 ≤ f(x) ≤ x² para todo x cerca de 1, calcule <span class="limw"><span>lim</span><span class="bot">x→1</span></span>f(x).</div>
+    <details><summary>Ver solución</summary><div class="sol">
+      <span class="limw"><span>lim</span><span class="bot">x→1</span></span>(2x−1)=1 y <span class="limw"><span>lim</span><span class="bot">x→1</span></span>x²=1. Ambas cotas coinciden en 1, por lo tanto <span class="limw"><span>lim</span><span class="bot">x→1</span></span>f(x) = 1.
+    </div></details>
+  </div>
+
+  <h3 class="sub">D. Cambio de variable</h3>
+
+  <div class="ex">
+    <div class="q"><span class="badge">9</span><span class="limw"><span>lim</span><span class="bot">x→8</span></span><span class="frac"><span class="num">x−8</span><span class="den">∛x−2</span></span></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Sea u=∛x ⇒ x=u³. Cuando x→8, u→2.<br>
+      <span class="frac"><span class="num">u³−8</span><span class="den">u−2</span></span> = <span class="frac"><span class="num">(u−2)(u²+2u+4)</span><span class="den">u−2</span></span> = u²+2u+4.<br>
+      Evaluando en u=2: 4+4+4 = 12.
+    </div></details>
+  </div>
+
+  <div class="ex">
+    <div class="q"><span class="badge">10</span><span class="limw"><span>lim</span><span class="bot">x→1</span></span><span class="frac"><span class="num">√x−1</span><span class="den">∛x−1</span></span></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Los índices son 2 y 3; usa u con índice 6 (mínimo común múltiplo): sea x=u⁶, entonces √x=u³, ∛x=u². Cuando x→1, u→1.<br>
+      <span class="frac"><span class="num">u³−1</span><span class="den">u²−1</span></span> = <span class="frac"><span class="num">(u−1)(u²+u+1)</span><span class="den">(u−1)(u+1)</span></span> = <span class="frac"><span class="num">u²+u+1</span><span class="den">u+1</span></span>.<br>
+      Evaluando en u=1: <span class="frac"><span class="num">1+1+1</span><span class="den">1+1</span></span> = <span class="frac"><span class="num">3</span><span class="den">2</span></span>.
+    </div></details>
+  </div>
+
+  <h3 class="sub">E. Límites exponenciales</h3>
+
+  <div class="ex">
+    <div class="q"><span class="badge">11</span><span class="limw"><span>lim</span><span class="bot">x→∞</span></span>(1 + <span class="frac" style="font-size:.8em;"><span class="num">3</span><span class="den">x</span></span>)<sup>x</sup></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Aplicación directa de la fórmula (1+a⁄x)<sup>x</sup> → e<sup>a</sup> con a=3: resultado e³.
+    </div></details>
+  </div>
+
+  <div class="ex">
+    <div class="q"><span class="badge">12</span><span class="limw"><span>lim</span><span class="bot">x→∞</span></span>(<span class="frac" style="font-size:.85em;"><span class="num">x+3</span><span class="den">x+1</span></span>)<sup>x</sup></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Reescribe la base: (x+3)⁄(x+1) = 1 + 2⁄(x+1).<br>
+      Sea u=x+1 (u→∞ cuando x→∞, y x=u−1):<br>
+      (1+2⁄u)<sup>u−1</sup> = (1+2⁄u)<sup>u</sup> · (1+2⁄u)<sup>−1</sup> → e² · 1 = e².
+    </div></details>
+  </div>
+
+  <div class="ex">
+    <div class="q"><span class="badge">13</span><span class="limw"><span>lim</span><span class="bot">x→0</span></span>(1+5x)<sup>1⁄x</sup></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Escribe el exponente como 1⁄x = 5·1⁄(5x):<br>
+      (1+5x)<sup>1⁄x</sup> = [(1+5x)<sup>1⁄5x</sup>]<sup>5</sup> → e<sup>5</sup> (usando (1+m)<sup>1⁄m</sup>→e con m=5x→0).
+    </div></details>
+  </div>
+
+  <h3 class="sub">F. Límites logarítmicos</h3>
+
+  <div class="ex">
+    <div class="q"><span class="badge">14</span><span class="limw"><span>lim</span><span class="bot">x→0</span></span><span class="frac"><span class="num">e<sup>7x</sup>−1</span><span class="den">x</span></span></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Fórmula directa con k=7: resultado 7.
+    </div></details>
+  </div>
+
+  <div class="ex">
+    <div class="q"><span class="badge">15</span><span class="limw"><span>lim</span><span class="bot">x→0</span></span><span class="frac"><span class="num">4<sup>x</sup>−1</span><span class="den">x</span></span></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Fórmula con a=4, k=1: resultado ln 4.
+    </div></details>
+  </div>
+
+  <div class="ex">
+    <div class="q"><span class="badge">16</span><span class="limw"><span>lim</span><span class="bot">x→0</span></span><span class="frac"><span class="num">e<sup>3x</sup>−e<sup>−3x</sup></span><span class="den">x</span></span></div>
+    <details><summary>Ver solución</summary><div class="sol">
+      Separa: <span class="frac"><span class="num">e<sup>3x</sup>−e<sup>−3x</sup></span><span class="den">x</span></span> = <span class="frac"><span class="num">e<sup>3x</sup>−1</span><span class="den">x</span></span> − <span class="frac"><span class="num">e<sup>−3x</sup>−1</span><span class="den">x</span></span>.<br>
+      El primer término → 3 (con k=3) y el segundo → −3 (con k=−3).<br>
+      Resultado: 3−(−3) = 6.
+    </div></details>
+  </div>
+</section>
+
+<section id="plan">
+  <h2 class="section-title"><span class="num">🗓️</span>Plan de repaso día a día</h2>
+  <p>Desde hoy (miércoles 19) hasta el día de la prueba (miércoles 26). Sesiones pensadas para ~60–90 min diarios; ajusta según tu disponibilidad real.</p>
+  <div class="day-grid">
+    <div class="day">
+      <div class="when">Mié 19<span class="date">hoy</span></div>
+      <div class="what"><strong>Concepto de límite + límites laterales</strong><span class="detail">Lee la Clase 18. Practica con tablas numéricas y gráficos. Resuelve los ejercicios 1–3 de este resumen (sección A).</span></div>
+    </div>
+    <div class="day">
+      <div class="when">Jue 20</div>
+      <div class="what"><strong>Álgebra de límites y formas indeterminadas</strong><span class="detail">Repasa las propiedades y memoriza las 7 formas indeterminadas. Practica reconociendo cuándo NO se puede aplicar el álgebra directa.</span></div>
+    </div>
+    <div class="day">
+      <div class="when">Vie 21</div>
+      <div class="what"><strong>Límites al infinito y notables algebraicos</strong><span class="detail">Domina la regla de comparación de grados de polinomios. Resuelve los ejercicios 4–6 (sección B) y los de la Clase 19.</span></div>
+    </div>
+    <div class="day">
+      <div class="when">Sáb 22</div>
+      <div class="what"><strong>Teorema del Sándwich</strong><span class="detail">Enfócate en identificar cuándo usarlo (funciones acotadas tipo seno/coseno). Resuelve ejercicios 7–8 (sección C).</span></div>
+    </div>
+    <div class="day">
+      <div class="when">Dom 23</div>
+      <div class="what"><strong>Cambio de variable</strong><span class="detail">Practica el procedimiento paso a paso con raíces de distinto índice. Resuelve ejercicios 9–10 (sección D). Día ideal para descansar más y estudiar en una sola sesión.</span></div>
+    </div>
+    <div class="day">
+      <div class="when">Lun 24</div>
+      <div class="what"><strong>Límites exponenciales (número e)</strong><span class="detail">Memoriza las 3 formas del límite fundamental. Resuelve ejercicios 11–13 (sección E) y los de la Clase 20.</span></div>
+    </div>
+    <div class="day">
+      <div class="when">Mar 25</div>
+      <div class="what"><strong>Límites logarítmicos + repaso general + simulacro</strong><span class="detail">Repasa fórmulas logarítmicas (ejercicios 14–16). Luego haz un simulacro cronometrado de 80 minutos mezclando ejercicios de todos los temas, sin apuntes.</span></div>
+    </div>
+    <div class="day exam">
+      <div class="when">Mié 26<span class="date">PEP 2</span></div>
+      <div class="what"><strong>Repaso rápido antes de la prueba</strong><span class="detail">Solo relee el "Formulario rápido" de esta guía. No aprendas contenido nuevo el mismo día — enfócate en recordar fórmulas y descansar bien la noche anterior.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="tecnicas">
+  <h2 class="section-title"><span class="num">💡</span>Técnicas de estudio y repaso</h2>
+  <p>Métodos con buen respaldo para aprender matemáticas de forma eficiente, aplicables a este plan:</p>
+
+  <div class="method">
+    <h4>Práctica activa (active recall)</h4>
+    <p>En vez de releer los apuntes, cierra el material y trata de resolver ejercicios o reconstruir una demostración de memoria. Recordar activamente fija el conocimiento mucho mejor que la lectura pasiva. En matemáticas esto significa: cierra el formulario y trata de resolver el problema antes de mirar la fórmula.</p>
+  </div>
+
+  <div class="method">
+    <h4>Repetición espaciada</h4>
+    <p>Repasa las fórmulas clave (límite del sándwich, cambio de variable, número e) en sesiones cortas distribuidas en varios días, en vez de una sola maratón. Por eso el plan de arriba dedica un día a cada tema y reserva el último día solo para repaso, no para contenido nuevo.</p>
+  </div>
+
+  <div class="method">
+    <h4>Método Feynman</h4>
+    <p>Explica en voz alta (o por escrito, como si le enseñaras a un compañero) por qué funciona el Teorema del Sándwich, o por qué el cambio de variable transforma el límite. Si te trabas explicándolo, ahí está el hueco en tu comprensión — vuelve a esa parte de la clase.</p>
+  </div>
+
+  <div class="method">
+    <h4>Formulario propio escrito a mano</h4>
+    <p>Copiar el "Formulario rápido" a mano (no solo leerlo) obliga a procesar cada fórmula. Hazlo el día 20 y de nuevo el día 25, comparando ambas versiones para ver qué se te olvidó.</p>
+  </div>
+
+  <div class="method">
+    <h4>Simulacro cronometrado</h4>
+    <p>El día 25, resuelve una batería de ejercicios mezclados (no por tema) en exactamente 80 minutos, sin mirar apuntes — igual que la prueba real. Esto entrena la gestión del tiempo y detecta en qué tipo de ejercicio te demoras más.</p>
+  </div>
+
+  <div class="method">
+    <h4>Bitácora de errores</h4>
+    <p>Cada vez que te equivoques en un ejercicio de práctica, anota en una hoja aparte: qué error cometiste (¿signo?, ¿aplicaste una propiedad sin verificar que el límite existía?, ¿olvidaste un caso de la indeterminación?). Revisa esa lista el día antes de la prueba — suele ser más útil que repasar todo de nuevo.</p>
+  </div>
+
+  <div class="method">
+    <h4>Técnica Pomodoro</h4>
+    <p>Bloques de 25 minutos de estudio enfocado + 5 minutos de descanso. Después de 4 bloques, un descanso más largo (15–20 min). Ayuda a mantener la concentración en sesiones de límites, que requieren atención sostenida a los detalles algebraicos.</p>
+  </div>
+
+  <div class="method">
+    <h4>Descanso y sueño</h4>
+    <p>La consolidación de la memoria ocurre en gran parte durante el sueño. Evita trasnochar estudiando el día antes de la prueba — es preferible dormir bien y hacer solo un repaso ligero por la mañana.</p>
+  </div>
+</section>
+
+</div>
+
+<footer class="site-footer">
+  Resumen elaborado a partir de las Clases 18, 19 y 20 (Coordinación de Matemática, MAyE I) y del temario oficial del PEP 2. · Última actualización: 19 de agosto de 2026.
+</footer>
+
+</body>
+</html>

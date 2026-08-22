@@ -1,0 +1,194 @@
+/* ============================================================
+   Site-wide styles: navbar, hero, landing page, course home page.
+   Palette sampled from fae.usach.cl/fae (charcoal + teal + gold/orange).
+   Study-guide-specific components (fractions, exercise cards, etc.)
+   live in study.css so any course can reuse them.
+   ============================================================ */
+
+:root{
+  --bg:#faf9f7;
+  --panel:#ffffff;
+  --ink:#1b1e22;
+  --ink-soft:#4b5266;
+  --muted:#7b8299;
+  --line:#e6e3dc;
+
+  /* charcoal (navbar / dark surfaces) */
+  --charcoal:#262b31;
+  --charcoal-bar:#3a4049;
+  --charcoal-soft:#454c55;
+
+  /* teal (primary accent) */
+  --teal:#2f9c90;
+  --teal-dark:#24746b;
+  --teal-soft:#e7f4f2;
+
+  /* gold / orange (secondary accents) */
+  --gold:#e2ac30;
+  --orange:#dd7e28;
+
+  --good:#2f9c90;
+  --good-soft:#e7f4f2;
+  --warn:#b8842c;
+  --warn-soft:#faf1e0;
+  --card-radius:14px;
+  --sans: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --serif: Georgia, "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0; padding:0;}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:var(--sans); line-height:1.55; font-size:16px;
+  padding-bottom:80px;
+}
+.wrap{max-width:1000px; margin:0 auto; padding:0 24px;}
+a{color:var(--teal-dark);}
+p{color:var(--ink-soft);}
+
+/* ---------------- Utility bar (thin, above main nav) ---------------- */
+.utility-bar{
+  background:var(--charcoal-bar); color:#c7ccd1;
+  font-size:12px; letter-spacing:.02em;
+}
+.utility-bar .wrap{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:7px 24px; max-width:1000px;
+}
+.utility-bar .u-links{display:flex; gap:18px;}
+.utility-bar .u-links a{color:#c7ccd1; text-decoration:none; font-weight:600;}
+.utility-bar .u-links a:hover{color:#fff;}
+
+/* ---------------- Main navbar (present on every page) ---------------- */
+.site-nav{
+  position:sticky; top:0; z-index:50;
+  background:var(--charcoal);
+  border-bottom:2px solid var(--teal);
+}
+.site-nav-inner{
+  display:flex; align-items:center; gap:26px;
+  padding:14px 24px;
+}
+.site-nav .brand{
+  color:#fff; font-weight:800; text-decoration:none; font-size:15px;
+  flex:none; letter-spacing:-.01em; display:flex; align-items:center; gap:8px;
+  padding-right:20px; border-right:1px solid rgba(255,255,255,.15);
+}
+.site-nav .course-links{
+  display:flex; gap:4px; overflow-x:auto; scrollbar-width:thin;
+}
+.site-nav .course-links a{
+  color:#cfd4da; text-decoration:none; font-size:13.5px; font-weight:700;
+  padding:8px 14px; border-radius:6px; white-space:nowrap; flex:none;
+  transition:background .15s, color .15s;
+}
+.site-nav .course-links a:hover{ background:rgba(255,255,255,.08); color:#fff; }
+.site-nav .course-links a.active{ background:var(--teal); color:#fff; }
+
+/* ---------------- Hero header ---------------- */
+header.hero{
+  background:
+    linear-gradient(180deg, rgba(20,24,28,.55) 0%, rgba(38,43,49,.85) 60%, var(--charcoal) 100%),
+    linear-gradient(120deg, #3a4049 0%, #262b31 55%, #1c2024 100%);
+  color:#fff; padding:64px 0 0; margin-bottom:0;
+  border-bottom:5px solid var(--teal-dark);
+}
+header.hero .wrap{padding-bottom:48px;}
+.eyebrow-rule{
+  width:46px; height:4px; background:var(--gold); margin-bottom:16px; border-radius:2px;
+}
+.eyebrow{
+  text-transform:uppercase; letter-spacing:.12em; font-size:12.5px;
+  font-weight:700; opacity:.85; margin-bottom:10px;
+}
+h1.title{
+  font-size:40px; margin:0 0 14px; font-weight:900; letter-spacing:-.01em;
+  text-transform:uppercase; line-height:1.08;
+}
+h1.title .accent{color:var(--gold);}
+.subtitle{font-size:16.5px; opacity:.85; max-width:600px;}
+.hero-meta{display:flex; flex-wrap:wrap; gap:10px; margin-top:22px;}
+.pill{
+  background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.3);
+  padding:7px 14px; border-radius:999px; font-size:13.5px; font-weight:600;
+}
+
+/* Compact hero variant for content/course pages (vs. the big landing hero) */
+header.hero.hero-page{padding:36px 0 30px;}
+header.hero.hero-page .wrap{padding-bottom:0;}
+header.hero.hero-page h1.title{font-size:26px; text-transform:none;}
+header.hero.hero-page .eyebrow{opacity:.75;}
+header.hero.hero-page .breadcrumb{
+  font-size:13px; margin-bottom:14px; opacity:.8;
+}
+header.hero.hero-page .breadcrumb a{color:#dfe3e7; text-decoration:none;}
+header.hero.hero-page .breadcrumb a:hover{text-decoration:underline;}
+
+/* ---------------- Generic card ---------------- */
+.card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--card-radius);
+  padding:18px 22px; margin:14px 0;
+}
+
+/* ---------------- Section heading (like "Pregrado" on FAE) ---------------- */
+h2.section-heading{
+  font-size:22px; font-weight:800; color:var(--ink); margin:0 0 22px;
+  padding-top:34px;
+}
+
+/* ---------------- Landing page: course grid ---------------- */
+.course-grid{
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+  gap:18px; margin:0 0 28px;
+}
+.course-card{
+  display:block; background:var(--panel); border:1px solid var(--line);
+  border-top:4px solid var(--teal);
+  border-radius:10px; padding:20px; text-decoration:none;
+  color:var(--ink); transition:transform .15s, box-shadow .15s, border-color .15s;
+}
+.course-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 24px rgba(38,43,49,.14);
+}
+.course-card .short{
+  display:inline-block; background:var(--teal-soft); color:var(--teal-dark);
+  font-size:12px; font-weight:800; padding:3px 10px; border-radius:999px; margin-bottom:12px;
+}
+.course-card .name{font-size:16.5px; font-weight:750; margin-bottom:10px; color:var(--ink);}
+.course-card .status{font-size:13px; color:var(--muted); display:flex; align-items:center; gap:6px;}
+.course-card .status.ready{color:var(--teal-dark); font-weight:700;}
+
+/* ---------------- Course home page: resource list ---------------- */
+.resource-list{display:grid; gap:12px; margin:20px 0;}
+.resource-card{
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  background:var(--panel); border:1px solid var(--line); border-left:4px solid var(--gold);
+  border-radius:10px; padding:16px 20px; text-decoration:none; color:var(--ink);
+  transition:box-shadow .15s, border-color .15s;
+}
+.resource-card:hover{ border-color:var(--teal); box-shadow:0 6px 16px rgba(38,43,49,.10); }
+.resource-card .rtitle{font-weight:750; font-size:15.5px; margin-bottom:4px;}
+.resource-card .rdesc{font-size:13.5px; color:var(--muted);}
+.resource-card .rarrow{color:var(--teal-dark); font-size:20px; flex:none;}
+.empty-state{
+  text-align:center; padding:50px 20px; color:var(--muted);
+  border:1.5px dashed var(--line); border-radius:var(--card-radius);
+}
+.course-header{
+  display:flex; align-items:center; gap:12px; margin-bottom:6px;
+}
+.course-header .short{
+  background:var(--teal); color:#fff; font-size:12.5px; font-weight:800;
+  padding:4px 12px; border-radius:999px;
+}
+
+footer.site-footer{
+  text-align:center; color:var(--muted); font-size:13px; margin-top:60px; padding:20px;
+}
+
+@media (max-width:640px){
+  h1.title{font-size:28px;}
+  .site-nav-inner{gap:14px;}
+  .utility-bar .u-links{gap:10px;}
+}

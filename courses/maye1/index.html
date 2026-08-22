@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAyE I — Mi Semestre</title>
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+
+<script src="../../assets/nav.js" data-base="../../" data-course="maye1"></script>
+
+<header class="hero hero-page">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../../index.html">Inicio</a> / <span id="course-name-crumb"></span></div>
+    <div class="eyebrow-rule"></div>
+    <div class="eyebrow">Curso</div>
+    <h1 class="title" id="course-title"></h1>
+    <div class="subtitle">Apuntes, resúmenes y guías de repaso para este ramo.</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <h2 class="section-heading">Material disponible</h2>
+  <div class="resource-list">
+    <a class="resource-card" href="pep2.html">
+      <div>
+        <div class="rtitle">📘 Resumen y Plan de Estudio — PEP 2</div>
+        <div class="rdesc">Límites, límites laterales, límites al infinito, Teorema del Sándwich, cambio de variable, límites exponenciales y logarítmicos. Incluye 16 ejercicios resueltos y plan de repaso día a día.</div>
+      </div>
+      <div class="rarrow">→</div>
+    </a>
+  </div>
+
+  <footer class="site-footer">
+    Sitio personal de apuntes · actualizado a mano curso por curso.
+  </footer>
+</div>
+
+<script>
+  var course = window.SITE_COURSES.find(function (c) { return c.id === "maye1"; });
+  if (course) {
+    document.getElementById("course-title").textContent = course.name;
+    document.getElementById("course-name-crumb").textContent = course.short;
+  }
+</script>
+
+</body>
+</html>
