@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solucionario de Regularizaciones — Mi Semestre</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  p{ color: inherit; }
+
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --paper: #f2f3ee;
+    --paper-raised: #ffffff;
+    --ink: #1c2b3a;
+    --ink-soft: #55636f;
+    --ink-faint: #8a97a1;
+    --accent: #1f7a5c;
+    --accent-ink: #0f4a37;
+    --accent-soft: #e3efe8;
+    --amber: #a86a1c;
+    --amber-soft: #f5e9d4;
+    --amber-ink: #6e460f;
+    --red: #a83f3f;
+    --red-soft: #f7e6e6;
+    --red-ink: #7a2323;
+    --line: rgba(28,43,58,0.13);
+    --line-strong: rgba(28,43,58,0.24);
+    --shadow: 0 1px 2px rgba(20,30,40,0.04), 0 6px 20px -8px rgba(20,30,40,0.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper: #0f1720; --paper-raised: #17222c; --ink: #e7ecef; --ink-soft: #a3b1bb; --ink-faint: #6d7b86;
+      --accent: #45b489; --accent-ink: #b7ecd7; --accent-soft: rgba(69,180,137,0.14);
+      --amber: #dc9c53; --amber-ink: #f3d5a8; --amber-soft: rgba(220,156,83,0.14);
+      --red: #d97a7a; --red-ink: #f3c2c2; --red-soft: rgba(217,122,122,0.14);
+      --line: rgba(231,236,239,0.12); --line-strong: rgba(231,236,239,0.22);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 28px -10px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper: #0f1720; --paper-raised: #17222c; --ink: #e7ecef; --ink-soft: #a3b1bb; --ink-faint: #6d7b86;
+    --accent: #45b489; --accent-ink: #b7ecd7; --accent-soft: rgba(69,180,137,0.14);
+    --amber: #dc9c53; --amber-ink: #f3d5a8; --amber-soft: rgba(220,156,83,0.14);
+    --red: #d97a7a; --red-ink: #f3c2c2; --red-soft: rgba(217,122,122,0.14);
+    --line: rgba(231,236,239,0.12); --line-strong: rgba(231,236,239,0.22);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 28px -10px rgba(0,0,0,0.55);
+  }
+
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans', system-ui, sans-serif; line-height:1.6; font-size:16.5px;}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important; transition-duration:.001ms !important;}}
+  ::selection{background:var(--accent-soft);}
+  .num{font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums;}
+  h1,h2,h3,h4{font-family:'Fraunces', Georgia, serif; font-weight:600; text-wrap:balance; margin:0; color:var(--ink);}
+
+  .shell{max-width:900px; margin:0 auto; padding:0 20px 100px;}
+
+  .cover{background: linear-gradient(165deg, var(--ink) 0%, #0f2a24 130%); color:#f2f3ee; padding:56px 20px 46px;}
+  :root[data-theme="dark"] .cover, :root:not([data-theme="light"]) .cover{background: linear-gradient(165deg, #0a1319 0%, #0b1f1a 130%);}
+  .cover-inner{max-width:900px; margin:0 auto;}
+  .eyebrow{font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:.10em; text-transform:uppercase; color:#9fd9c0; display:flex; align-items:center; gap:10px;}
+  .eyebrow::before{content:""; width:22px; height:1px; background:#9fd9c0; opacity:.7;}
+  .cover h1{color:#f7f8f4; font-size:clamp(2rem,4.4vw,2.8rem); line-height:1.1; margin:16px 0 14px; max-width:16ch;}
+  .cover p{color:#c7cfc9; font-size:1.02rem; max-width:60ch; margin:0 0 22px;}
+  .cover-meta{display:flex; flex-wrap:wrap; gap:10px 22px; font-size:13px; color:#a9b6b0; font-family:'IBM Plex Mono', monospace; border-top:1px solid rgba(247,248,244,.16); padding-top:16px;}
+  .cover-meta b{color:#e7ece7; font-weight:500;}
+
+  .toc{display:flex; flex-wrap:wrap; gap:8px; margin:-24px 0 44px; position:relative; z-index:2;}
+  .toc a{background:var(--paper-raised); border:1px solid var(--line); box-shadow:var(--shadow); color:var(--ink); text-decoration:none; font-size:13px; font-weight:500; padding:8px 13px; border-radius:8px; display:flex; align-items:center; gap:7px;}
+  .toc a .chip{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--accent-ink); background:var(--accent-soft); border-radius:4px; padding:1px 6px;}
+
+  .intro-note{background:var(--paper-raised); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:4px 10px 10px 4px; padding:18px 22px; box-shadow:var(--shadow); margin-bottom:36px; font-size:.93rem; color:var(--ink-soft);}
+  .intro-note b{color:var(--ink);}
+
+  section.ex{margin:0 0 46px; scroll-margin-top:16px;}
+  .ex-head{display:flex; align-items:flex-start; gap:14px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--line-strong);}
+  .ex-head .idx{font-family:'IBM Plex Mono', monospace; font-size:14px; font-weight:600; color:var(--accent-ink); background:var(--accent-soft); border-radius:6px; padding:4px 10px; flex:none;}
+  .ex-head h2{font-size:1.28rem;}
+  .ex-head .grp{display:block; font-size:.78rem; color:var(--ink-faint); font-family:'IBM Plex Mono', monospace; text-transform:uppercase; letter-spacing:.05em; margin-bottom:3px;}
+
+  .statement{background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; padding:14px 18px; margin-bottom:16px; font-size:.9rem; color:var(--ink-soft); box-shadow:var(--shadow);}
+  .statement b{color:var(--ink);}
+
+  .step{margin:16px 0;}
+  .step-label{font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:var(--accent-ink); display:flex; align-items:center; gap:8px; margin-bottom:8px;}
+  .step-label::before{content:""; width:16px; height:1px; background:var(--accent); opacity:.6;}
+
+  .calc{background:var(--accent-soft); border-radius:8px; padding:11px 15px; font-size:.87rem; color:var(--ink); margin:8px 0;}
+  .calc div{padding:2px 0;}
+  .calc .r{color:var(--ink-soft);}
+  .calc .eq{font-weight:600; color:var(--accent-ink);}
+
+  table.jt{width:100%; border-collapse:collapse; margin:8px 0 4px; font-size:.89rem; box-shadow:var(--shadow); border-radius:8px; overflow:hidden;}
+  table.jt caption{text-align:left; font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-faint); padding:0 0 6px; caption-side:top;}
+  table.jt th{background:var(--ink); color:#eef1ec; text-align:left; font-weight:500; font-size:.78rem; padding:8px 12px; font-family:'IBM Plex Mono', monospace; letter-spacing:.03em;}
+  :root[data-theme="dark"] table.jt th, :root:not([data-theme="light"]) table.jt th{background:#0a141c; color:#cfe7db;}
+  table.jt th:not(:first-child), table.jt td:not(:first-child){text-align:right;}
+  table.jt td{padding:8px 12px; border-bottom:1px solid var(--line); background:var(--paper-raised); color:var(--ink);}
+  table.jt tr:last-child td{border-bottom:none;}
+  table.jt td.acc-d{padding-left:12px;}
+  table.jt td.acc-h{padding-left:30px; color:var(--ink-soft);}
+  table.jt td.acc-h::before{content:"a "; color:var(--ink-faint);}
+  table.jt td.amt{font-family:'IBM Plex Mono', monospace;}
+
+  .note{background:var(--amber-soft); border-left:3px solid var(--amber); border-radius:6px; padding:9px 14px; font-size:.85rem; color:var(--amber-ink); margin:12px 0;}
+  .note b{color:var(--ink);}
+  .warn{background:var(--red-soft); border-left:3px solid var(--red); border-radius:6px; padding:9px 14px; font-size:.85rem; color:var(--red-ink); margin:12px 0;}
+
+  table.summary{width:100%; border-collapse:collapse; margin:10px 0; font-size:.87rem;}
+  table.summary th{background:var(--accent-soft); color:var(--accent-ink); text-align:left; padding:7px 10px; font-size:.78rem; font-family:'IBM Plex Mono', monospace;}
+  table.summary th:not(:first-child), table.summary td:not(:first-child){text-align:right; font-family:'IBM Plex Mono', monospace;}
+  table.summary td{padding:7px 10px; border-bottom:1px solid var(--line);}
+  table.summary tr:last-child td{border-bottom:none; font-weight:600;}
+
+  .exwrap{overflow-x:auto;}
+
+  footer{text-align:center; color:var(--ink-faint); font-size:12.5px; font-family:'IBM Plex Mono', monospace; padding-top:30px; border-top:1px solid var(--line);}
+
+</style>
+</head>
+<body>
+
+<script src="../../assets/nav.js" data-base="../../" data-course="contabilidad"></script>
+
+
+<div class="cover">
+  <div class="cover-inner">
+    <span class="eyebrow">Contabilidad General · Solucionario paso a paso</span>
+    <h1>Guía de Regularizaciones — Resuelta</h1>
+    <p>Desarrollo completo de los ocho bloques de ejercicios de la guía: devengos con IVA, intereses, sueldos, moneda extranjera, depreciación, provisiones, deudores incobrables y el caso integrado.</p>
+    <div class="cover-meta">
+      <span><b>IVA</b> · 19%</span>
+      <span><b>Normas</b> · NIC 1 · NIC 16 · NIC 21 · NIC 37 · NIIF 9</span>
+      <span><b>Docente</b> · Camila Valdés Araya</span>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+
+  <nav class="toc">
+    <a href="#a1"><span class="chip">A1</span> Gasto anticipado + IVA</a>
+    <a href="#a2"><span class="chip">A2</span> Ingreso adelantado + IVA</a>
+    <a href="#b1"><span class="chip">B1</span> Interés por pagar</a>
+    <a href="#b2"><span class="chip">B2</span> Interés por cobrar</a>
+    <a href="#c1"><span class="chip">C1</span> Remuneraciones</a>
+    <a href="#d1"><span class="chip">D1</span> CxC en USD</a>
+    <a href="#d2"><span class="chip">D2</span> Pasivo en USD</a>
+    <a href="#d3"><span class="chip">D3</span> Importación</a>
+    <a href="#e"><span class="chip">E</span> Depreciación</a>
+    <a href="#f"><span class="chip">F</span> Provisión garantías</a>
+    <a href="#g"><span class="chip">G</span> Deudores incobrables</a>
+    <a href="#h"><span class="chip">H</span> Caso integrado</a>
+  </nav>
+
+  <div class="intro-note"><b>Cómo leer este solucionario:</b> cada ejercicio sigue el mismo camino — (1) se identifican los datos y se calcula el monto relevante, (2) se registra el asiento en el momento del flujo de caja si corresponde, y (3) se registra el asiento de ajuste al 31 de diciembre. Todas las cifras están en pesos chilenos; el IVA se aplica al 19% donde corresponde.</div>
+
+  <!-- A1 -->
+  <section class="ex" id="a1">
+    <div class="ex-head"><span class="idx">A1</span><div><span class="grp">Devengos con IVA</span><h2>Gasto pagado por anticipado con IVA</h2></div></div>
+    <div class="statement">Comercial Los Andes Ltda. contrató el 1 de octubre un seguro anual: valor neto <b>$3.600.000</b> + IVA, pagado al contado.</div>
+
+    <div class="step"><span class="step-label">Paso 1 · IVA y total pagado</span>
+      <div class="calc">
+        <div class="r">IVA crédito fiscal = 3.600.000 × 19%</div>
+        <div class="eq">= $684.000</div>
+        <div class="r">Total pagado = 3.600.000 + 684.000</div>
+        <div class="eq">= $4.284.000</div>
+      </div>
+    </div>
+
+    <div class="step"><span class="step-label">Paso 2 · Asiento del pago (1 de octubre)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Seguros pagados por anticipado</td><td class="amt num">3.600.000</td><td></td></tr>
+        <tr><td class="acc-d">IVA Crédito Fiscal</td><td class="amt num">684.000</td><td></td></tr>
+        <tr><td class="acc-h">Banco</td><td></td><td class="amt num">4.284.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Paso 3 · Consumo al 31 de diciembre</span>
+      <div class="calc">
+        <div class="r">Gasto mensual = 3.600.000 ÷ 12</div>
+        <div class="eq">= $300.000/mes</div>
+        <div class="r">Meses transcurridos (oct–dic) = 3</div>
+        <div class="eq">Consumido = 300.000 × 3 = $900.000</div>
+      </div>
+    </div>
+
+    <div class="step"><span class="step-label">Paso 4 · Asiento de ajuste (31 de diciembre)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por seguros</td><td class="amt num">900.000</td><td></td></tr>
+        <tr><td class="acc-h">Seguros pagados por anticipado</td><td></td><td class="amt num">900.000</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="note"><b>Nota:</b> el saldo del activo queda en $2.700.000 (cubre enero–septiembre del año siguiente). El IVA crédito fiscal ya se reconoció íntegramente al pagar y no se ajusta por el paso del tiempo.</div>
+  </section>
+
+  <!-- A2 -->
+  <section class="ex" id="a2">
+    <div class="ex-head"><span class="idx">A2</span><div><span class="grp">Devengos con IVA</span><h2>Ingreso percibido por adelantado con IVA</h2></div></div>
+    <div class="statement">Gimnasio Vitalis SpA emitió el 1 de diciembre una factura por un plan trimestral de <b>$1.500.000</b> neto + IVA, cobrado al contado. El plan cubre diciembre, enero y febrero.</div>
+
+    <div class="step"><span class="step-label">Paso 1 · IVA y total cobrado</span>
+      <div class="calc">
+        <div class="r">IVA débito fiscal = 1.500.000 × 19%</div>
+        <div class="eq">= $285.000</div>
+        <div class="r">Total cobrado = 1.500.000 + 285.000</div>
+        <div class="eq">= $1.785.000</div>
+      </div>
+    </div>
+
+    <div class="step"><span class="step-label">Paso 2 · Asiento del cobro (1 de diciembre)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Banco</td><td class="amt num">1.785.000</td><td></td></tr>
+        <tr><td class="acc-h">Ingresos percibidos por adelantado</td><td></td><td class="amt num">1.500.000</td></tr>
+        <tr><td class="acc-h">IVA Débito Fiscal</td><td></td><td class="amt num">285.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Paso 3 · Devengado al 31 de diciembre</span>
+      <div class="calc">
+        <div class="r">Ingreso mensual = 1.500.000 ÷ 3</div>
+        <div class="eq">= $500.000/mes</div>
+        <div class="r">Meses prestados (diciembre) = 1</div>
+        <div class="eq">Devengado = $500.000</div>
+      </div>
+    </div>
+
+    <div class="step"><span class="step-label">Paso 4 · Asiento de ajuste (31 de diciembre)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Ingresos percibidos por adelantado</td><td class="amt num">500.000</td><td></td></tr>
+        <tr><td class="acc-h">Ingresos por servicios</td><td></td><td class="amt num">500.000</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="note"><b>Nota:</b> el pasivo remanente de $1.000.000 corresponde a enero y febrero, meses del plan aún no prestados.</div>
+  </section>
+
+  <!-- B1 -->
+  <section class="ex" id="b1">
+    <div class="ex-head"><span class="idx">B1</span><div><span class="grp">Intereses devengados</span><h2>Intereses por pagar</h2></div></div>
+    <div class="statement">Constructora Pacífico S.A. obtuvo el 1 de noviembre un préstamo de <b>$24.000.000</b> al 10% anual; capital e intereses se pagan al vencimiento, en seis meses.</div>
+
+    <div class="step"><span class="step-label">Cálculo del interés devengado</span>
+      <div class="calc">
+        <div class="r">Meses transcurridos al 31-dic (nov, dic) = 2</div>
+        <div class="eq">Interés = 24.000.000 × 10% × 2/12 = $400.000</div>
+      </div>
+    </div>
+
+    <div class="step"><span class="step-label">Asiento de ajuste (31 de diciembre)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por intereses</td><td class="amt num">400.000</td><td></td></tr>
+        <tr><td class="acc-h">Intereses por pagar</td><td></td><td class="amt num">400.000</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="note"><b>Nota:</b> el interés se devenga por el tiempo transcurrido, no por la fecha de pago; aunque el préstamo se cancele en mayo, estos 2 meses ya son gasto de este ejercicio.</div>
+  </section>
+
+  <!-- B2 -->
+  <section class="ex" id="b2">
+    <div class="ex-head"><span class="idx">B2</span><div><span class="grp">Intereses devengados</span><h2>Intereses por cobrar</h2></div></div>
+    <div class="statement">Inversiones del Sur Ltda. constituyó el 1 de octubre un depósito a plazo de <b>$30.000.000</b> al 6% anual, a cinco meses, con intereses pagaderos al vencimiento.</div>
+
+    <div class="step"><span class="step-label">Cálculo del interés ganado</span>
+      <div class="calc">
+        <div class="r">Meses transcurridos al 31-dic (oct, nov, dic) = 3</div>
+        <div class="eq">Interés = 30.000.000 × 6% × 3/12 = $450.000</div>
+      </div>
+    </div>
+
+    <div class="step"><span class="step-label">Asiento de ajuste (31 de diciembre)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Intereses por cobrar</td><td class="amt num">450.000</td><td></td></tr>
+        <tr><td class="acc-h">Ingresos financieros</td><td></td><td class="amt num">450.000</td></tr>
+      </tbody></table></div>
+    </div>
+  </section>
+
+  <!-- C1 -->
+  <section class="ex" id="c1">
+    <div class="ex-head"><span class="idx">C1</span><div><span class="grp">Sueldos y otros devengos por pagar</span><h2>Remuneraciones devengadas</h2></div></div>
+    <div class="statement">Transportes Cordillera Ltda. cierra al 31 de diciembre. Adeuda la última quincena de sueldos de choferes por <b>$5.400.000</b> (se paga el 5 de enero) y tiene comprometido un bono anual de desempeño de <b>$3.000.000</b> (se paga en marzo). Las remuneraciones no están afectas a IVA.</div>
+
+    <div class="step"><span class="step-label">Asiento 1 · Quincena de sueldos pendiente</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por sueldos</td><td class="amt num">5.400.000</td><td></td></tr>
+        <tr><td class="acc-h">Sueldos por pagar</td><td></td><td class="amt num">5.400.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Asiento 2 · Bono de desempeño comprometido</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por remuneraciones (bono)</td><td class="amt num">3.000.000</td><td></td></tr>
+        <tr><td class="acc-h">Bono por pagar</td><td></td><td class="amt num">3.000.000</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="note"><b>Por qué no son provisiones NIC 37:</b> ambos montos son ciertos en cuantía y ya están comprometidos con el trabajador; no requieren estimación. Si el monto del bono dependiera de una fórmula aún incierta, ahí sí calificaría como provisión.</div>
+  </section>
+
+  <!-- D1 -->
+  <section class="ex" id="d1">
+    <div class="ex-head"><span class="idx">D1</span><div><span class="grp">Moneda extranjera · NIC 21</span><h2>Cuenta por cobrar en USD</h2></div></div>
+    <div class="statement">Importadora Global SpA mantiene al 31 de diciembre una cuenta por cobrar de <b>USD 8.000</b>, registrada a $920/USD. El tipo de cambio de cierre es $980/USD.</div>
+
+    <div class="step"><span class="step-label">Cálculo de la reexpresión</span>
+      <div class="calc">
+        <div class="r">Valor registrado = 8.000 × 920 = $7.360.000</div>
+        <div class="r">Valor al cierre = 8.000 × 980 = $7.840.000</div>
+        <div class="eq">Diferencia favorable = $480.000</div>
+      </div>
+    </div>
+
+    <div class="step"><span class="step-label">Asiento de ajuste (31 de diciembre)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Cuentas por cobrar</td><td class="amt num">480.000</td><td></td></tr>
+        <tr><td class="acc-h">Diferencia de cambio (ingreso)</td><td></td><td class="amt num">480.000</td></tr>
+      </tbody></table></div>
+    </div>
+  </section>
+
+  <!-- D2 -->
+  <section class="ex" id="d2">
+    <div class="ex-head"><span class="idx">D2</span><div><span class="grp">Moneda extranjera · NIC 21</span><h2>Pasivo en USD</h2></div></div>
+    <div class="statement">La misma empresa tiene un préstamo de <b>USD 15.000</b>, también registrado a $920/USD.</div>
+
+    <div class="step"><span class="step-label">Cálculo de la reexpresión</span>
+      <div class="calc">
+        <div class="r">Valor registrado = 15.000 × 920 = $13.800.000</div>
+        <div class="r">Valor al cierre = 15.000 × 980 = $14.700.000</div>
+        <div class="eq">Diferencia desfavorable = $900.000</div>
+      </div>
+    </div>
+
+    <div class="step"><span class="step-label">Asiento de ajuste (31 de diciembre)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Diferencia de cambio (gasto)</td><td class="amt num">900.000</td><td></td></tr>
+        <tr><td class="acc-h">Préstamo por pagar</td><td></td><td class="amt num">900.000</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="note"><b>Comparación con D1:</b> es el mismo movimiento del dólar (+$60), pero el signo del resultado se invierte según la naturaleza de la partida — en un <b>activo</b> en USD (D1), la depreciación del peso genera <b>ganancia</b>; en un <b>pasivo</b> en USD (D2), genera <b>pérdida</b>, porque ahora se debe más pesos para saldar la misma deuda en dólares.</div>
+  </section>
+
+  <!-- D3 -->
+  <section class="ex" id="d3">
+    <div class="ex-head"><span class="idx">D3</span><div><span class="grp">Moneda extranjera · NIC 21</span><h2>Importación con IVA</h2></div></div>
+    <div class="statement">Importadora Global compró mercadería a un proveedor extranjero por <b>USD 10.000</b>, al tipo de cambio del día de $950. El IVA de internación (19%) se pagó en aduana; la deuda con el proveedor quedó en dólares. Al cierre, el tipo de cambio es $980.</div>
+
+    <div class="step"><span class="step-label">Paso 1 · Costo de la mercadería e IVA de internación</span>
+      <div class="calc">
+        <div class="r">Mercadería = 10.000 × 950 = $9.500.000</div>
+        <div class="r">IVA internación = 9.500.000 × 19%</div>
+        <div class="eq">= $1.805.000 (pagado en pesos, en aduana)</div>
+      </div>
+    </div>
+
+    <div class="step"><span class="step-label">Paso 2 · Asiento de la compra</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Mercaderías</td><td class="amt num">9.500.000</td><td></td></tr>
+        <tr><td class="acc-d">IVA Crédito Fiscal</td><td class="amt num">1.805.000</td><td></td></tr>
+        <tr><td class="acc-h">Proveedores extranjeros</td><td></td><td class="amt num">9.500.000</td></tr>
+        <tr><td class="acc-h">Banco (IVA pagado en aduana)</td><td></td><td class="amt num">1.805.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Paso 3 · Reexpresión de la deuda al cierre ($980)</span>
+      <div class="calc">
+        <div class="r">Valor registrado = 10.000 × 950 = $9.500.000</div>
+        <div class="r">Valor al cierre = 10.000 × 980 = $9.800.000</div>
+        <div class="eq">Diferencia desfavorable = $300.000</div>
+      </div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Diferencia de cambio (gasto)</td><td class="amt num">300.000</td><td></td></tr>
+        <tr><td class="acc-h">Proveedores extranjeros</td><td></td><td class="amt num">300.000</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="note"><b>Nota:</b> solo la deuda con el proveedor (partida monetaria en USD) se reexpresa al cierre; el costo de la mercadería ya capitalizado ($9.500.000) no se toca — no es una partida monetaria en moneda extranjera.</div>
+  </section>
+
+  <!-- E -->
+  <section class="ex" id="e">
+    <div class="ex-head"><span class="idx">E</span><div><span class="grp">Depreciación</span><h2>Un activo a lo largo de tres meses</h2></div></div>
+    <div class="statement">Industrias Metalúrgicas del Maule S.A. adquirió el 1 de julio una máquina en <b>$36.000.000</b>, valor residual $6.000.000, vida útil 5 años (60 meses), método lineal mensual.</div>
+
+    <div class="step"><span class="step-label">Mes 1 · Julio — la máquina entra en operación</span>
+      <div class="calc">
+        <div class="r">Depreciación mensual = (36.000.000 − 6.000.000) ÷ 60</div>
+        <div class="eq">= $500.000</div>
+      </div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por depreciación</td><td class="amt num">500.000</td><td></td></tr>
+        <tr><td class="acc-h">Depreciación acumulada</td><td></td><td class="amt num">500.000</td></tr>
+      </tbody></table></div>
+      <div class="calc"><div class="eq">Importe en libros al cierre de julio = 36.000.000 − 500.000 = $35.500.000</div></div>
+    </div>
+
+    <div class="step"><span class="step-label">Mes 2 · Agosto — mejora que aumenta la capacidad ($5.900.000, capitalizada)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Maquinaria (mejora)</td><td class="amt num">5.900.000</td><td></td></tr>
+        <tr><td class="acc-h">Banco / Proveedores</td><td></td><td class="amt num">5.900.000</td></tr>
+      </tbody></table></div>
+      <div class="calc">
+        <div class="r">Importe en libros antes de depreciar agosto = 35.500.000 + 5.900.000 = $41.400.000</div>
+        <div class="r">Vida útil restante (sin cambio de estimación) = 59 meses</div>
+        <div class="eq">Depreciación agosto = (41.400.000 − 6.000.000) ÷ 59 = $600.000</div>
+      </div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por depreciación</td><td class="amt num">600.000</td><td></td></tr>
+        <tr><td class="acc-h">Depreciación acumulada</td><td></td><td class="amt num">600.000</td></tr>
+      </tbody></table></div>
+      <div class="calc"><div class="eq">Importe en libros al cierre de agosto = 41.400.000 − 600.000 = $40.800.000</div></div>
+    </div>
+
+    <div class="step"><span class="step-label">Mes 3 · Septiembre — revisión de vida útil a 40 meses restantes</span>
+      <div class="calc">
+        <div class="r">Importe en libros al 1 de septiembre = $40.800.000</div>
+        <div class="eq">Depreciación septiembre = (40.800.000 − 6.000.000) ÷ 40 = $870.000</div>
+      </div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por depreciación</td><td class="amt num">870.000</td><td></td></tr>
+        <tr><td class="acc-h">Depreciación acumulada</td><td></td><td class="amt num">870.000</td></tr>
+      </tbody></table></div>
+      <div class="calc"><div class="eq">Importe en libros al cierre de septiembre = 40.800.000 − 870.000 = $39.930.000</div></div>
+    </div>
+
+    <table class="summary">
+      <thead><tr><th>Mes</th><th>Depreciación</th><th>Importe en libros al cierre</th></tr></thead>
+      <tbody>
+        <tr><td>Julio</td><td class="num">500.000</td><td class="num">35.500.000</td></tr>
+        <tr><td>Agosto (tras mejora +5.900.000)</td><td class="num">600.000</td><td class="num">40.800.000</td></tr>
+        <tr><td>Septiembre (tras revisión de vida útil)</td><td class="num">870.000</td><td class="num">39.930.000</td></tr>
+      </tbody>
+    </table>
+    <div class="note"><b>Nota clave:</b> en cada mes se aplica la misma fórmula general — (importe en libros − valor residual) ÷ vida útil restante — recalculando desde cero cada vez que cambia una variable (una mejora capitalizada o una revisión de estimación). Ambos cambios se tratan de forma prospectiva (NIC 8), nunca reexpresando meses anteriores.</div>
+  </section>
+
+  <!-- F -->
+  <section class="ex" id="f">
+    <div class="ex-head"><span class="idx">F</span><div><span class="grp">Provisiones · NIC 37</span><h2>Provisión por garantías</h2></div></div>
+    <div class="statement">Electrodomésticos del Norte S.A. estima al 31 de diciembre que las garantías de las ventas del año ascenderán a <b>$8.000.000</b>. Al año siguiente, las reparaciones efectivamente pagadas suman $6.500.000, y al cierre de ese año se concluye que no habrá más reclamos.</div>
+
+    <div class="step"><span class="step-label">1 · Reconocimiento de la provisión (31 de diciembre, año 1)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por garantías</td><td class="amt num">8.000.000</td><td></td></tr>
+        <tr><td class="acc-h">Provisión por garantías</td><td></td><td class="amt num">8.000.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">2 · Aplicación al materializarse las reparaciones (año siguiente)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Provisión por garantías</td><td class="amt num">6.500.000</td><td></td></tr>
+        <tr><td class="acc-h">Banco / Caja</td><td></td><td class="amt num">6.500.000</td></tr>
+      </tbody></table></div>
+      <div class="note">El gasto ya se reconoció en el año 1; el pago real solo consume la provisión, sin volver a afectar resultado.</div>
+    </div>
+
+    <div class="step"><span class="step-label">3 · Reverso del remanente no utilizado (cierre del año siguiente)</span>
+      <div class="calc"><div class="eq">Remanente = 8.000.000 − 6.500.000 = $1.500.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Provisión por garantías</td><td class="amt num">1.500.000</td><td></td></tr>
+        <tr><td class="acc-h">Ingreso por reverso de provisión</td><td></td><td class="amt num">1.500.000</td></tr>
+      </tbody></table></div>
+    </div>
+  </section>
+
+  <!-- G -->
+  <section class="ex" id="g">
+    <div class="ex-head"><span class="idx">G</span><div><span class="grp">Estimación de deudores incobrables · NIIF 9</span><h2>Deterioro de cuentas por cobrar</h2></div></div>
+    <div class="statement">Distribuidora Central Ltda. presenta al 31 de diciembre cuentas por cobrar de <b>$50.000.000</b> y estima una pérdida crediticia esperada del 4%.</div>
+
+    <div class="step"><span class="step-label">Deterioro inicial (31 de diciembre)</span>
+      <div class="calc"><div class="eq">Deterioro = 50.000.000 × 4% = $2.000.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por deterioro de cuentas por cobrar</td><td class="amt num">2.000.000</td><td></td></tr>
+        <tr><td class="acc-h">Deterioro acumulado (CxC)</td><td></td><td class="amt num">2.000.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">(a) Se castiga una cuenta de $1.200.000, definitivamente incobrable</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Deterioro acumulado</td><td class="amt num">1.200.000</td><td></td></tr>
+        <tr><td class="acc-h">Cuentas por cobrar</td><td></td><td class="amt num">1.200.000</td></tr>
+      </tbody></table></div>
+      <div class="note">El castigo se aplica contra la provisión ya constituida; no genera un nuevo gasto.</div>
+    </div>
+
+    <div class="step"><span class="step-label">(b) Un cliente cuya deuda de $900.000 ya había sido castigada, paga la totalidad</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Banco</td><td class="amt num">900.000</td><td></td></tr>
+        <tr><td class="acc-h">Recuperación de cuentas castigadas (ingreso)</td><td></td><td class="amt num">900.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">(c) De una cuenta castigada de $1.500.000 se recupera solo $600.000</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Banco</td><td class="amt num">600.000</td><td></td></tr>
+        <tr><td class="acc-h">Recuperación de cuentas castigadas (ingreso)</td><td></td><td class="amt num">600.000</td></tr>
+      </tbody></table></div>
+      <div class="note">Los $900.000 restantes ya se dieron de baja en el castigo original; al darse por definitivamente perdidos, no generan un asiento adicional.</div>
+    </div>
+
+    <div class="step"><span class="step-label">(d) Ajuste al cierre del año siguiente: CxC bajan a $40.000.000, pérdida esperada 1,5%</span>
+      <div class="calc">
+        <div class="r">Deterioro acumulado antes del ajuste = 2.000.000 − 1.200.000 (castigo a) = $800.000</div>
+        <div class="r">Deterioro requerido = 40.000.000 × 1,5% = $600.000</div>
+        <div class="eq">Como 600.000 &lt; 800.000, se reduce la provisión en $200.000</div>
+      </div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Deterioro acumulado</td><td class="amt num">200.000</td><td></td></tr>
+        <tr><td class="acc-h">Ingreso por ajuste de deterioro</td><td></td><td class="amt num">200.000</td></tr>
+      </tbody></table></div>
+      <div class="note">Las recuperaciones (b) y (c) se registran como ingreso directo y no afectan el saldo de la cuenta correctora; por eso el arrastre solo descuenta el castigo (a).</div>
+    </div>
+  </section>
+
+  <!-- H -->
+  <section class="ex" id="h">
+    <div class="ex-head"><span class="idx">H</span><div><span class="grp">Ejercicio integrado</span><h2>Servicios Austral Ltda.</h2></div></div>
+    <div class="statement">Balance de comprobación al 31 de diciembre (antes de ajustes): Ingresos por servicios $44.400.000; Gastos de arriendo $7.200.000; Sueldos $22.000.000; Gastos generales $5.000.000. Se piden los 8 ajustes y el resultado ajustado.</div>
+
+    <div class="step"><span class="step-label">Ajuste 1 · Seguro consumido</span>
+      <div class="calc"><div class="eq">3.600.000 ÷ 12 × 3 meses = $900.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por seguros</td><td class="amt num">900.000</td><td></td></tr>
+        <tr><td class="acc-h">Seguros pagados por anticipado</td><td></td><td class="amt num">900.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Ajuste 2 · Ingreso devengado del plan de 4 meses</span>
+      <div class="calc"><div class="eq">4.800.000 ÷ 4 × 1 mes = $1.200.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Ingresos percibidos por adelantado</td><td class="amt num">1.200.000</td><td></td></tr>
+        <tr><td class="acc-h">Ingresos por servicios</td><td></td><td class="amt num">1.200.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Ajuste 3 · Intereses del préstamo bancario</span>
+      <div class="calc"><div class="eq">12.000.000 × 10% × 3/12 = $300.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por intereses</td><td class="amt num">300.000</td><td></td></tr>
+        <tr><td class="acc-h">Intereses por pagar</td><td></td><td class="amt num">300.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Ajuste 4 · Sueldos devengados por pagar</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por sueldos</td><td class="amt num">1.800.000</td><td></td></tr>
+        <tr><td class="acc-h">Sueldos por pagar</td><td></td><td class="amt num">1.800.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Ajuste 5 · Depreciación anual de la maquinaria</span>
+      <div class="calc"><div class="eq">(24.000.000 − 4.000.000) ÷ 5 años = $4.000.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por depreciación</td><td class="amt num">4.000.000</td><td></td></tr>
+        <tr><td class="acc-h">Depreciación acumulada — Maquinaria</td><td></td><td class="amt num">4.000.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Ajuste 6 · Reexpresión de la CxC en USD</span>
+      <div class="calc">
+        <div class="r">5.000 × 920 = 4.600.000 (valor registrado) → 5.000 × 980 = 4.900.000 (cierre)</div>
+        <div class="eq">Diferencia favorable = $300.000</div>
+      </div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Cuentas por cobrar en USD</td><td class="amt num">300.000</td><td></td></tr>
+        <tr><td class="acc-h">Diferencia de cambio (ingreso)</td><td></td><td class="amt num">300.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Ajuste 7 · Provisión por garantías</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por garantías</td><td class="amt num">1.500.000</td><td></td></tr>
+        <tr><td class="acc-h">Provisión por garantías</td><td></td><td class="amt num">1.500.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Ajuste 8 · Deterioro de cuentas por cobrar nacionales</span>
+      <div class="calc"><div class="eq">20.000.000 × 3% = $600.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por deterioro de cuentas por cobrar</td><td class="amt num">600.000</td><td></td></tr>
+        <tr><td class="acc-h">Deterioro acumulado (CxC)</td><td></td><td class="amt num">600.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Resultado del ejercicio ajustado</span>
+      <div class="calc">
+        <div class="r">Resultado preliminar = 44.400.000 − (7.200.000 + 22.000.000 + 5.000.000)</div>
+        <div class="eq">Resultado preliminar = $10.200.000</div>
+      </div>
+      <table class="summary">
+        <thead><tr><th>Concepto</th><th>Efecto en resultado</th></tr></thead>
+        <tbody>
+          <tr><td>Resultado preliminar (antes de ajustes)</td><td class="num">10.200.000</td></tr>
+          <tr><td>(2) Ingreso por servicios devengado</td><td class="num">+1.200.000</td></tr>
+          <tr><td>(6) Diferencia de cambio favorable</td><td class="num">+300.000</td></tr>
+          <tr><td>(1) Gasto por seguros</td><td class="num">(900.000)</td></tr>
+          <tr><td>(3) Gasto por intereses</td><td class="num">(300.000)</td></tr>
+          <tr><td>(4) Gasto por sueldos</td><td class="num">(1.800.000)</td></tr>
+          <tr><td>(5) Gasto por depreciación</td><td class="num">(4.000.000)</td></tr>
+          <tr><td>(7) Gasto por garantías</td><td class="num">(1.500.000)</td></tr>
+          <tr><td>(8) Gasto por deterioro</td><td class="num">(600.000)</td></tr>
+          <tr><td><b>Resultado del ejercicio (ajustado)</b></td><td class="num">$2.600.000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn"><b>Sin los ajustes</b>, el resultado habría quedado sobrevalorado en $7.600.000: faltaban seis gastos ya devengados y sobraba un ingreso todavía no ganado por completo. El devengo corrige ambos sentidos a la vez — por eso conviene siempre calcular primero el efecto neto en resultado antes de armar el estado de resultados final.</div>
+  </section>
+
+  <footer>Solucionario elaborado a partir de la Guía de Regularizaciones Periódicas USACH · Contabilidad General — uso personal de estudio</footer>
+</div>
+
+</body>
+</html>

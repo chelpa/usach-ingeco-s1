@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dominio de Límites — Mi Semestre</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  p{ color: inherit; }
+
+  :root{
+    --paper:#faf9f5;
+    --paper-raised:#ffffff;
+    --ink:#1f2933;
+    --ink-soft:#5b6672;
+    --ink-faint:#8a94a0;
+    --grid:#dbe4f0;
+    --line:#d9d3c5;
+    --accent:#20509e;
+    --accent-ink:#14345f;
+    --accent-soft:#e7edf9;
+    --accent-soft-line:#c4d3ee;
+    --plum:#7c3159;
+    --plum-soft:#f3e6ee;
+    --plum-soft-line:#dcb9cd;
+    --good:#2b6e4f;
+    --good-soft:#e5f1ea;
+    --shadow: 0 1px 2px rgba(31,41,51,.06), 0 6px 20px -12px rgba(31,41,51,.18);
+    --font-display: 'Fraunces', ui-serif, Georgia, serif;
+    --font-body: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#12161c;
+      --paper-raised:#181e26;
+      --ink:#e9edf2;
+      --ink-soft:#aab4c0;
+      --ink-faint:#78828e;
+      --grid:#223047;
+      --line:#2c3542;
+      --accent:#7ba7e8;
+      --accent-ink:#bcd4f5;
+      --accent-soft:#1b2739;
+      --accent-soft-line:#2d4468;
+      --plum:#d891b3;
+      --plum-soft:#2a1c25;
+      --plum-soft-line:#4a2c3b;
+      --good:#7fbf9c;
+      --good-soft:#16261e;
+      --shadow: 0 1px 2px rgba(0,0,0,.35), 0 10px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#12161c;
+    --paper-raised:#181e26;
+    --ink:#e9edf2;
+    --ink-soft:#aab4c0;
+    --ink-faint:#78828e;
+    --grid:#223047;
+    --line:#2c3542;
+    --accent:#7ba7e8;
+    --accent-ink:#bcd4f5;
+    --accent-soft:#1b2739;
+    --accent-soft-line:#2d4468;
+    --plum:#d891b3;
+    --plum-soft:#2a1c25;
+    --plum-soft-line:#4a2c3b;
+    --good:#7fbf9c;
+    --good-soft:#16261e;
+    --shadow: 0 1px 2px rgba(0,0,0,.35), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:16.5px;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{ background:var(--accent-soft-line); }
+
+  a{ color:var(--accent); }
+
+  .wrap{ max-width:920px; margin:0 auto; padding: 0 24px 96px; }
+
+  /* ---------- Header ---------- */
+  header.hero{
+    position:relative;
+    padding: 56px 24px 40px;
+    background:
+      linear-gradient(180deg, var(--accent-soft) 0%, var(--paper) 88%);
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  header.hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 26px 26px;
+    opacity:.55;
+    mask-image: linear-gradient(180deg, black, transparent 85%);
+    -webkit-mask-image: linear-gradient(180deg, black, transparent 85%);
+  }
+  .hero-inner{ max-width:920px; margin:0 auto; position:relative; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:.5em;
+    font-family:var(--font-mono);
+    font-size:.78rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--accent-ink);
+    background:var(--paper-raised);
+    border:1px solid var(--accent-soft-line);
+    padding:.35em .8em;
+    border-radius:100px;
+    box-shadow:var(--shadow);
+  }
+  h1.title{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(2.1rem, 5vw, 3.15rem);
+    line-height:1.05;
+    margin: .55em 0 .3em;
+    text-wrap:balance;
+    color:var(--ink);
+  }
+  h1.title em{
+    font-style:italic;
+    color:var(--accent);
+  }
+  .subtitle{
+    font-size:1.05rem;
+    color:var(--ink-soft);
+    max-width:62ch;
+    margin:0 0 1.4em;
+  }
+  .hero-meta{
+    display:flex; flex-wrap:wrap; gap:10px;
+    font-family:var(--font-mono);
+    font-size:.8rem;
+    color:var(--ink-soft);
+  }
+  .hero-meta span{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:.4em .7em;
+  }
+
+  /* ---------- TOC ---------- */
+  nav.toc{
+    position:sticky; top:56px; z-index:20;
+    background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .toc-inner{
+    max-width:920px; margin:0 auto;
+    display:flex; gap:4px; overflow-x:auto;
+    padding: 10px 24px;
+    scrollbar-width:none;
+  }
+  .toc-inner::-webkit-scrollbar{ display:none; }
+  nav.toc a{
+    flex:0 0 auto;
+    font-family:var(--font-mono);
+    font-size:.78rem;
+    text-decoration:none;
+    color:var(--ink-soft);
+    padding:.5em .8em;
+    border-radius:8px;
+    white-space:nowrap;
+    border:1px solid transparent;
+  }
+  nav.toc a:hover{ color:var(--accent); border-color:var(--accent-soft-line); background:var(--accent-soft); }
+
+  /* ---------- Sections ---------- */
+  section{ padding-top:64px; scroll-margin-top:64px; }
+  .sec-head{ display:flex; align-items:baseline; gap:.6em; margin-bottom:6px; }
+  .sec-num{
+    font-family:var(--font-mono);
+    font-size:.85rem;
+    color:var(--accent);
+    border:1px solid var(--accent-soft-line);
+    background:var(--accent-soft);
+    border-radius:6px;
+    padding:.15em .5em;
+  }
+  h2.sec-title{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(1.5rem, 3vw, 1.9rem);
+    margin:0;
+    color:var(--ink);
+  }
+  .sec-kicker{
+    font-size:.95rem;
+    color:var(--ink-soft);
+    max-width:68ch;
+    margin: .3em 0 1.7em;
+  }
+
+  h3.block-title{
+    font-family:var(--font-display);
+    font-size:1.15rem;
+    font-weight:600;
+    margin: 0 0 .7em;
+    color:var(--ink);
+  }
+
+  .card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+  }
+
+  /* Big picture callout */
+  .bigpicture{
+    padding:22px 26px;
+    border-left:3px solid var(--accent);
+    margin-bottom: 32px;
+  }
+  .bigpicture p{ margin:0; font-size:1.03rem; }
+
+  /* ---------- Formula table ---------- */
+  .table-scroll{ overflow-x:auto; border-radius:14px; border:1px solid var(--line); box-shadow:var(--shadow); margin-bottom:30px; }
+  table.vault{
+    width:100%; border-collapse:collapse; background:var(--paper-raised);
+    min-width:720px;
+  }
+  table.vault caption{ display:none; }
+  table.vault th{
+    text-align:left;
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    background:var(--accent-soft);
+    padding:.85em 1em;
+    border-bottom:1px solid var(--accent-soft-line);
+    /* Not sticky: position:sticky on <th> combined with this table's
+       border-collapse:collapse renders incorrectly in Chromium (the header
+       cell detaches from its row while scrolling). The table is short
+       enough that a floating header isn't needed. */
+  }
+  table.vault td{
+    padding:.9em 1em;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+    font-size:.93rem;
+  }
+  table.vault tr:last-child td{ border-bottom:none; }
+  table.vault td.concept{ font-weight:600; color:var(--ink); min-width:15ch; }
+  table.vault td.notation{ font-family:var(--font-mono); color:var(--accent-ink); white-space:nowrap; }
+
+  /* Pitfalls */
+  .pitfalls{ display:grid; gap:10px; margin-bottom:8px; }
+  .pitfall{
+    display:grid; grid-template-columns:auto 1fr; gap:12px;
+    padding:14px 16px;
+    border:1px solid var(--plum-soft-line);
+    background:var(--plum-soft);
+    border-radius:12px;
+  }
+  .pitfall .mark{ font-family:var(--font-mono); color:var(--plum); font-weight:700; }
+  .pitfall p{ margin:0; font-size:.93rem; }
+  .pitfall strong{ color:var(--ink); }
+
+  /* ---------- Archetypes ---------- */
+  .archetypes{ display:grid; grid-template-columns:repeat(auto-fit, minmax(300px,1fr)); gap:16px; }
+  .arche{ padding:20px 22px; }
+  .arche-tag{
+    font-family:var(--font-mono); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent-ink); margin-bottom:.5em; display:block;
+  }
+  .arche h4{ font-family:var(--font-display); font-size:1.08rem; margin:0 0 .5em; color:var(--ink); }
+  .arche .trigger{ font-size:.9rem; color:var(--ink-soft); margin:0 0 .8em; padding-left:.9em; border-left:2px solid var(--accent-soft-line); }
+  .arche ol{ margin:0; padding-left:1.2em; font-size:.9rem; }
+  .arche ol li{ margin-bottom:.4em; }
+  .arche ol li:last-child{ margin-bottom:0; }
+
+  /* ---------- Worked exercises ---------- */
+  .exercise{ margin-bottom:34px; padding:0; overflow:hidden; }
+  .exercise-head{
+    background:var(--accent-soft);
+    border-bottom:1px solid var(--accent-soft-line);
+    padding:16px 22px;
+    display:flex; gap:14px; align-items:baseline; flex-wrap:wrap;
+  }
+  .exercise-head .exnum{ font-family:var(--font-mono); color:var(--accent); font-weight:700; }
+  .exercise-head .exstmt{ font-size:.98rem; color:var(--ink); }
+  .exercise-body{ padding:20px 22px 22px; display:grid; gap:14px; }
+  .step{ display:grid; grid-template-columns: 1fr; gap:6px; }
+  .step .eq{ font-family:var(--font-mono); font-size:1rem; overflow-x:auto; padding:2px 0; }
+  .note{
+    font-size:.85rem; color:var(--ink-soft);
+    background: color-mix(in srgb, var(--accent-soft) 55%, transparent);
+    border-left:2px solid var(--accent-soft-line);
+    padding:.5em .8em;
+    border-radius:0 8px 8px 0;
+    width:fit-content;
+    max-width:70ch;
+  }
+  .answer-box{
+    display:inline-flex; align-items:center; gap:.5em;
+    font-family:var(--font-mono); font-size:1rem;
+    border:1.5px solid var(--accent);
+    color:var(--accent-ink);
+    background:var(--accent-soft);
+    padding:.5em .9em;
+    border-radius:8px;
+    margin-top:4px;
+  }
+  .answer-box .tick{ color:var(--good); }
+
+  /* Math helpers */
+  .mx{ font-family:var(--font-mono); }
+  .frac{ display:inline-flex; flex-direction:column; vertical-align:middle; text-align:center; margin:0 .15em; line-height:1.15; }
+  .frac .num, .frac .den{ display:block; padding:0 .25em; }
+  .frac .num{ border-bottom:1.4px solid currentColor; }
+  .rt{ display:inline-flex; align-items:flex-start; }
+  .rt .sign{ padding-top:.05em; }
+  .rt .rad{ border-top:1.4px solid currentColor; padding:0 .2em; margin-left:.02em; }
+  .lim{ display:inline-flex; flex-direction:column; align-items:flex-start; vertical-align:middle; line-height:1; margin-right:.15em; }
+  .lim .lim-sub{ font-size:.6em; color:var(--ink-soft); margin-top:.15em; }
+
+  /* ---------- Flashcards ---------- */
+  .flash-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(250px,1fr)); gap:16px; }
+  .flash{ perspective:1200px; }
+  .flash input{ display:none; }
+  .flash label{ display:block; cursor:pointer; }
+  .flash-inner{
+    position:relative; min-height:150px; border-radius:14px;
+    transform-style:preserve-3d;
+    transition: transform .5s cubic-bezier(.2,.7,.3,1);
+    box-shadow:var(--shadow);
+  }
+  .flash input:checked ~ label .flash-inner{ transform: rotateY(180deg); }
+  .flash-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:14px;
+    padding:18px 20px;
+    display:flex; flex-direction:column;
+    border:1px solid var(--line);
+  }
+  .flash-face.front{ background:var(--paper-raised); }
+  .flash-face.back{
+    background:var(--accent-soft);
+    border-color:var(--accent-soft-line);
+    transform: rotateY(180deg);
+  }
+  .flash-kicker{
+    font-family:var(--font-mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--ink-faint); margin-bottom:.6em;
+  }
+  .flash-face.back .flash-kicker{ color:var(--accent-ink); }
+  .flash-q, .flash-a{ font-size:.92rem; margin:0; }
+  .flash-q{ color:var(--ink); font-weight:600; }
+  .flash-a{ color:var(--ink); }
+  .flash-hint{ margin-top:auto; font-family:var(--font-mono); font-size:.7rem; color:var(--ink-faint); padding-top:.8em; }
+  @media (prefers-reduced-motion: reduce){
+    .flash-inner{ transition:none; }
+  }
+
+  /* ---------- Practice ---------- */
+  .practice-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:16px; margin-bottom:22px; }
+  .prob{ padding:18px 20px; }
+  .prob-kicker{ display:flex; align-items:center; gap:.5em; font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; margin-bottom:.7em; }
+  .prob-kicker.guided{ color:var(--good); }
+  .prob-kicker.challenge{ color:var(--plum); }
+  .prob-kicker .dot{ width:7px; height:7px; border-radius:50%; background:currentColor; }
+  .prob p.statement{ font-size:.95rem; margin:0 0 .8em; }
+  .prob .hint{ font-size:.85rem; color:var(--ink-soft); background:var(--good-soft); border-radius:8px; padding:.6em .8em; }
+
+  details.solutions{
+    border:1px solid var(--accent-soft-line);
+    border-radius:14px;
+    background:var(--accent-soft);
+    padding: 4px 0;
+    overflow:hidden;
+  }
+  details.solutions summary{
+    cursor:pointer;
+    list-style:none;
+    padding:16px 22px;
+    font-family:var(--font-mono);
+    font-weight:600;
+    color:var(--accent-ink);
+    display:flex; align-items:center; gap:.6em;
+  }
+  details.solutions summary::-webkit-details-marker{ display:none; }
+  details.solutions summary::before{ content:"▸"; transition: transform .2s ease; }
+  details.solutions[open] summary::before{ transform: rotate(90deg); }
+  .sol-body{ padding: 4px 22px 22px; display:grid; gap:22px; }
+  .sol-item h5{ font-family:var(--font-display); font-size:1rem; margin:0 0 .5em; color:var(--ink); }
+  .sol-item .eq{ font-family:var(--font-mono); font-size:.95rem; margin:.3em 0; overflow-x:auto; }
+
+  footer{
+    max-width:920px; margin: 60px auto 0; padding: 24px 24px 0;
+    border-top:1px solid var(--line);
+    font-size:.82rem; color:var(--ink-faint);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  @media (max-width:640px){
+    header.hero{ padding: 44px 18px 30px; }
+    .wrap{ padding: 0 16px 72px; }
+    section{ padding-top:48px; }
+  }
+
+</style>
+</head>
+<body>
+
+<script src="../../assets/nav.js" data-base="../../" data-course="maye1"></script>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">Kit de preparación · PEP 2 · Cálculo diferencial</span>
+    <h1 class="title">Dominio de <em>Límites</em></h1>
+    <p class="subtitle">Teoría, patrones de resolución, ejercicios resueltos con comentario, fichas de estudio y una autoevaluación — todo construido a partir de tu guía preparatoria.</p>
+    <div class="hero-meta">
+      <span>7 ejercicios fuente</span>
+      <span>6 arquetipos identificados</span>
+      <span>12 fichas de estudio</span>
+      <span>4 problemas de práctica</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="toc-inner">
+    <a href="#teoria">01 · Formulario</a>
+    <a href="#arquetipos">02 · Arquetipos</a>
+    <a href="#ejercicios">03 · Ejercicios resueltos</a>
+    <a href="#fichas">04 · Fichas</a>
+    <a href="#practica">05 · Práctica</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- ============ SECTION 1 ============ -->
+  <section id="teoria">
+    <div class="sec-head"><span class="sec-num">01</span><h2 class="sec-title">Teoría central y formulario</h2></div>
+    <p class="sec-kicker">Todo límite de esta guía se resuelve con una de estas herramientas: álgebra de racionalización, límites notables exponenciales/logarítmicos, la técnica para 1<sup>∞</sup>, comparación de grados al infinito, o el Teorema del Sandwich.</p>
+
+    <div class="card bigpicture">
+      <p>Los límites describen el comportamiento de una función <span class="mx">alrededor</span> de un punto — o cuando la variable crece sin cota — sin exigir que la función esté definida exactamente ahí. Son la puerta de entrada a la continuidad y a la derivada: por eso las guías de cálculo insisten en "pegar" ramas de funciones a trozos, comparar el crecimiento entre exponenciales y polinomios, y acotar funciones difíciles entre otras más simples (Sandwich) para forzar un valor.</p>
+    </div>
+
+    <h3 class="block-title">Vault de fórmulas y definiciones</h3>
+    <div class="table-scroll">
+      <table class="vault">
+        <thead>
+          <tr><th>Concepto</th><th>Notación</th><th>Variables y significado</th><th>Condiciones clave</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="concept">Límite lateral (existencia)</td>
+            <td class="notation">L⁻ = L⁺ ⇒ ∃ lím</td>
+            <td>L⁻: límite por la izquierda; L⁺: límite por la derecha de x=a.</td>
+            <td>Ambos deben ser <em>finitos e iguales</em>. Si difieren, el límite no existe (típico en funciones a trozos).</td>
+          </tr>
+          <tr>
+            <td class="concept">Continuidad en x=a</td>
+            <td class="notation">L⁻ = L⁺ = f(a)</td>
+            <td>f(a): valor real de la función evaluada en a.</td>
+            <td>Condición más fuerte que solo "existencia del límite": exige además que f esté definida y coincida con él.</td>
+          </tr>
+          <tr>
+            <td class="concept">Racionalización (conjugada)</td>
+            <td class="notation">(a−b)(a+b) = a²−b²</td>
+            <td>a, b: términos con raíz que generan 0/0.</td>
+            <td>Se multiplica numerador <em>y</em> denominador por el mismo conjugado; solo elimina la raíz, no el resto del álgebra.</td>
+          </tr>
+          <tr>
+            <td class="concept">Límite notable exponencial</td>
+            <td class="notation">lím<sub>u→0</sub> (eᵘ−1)/u = 1</td>
+            <td>u: cualquier expresión que tienda a 0 (no solo "x").</td>
+            <td>El denominador debe ser <em>exactamente</em> u; si no lo es, se multiplica y divide por la constante que falte.</td>
+          </tr>
+          <tr>
+            <td class="concept">Límite notable logarítmico</td>
+            <td class="notation">lím<sub>u→0</sub> (aᵘ−1)/u = ln(a)</td>
+            <td>a: base positiva ≠ 1; u→0.</td>
+            <td>Caso general del anterior (con a=e, ln(e)=1 y se recupera la fórmula exponencial).</td>
+          </tr>
+          <tr>
+            <td class="concept">Indeterminada 1<sup>∞</sup></td>
+            <td class="notation">lím f(x)<sup>g(x)</sup> = e<sup>lím g(x)·(f(x)−1)</sup></td>
+            <td>f(x)→1 (la base); g(x)→∞ (el exponente).</td>
+            <td>Se resta 1 a la base <em>antes</em> de multiplicar por g(x); confundir esto es el error más común del arquetipo.</td>
+          </tr>
+          <tr>
+            <td class="concept">Diferencia de cubos</td>
+            <td class="notation">a³−b³ = (a−b)(a²+ab+b²)</td>
+            <td>a, b: bases de los cubos.</td>
+            <td>Útil para cancelar factores comunes en (x−c) cuando aparece x³ menos una constante.</td>
+          </tr>
+          <tr>
+            <td class="concept">Diferencia de cuadrados</td>
+            <td class="notation">a²−b² = (a−b)(a+b)</td>
+            <td>a, b: términos elevados al cuadrado.</td>
+            <td>Aparece tanto al racionalizar como al factorizar denominadores tipo x²−k².</td>
+          </tr>
+          <tr>
+            <td class="concept">Límites racionales en ∞</td>
+            <td class="notation">dividir por x<sup>máx grado</sup></td>
+            <td>Grado del numerador vs. grado del denominador.</td>
+            <td>Todo término x<sup>−n</sup> (n&gt;0) tiende a 0; el resultado depende solo de los coeficientes líderes.</td>
+          </tr>
+          <tr>
+            <td class="concept">Teorema del Sandwich</td>
+            <td class="notation">h(x) ≤ g(x) ≤ k(x) ⇒ lím g = L</td>
+            <td>h, k: funciones "cota" que acotan a g cerca de a.</td>
+            <td>Exige que lím h(x) = lím k(x) = L <em>en el mismo punto</em>; si no coinciden, el teorema no aplica.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="block-title">Errores frecuentes y trampas</h3>
+    <div class="pitfalls">
+      <div class="pitfall"><span class="mark">01</span><p><strong>Evaluar solo un lado en funciones a trozos.</strong> Calcular únicamente el límite por la derecha (o por la izquierda) y dar esa respuesta como "el" límite, sin verificar que ambos lados coincidan.</p></div>
+      <div class="pitfall"><span class="mark">02</span><p><strong>Aplicar el límite notable sin ajustar la constante.</strong> Usar (eᵘ−1)/u = 1 cuando el denominador no es exactamente u (p. ej. dejar (e⁴ᵏˣ−1)/x sin multiplicar y dividir por 4k).</p></div>
+      <div class="pitfall"><span class="mark">03</span><p><strong>Errores de signo al racionalizar.</strong> Expandir 9−(x+1) y olvidar el signo: el resultado es −(x−8), no (x−8); ese signo cambia toda la respuesta final.</p></div>
+      <div class="pitfall"><span class="mark">04</span><p><strong>Confundir f(x)−1 con f(x) en la forma 1<sup>∞</sup>.</strong> Multiplicar g(x) directamente por f(x) en vez de por (f(x)−1) invalida la fórmula del exponente.</p></div>
+      <div class="pitfall"><span class="mark">05</span><p><strong>No factorizar antes de dividir por x en el infinito.</strong> Dividir término a término sin antes cancelar factores comunes (como x³−8 = (x−2)(x²+2x+4)) lleva a cuentas innecesariamente largas o a errores de grado.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 2 ============ -->
+  <section id="arquetipos">
+    <div class="sec-head"><span class="sec-num">02</span><h2 class="sec-title">Arquetipos de resolución</h2></div>
+    <p class="sec-kicker">Los 7 ejercicios de la guía se agrupan en 6 patrones. Reconocer el arquetipo <em>antes</em> de escribir álgebra es la mitad del problema.</p>
+
+    <div class="archetypes">
+
+      <div class="card arche">
+        <span class="arche-tag">Arquetipo A</span>
+        <h4>Continuidad de función a trozos con parámetro</h4>
+        <p class="trigger">Disparador: función definida por ramas, con una constante desconocida, y se pide el valor que hace <em>existir</em> (o continuo) el límite en el punto de empalme.</p>
+        <ol>
+          <li>Calcula el límite lateral derecho: evalúa la rama válida para x&gt;a; si da 0/0, resuélvelo con racionalización o factorización.</li>
+          <li>Calcula el límite lateral izquierdo (normalmente la rama es directa, por sustitución simple).</li>
+          <li>Iguala ambos límites laterales y despeja el parámetro.</li>
+          <li>(Opcional) verifica continuidad comprobando que f(a) también coincide con ese valor.</li>
+        </ol>
+      </div>
+
+      <div class="card arche">
+        <span class="arche-tag">Arquetipo B</span>
+        <h4>Límites notables exponenciales/logarítmicos con parámetro</h4>
+        <p class="trigger">Disparador: cociente 0/0 en x→0 con términos eᵏˣ o aˣ en el numerador, igualado a un valor dado que involucra ln.</p>
+        <ol>
+          <li>Confirma la forma 0/0 al sustituir directamente.</li>
+          <li>Reescribe el numerador separando en diferencias de términos tipo (eᵘ−1).</li>
+          <li>Multiplica y divide cada término por la constante que hace coincidir el denominador con el exponente (forzando la forma u/u).</li>
+          <li>Aplica los límites notables: (eᵘ−1)/u→1 y (aᵘ−1)/u→ln(a).</li>
+          <li>Iguala la expresión resultante al valor dado y despeja el parámetro.</li>
+        </ol>
+      </div>
+
+      <div class="card arche">
+        <span class="arche-tag">Arquetipo C</span>
+        <h4>Indeterminada 1<sup>∞</sup> (potencia-base)</h4>
+        <p class="trigger">Disparador: expresión [f(x)]<sup>g(x)</sup> donde la base tiende a 1 y el exponente tiende a ∞ (o −∞).</p>
+        <ol>
+          <li>Verifica que f(x)→1 y g(x)→∞: confirma la forma 1<sup>∞</sup>.</li>
+          <li>Aplica la fórmula: el límite es e elevado a lím g(x)·(f(x)−1).</li>
+          <li>Calcula f(x)−1 como una sola fracción simplificada.</li>
+          <li>Calcula el límite del producto g(x)·(f(x)−1), típicamente reduciendo a la razón de términos líderes cuando x→∞.</li>
+          <li>El resultado final es e elevado a ese número.</li>
+        </ol>
+      </div>
+
+      <div class="card arche">
+        <span class="arche-tag">Arquetipo D</span>
+        <h4>Racionalización con raíces (forma 0/0)</h4>
+        <p class="trigger">Disparador: límite en un punto finito que da 0/0 y contiene una raíz cuadrada en el numerador o el denominador.</p>
+        <ol>
+          <li>Multiplica numerador y denominador por el conjugado de la expresión con raíz.</li>
+          <li>Simplifica usando diferencia de cuadrados: (a−b)(a+b) = a²−b².</li>
+          <li>Factoriza el polinomio resultante para exponer el factor común (x−a) (puede requerir diferencia de cuadrados/cubos en el otro lado).</li>
+          <li>Cancela (x−a).</li>
+          <li>Sustituye x=a directamente en la expresión simplificada.</li>
+        </ol>
+      </div>
+
+      <div class="card arche">
+        <span class="arche-tag">Arquetipo E</span>
+        <h4>Límites racionales en el infinito</h4>
+        <p class="trigger">Disparador: cociente de polinomios (o expresiones factorizables en polinomios) con x→∞ o x→−∞, forma ∞/∞.</p>
+        <ol>
+          <li>Factoriza numerador y denominador por completo (busca factores comunes ocultos, como diferencias de cubos).</li>
+          <li>Cancela los factores comunes.</li>
+          <li>Identifica el grado del numerador y del denominador resultantes.</li>
+          <li>Divide cada término por x elevado al mayor grado presente.</li>
+          <li>Toma el límite término a término: todo término con x en el denominador tiende a 0. El resultado es la razón de los coeficientes líderes.</li>
+        </ol>
+      </div>
+
+      <div class="card arche">
+        <span class="arche-tag">Arquetipo F</span>
+        <h4>Teorema del Sandwich con función acotada</h4>
+        <p class="trigger">Disparador: una expresión (g(x) o g(x)/x) queda acotada entre otras dos expresiones, y ambas cotas comparten el mismo límite en el punto de interés.</p>
+        <ol>
+          <li>Factoriza y simplifica las expresiones que acotan, cancelando factores comunes.</li>
+          <li>Calcula el límite de la cota inferior y de la cota superior por separado.</li>
+          <li>Si ambos límites son iguales a L, concluye por el Sandwich que la expresión central también tiende a L.</li>
+          <li>Si lo acotado no es exactamente g(x) sino g(x)/x, recupera g(x) escribiendo g(x)=x·(g(x)/x) y aplica la propiedad del límite de un producto.</li>
+        </ol>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ SECTION 3 ============ -->
+  <section id="ejercicios">
+    <div class="sec-head"><span class="sec-num">03</span><h2 class="sec-title">Ejercicios resueltos, paso a paso</h2></div>
+    <p class="sec-kicker">Tres ejercicios representativos de la guía, con comentario entre corchetes explicando <em>por qué</em> se da cada paso — no solo el "qué".</p>
+
+    <!-- Exercise 1 -->
+    <article class="card exercise">
+      <div class="exercise-head">
+        <span class="exnum">Ejercicio 1 · Arquetipo A + D</span>
+        <span class="exstmt">Determine el valor de k∈ℝ, si existe, para que exista el límite de f en x=1, con f(x) = <span class="mx">(√(x+3)−2)/(x−1)</span> si x&gt;1, y f(x)=kx+1 si x≤1.</span>
+      </div>
+      <div class="exercise-body">
+        <div class="step">
+          <div class="eq mx">lím<sub>x→1⁺</sub> f(x) = lím<sub>x→1⁺</sub> (√(x+3)−2)/(x−1)</div>
+          <div class="note">[Empezamos por la derecha porque es la rama con la raíz — la más probable en generar una indeterminación 0/0.]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">Al sustituir x=1: (√4−2)/(1−1) = 0/0</div>
+          <div class="note">[Confirmamos la indeterminación antes de manipular: esto justifica racionalizar en vez de sustituir directo.]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">(√(x+3)−2)/(x−1) · (√(x+3)+2)/(√(x+3)+2) = ((x+3)−4) / [(x−1)(√(x+3)+2)]</div>
+          <div class="note">[Multiplicamos por el conjugado √(x+3)+2: convierte la raíz del numerador en (x+3)−4 = x−1, que es exactamente el factor que necesitamos cancelar.]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">(x−1) / [(x−1)(√(x+3)+2)] = 1 / (√(x+3)+2)</div>
+          <div class="note">[Cancelamos (x−1): ya no hay indeterminación, la función simplificada es continua en x=1.]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">lím<sub>x→1⁺</sub> f(x) = 1/(√4+2) = 1/4</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">lím<sub>x→1⁻</sub> f(x) = lím<sub>x→1⁻</sub> (kx+1) = k+1</div>
+          <div class="note">[La rama izquierda es lineal, así que se evalúa por sustitución directa — no hay nada que racionalizar aquí.]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">Para que exista el límite: k+1 = 1/4 ⟹ k = 1/4 − 1 = −3/4</div>
+          <div class="note">[Igualar los dos límites laterales es la condición de existencia — el paso central del Arquetipo A.]</div>
+        </div>
+        <div class="answer-box"><span class="tick">✓</span> k = −3/4 &nbsp;(además, con este valor f también es continua en x=1, pues f(1)=k+1=1/4)</div>
+      </div>
+    </article>
+
+    <!-- Exercise 3 -->
+    <article class="card exercise">
+      <div class="exercise-head">
+        <span class="exnum">Ejercicio 3 · Arquetipo C</span>
+        <span class="exstmt">Calcule, en caso de existir, <span class="mx">lím<sub>x→∞</sub> ((3x+1)/(3x+4))ˣ</span>.</span>
+      </div>
+      <div class="exercise-body">
+        <div class="step">
+          <div class="eq mx">Base → 1 (pues (3x+1)/(3x+4)→1) y exponente → ∞ ⟹ forma indeterminada 1<sup>∞</sup></div>
+          <div class="note">[Reconocer el arquetipo primero: sin esta identificación no sabríamos qué fórmula aplicar.]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">lím f(x)<sup>g(x)</sup> = e<sup>lím g(x)·(f(x)−1)</sup>, con f(x)=(3x+1)/(3x+4), g(x)=x</div>
+          <div class="note">[Aplicamos directamente la fórmula del Arquetipo C — el problema se traslada de "un límite de una potencia" a "un límite dentro de un exponente".]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">f(x)−1 = (3x+1)/(3x+4) − 1 = (3x+1−3x−4)/(3x+4) = −3/(3x+4)</div>
+          <div class="note">[Restamos 1 como una sola fracción: el numerador se reduce a una constante, señal de que vamos por buen camino.]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">lím<sub>x→∞</sub> [x·(−3/(3x+4))] = lím<sub>x→∞</sub> (−3x)/(3x+4) = −1</div>
+          <div class="note">[Es un límite racional en el infinito (Arquetipo E, anidado): dividiendo por x, la razón de coeficientes líderes es −3/3 = −1.]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">lím<sub>x→∞</sub> ((3x+1)/(3x+4))ˣ = e⁻¹ = 1/e</div>
+        </div>
+        <div class="answer-box"><span class="tick">✓</span> El límite existe y vale 1/e</div>
+      </div>
+    </article>
+
+    <!-- Exercise 7 -->
+    <article class="card exercise">
+      <div class="exercise-head">
+        <span class="exnum">Ejercicio 7 · Arquetipo F</span>
+        <span class="exstmt">Asumiendo que lím<sub>x→2⁺</sub> g(x) existe y que <span class="mx">(x²−3x+2)/(x−1) ≤ g(x)/x ≤ (x²−x−2)/(x+1)</span>, encuentre lím<sub>x→2⁺</sub> g(x). (Aplique el Teorema del Sandwich.)</span>
+      </div>
+      <div class="exercise-body">
+        <div class="step">
+          <div class="eq mx">Cota inferior: x²−3x+2 = (x−1)(x−2) ⟹ (x−1)(x−2)/(x−1) = x−2</div>
+          <div class="note">[Factorizamos para exponer el factor (x−1) que cancela con el denominador — el objetivo es dejar cada cota lo más simple posible antes de tomar el límite.]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">Cota superior: x²−x−2 = (x−2)(x+1) ⟹ (x−2)(x+1)/(x+1) = x−2</div>
+          <div class="note">[Misma idea del otro lado: factorizamos y cancelamos (x+1). Que ambas cotas colapsen a la misma expresión (x−2) no es casualidad — así está diseñado el ejercicio.]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">La desigualdad queda: x−2 ≤ g(x)/x ≤ x−2</div>
+          <div class="note">[Con las dos cotas idénticas, "el sándwich" ya está listo para aplicarse — cualquier expresión entre dos copias de lo mismo es forzosamente igual a ellas.]</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">lím<sub>x→2⁺</sub>(x−2) = 0 = lím<sub>x→2⁺</sub>(x−2) ⟹ por Sandwich, lím<sub>x→2⁺</sub> g(x)/x = 0</div>
+        </div>
+        <div class="step">
+          <div class="eq mx">g(x) = x · (g(x)/x) ⟹ lím<sub>x→2⁺</sub> g(x) = (lím x)·(lím g(x)/x) = 2·0</div>
+          <div class="note">[El teorema nos dio el límite de g(x)/x, no de g(x): hay que "despejar" g(x) multiplicando de vuelta por x y usando la propiedad del límite de un producto.]</div>
+        </div>
+        <div class="answer-box"><span class="tick">✓</span> lím<sub>x→2⁺</sub> g(x) = 0</div>
+      </div>
+    </article>
+
+  </section>
+
+  <!-- ============ SECTION 4 ============ -->
+  <section id="fichas">
+    <div class="sec-head"><span class="sec-num">04</span><h2 class="sec-title">Fichas de estudio</h2></div>
+    <p class="sec-kicker">Haz clic en cada ficha para voltearla y ver la respuesta. Cubren definiciones, límites notables y decisiones de estrategia.</p>
+
+    <div class="flash-grid">
+
+      <div class="flash"><input type="checkbox" id="f1"><label for="f1"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Estrategia</span><p class="flash-q">¿Qué técnica se usa cuando un límite 0/0 contiene una raíz cuadrada?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">Racionalización: multiplicar numerador y denominador por el conjugado de la expresión con raíz, usando (a−b)(a+b)=a²−b².</p></div>
+      </div></label></div>
+
+      <div class="flash"><input type="checkbox" id="f2"><label for="f2"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Límite notable</span><p class="flash-q">lím<sub>u→0</sub> (eᵘ−1)/u = ?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">= 1 &nbsp;— válido para cualquier u que tienda a 0, no solo u=x.</p></div>
+      </div></label></div>
+
+      <div class="flash"><input type="checkbox" id="f3"><label for="f3"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Límite notable</span><p class="flash-q">lím<sub>u→0</sub> (aᵘ−1)/u = ?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">= ln(a) &nbsp;— generaliza el límite exponencial (con a=e se recupera ln(e)=1).</p></div>
+      </div></label></div>
+
+      <div class="flash"><input type="checkbox" id="f4"><label for="f4"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Fórmula clave</span><p class="flash-q">¿Cómo se resuelve una indeterminada 1<sup>∞</sup>?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">lím f(x)<sup>g(x)</sup> = e<sup>lím g(x)·(f(x)−1)</sup>. Ojo: es (f(x)−1), no f(x).</p></div>
+      </div></label></div>
+
+      <div class="flash"><input type="checkbox" id="f5"><label for="f5"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Condición</span><p class="flash-q">¿Qué debe cumplirse para que exista el límite de una función a trozos en x=a?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">lím<sub>x→a⁻</sub> f(x) = lím<sub>x→a⁺</sub> f(x): los límites laterales deben ser finitos e iguales.</p></div>
+      </div></label></div>
+
+      <div class="flash"><input type="checkbox" id="f6"><label for="f6"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Condición</span><p class="flash-q">¿Qué se necesita además para que esa función sea continua en x=a?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">Que ambos límites laterales sean además iguales a f(a), el valor real de la función en a.</p></div>
+      </div></label></div>
+
+      <div class="flash"><input type="checkbox" id="f7"><label for="f7"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Factorización</span><p class="flash-q">¿Cómo se factoriza a³−b³?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">(a−b)(a²+ab+b²) — la diferencia de cubos.</p></div>
+      </div></label></div>
+
+      <div class="flash"><input type="checkbox" id="f8"><label for="f8"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Factorización</span><p class="flash-q">¿Cómo se factoriza a²−b²?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">(a−b)(a+b) — la diferencia de cuadrados, base de toda racionalización.</p></div>
+      </div></label></div>
+
+      <div class="flash"><input type="checkbox" id="f9"><label for="f9"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Estrategia</span><p class="flash-q">Al calcular un límite racional cuando x→∞, ¿qué se hace?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">Dividir numerador y denominador por la mayor potencia de x presente (tras factorizar y cancelar lo que se pueda).</p></div>
+      </div></label></div>
+
+      <div class="flash"><input type="checkbox" id="f10"><label for="f10"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Teorema</span><p class="flash-q">¿Qué dice el Teorema del Sandwich?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">Si f(x)≤g(x)≤h(x) cerca de a y lím f(x)=lím h(x)=L, entonces lím g(x)=L también.</p></div>
+      </div></label></div>
+
+      <div class="flash"><input type="checkbox" id="f11"><label for="f11"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Truco algebraico</span><p class="flash-q">Con un exponente tipo kx dentro de eᵏˣ, ¿cómo se fuerza la forma del límite notable?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">Multiplicando y dividiendo por la constante del exponente (ej. 4k), para que el denominador quede igual a u=4kx.</p></div>
+      </div></label></div>
+
+      <div class="flash"><input type="checkbox" id="f12"><label for="f12"><div class="flash-inner">
+        <div class="flash-face front"><span class="flash-kicker">Trampa de signo</span><p class="flash-q">Al expandir 9−(x+1) dentro de una racionalización, ¿a qué hay que prestar atención?</p><span class="flash-hint">Toca para ver la respuesta →</span></div>
+        <div class="flash-face back"><span class="flash-kicker">Respuesta</span><p class="flash-a">9−(x+1) = 8−x = −(x−8), no (x−8). El signo negativo se debe arrastrar por todo el resto del cálculo.</p></div>
+      </div></label></div>
+
+    </div>
+  </section>
+
+  <!-- ============ SECTION 5 ============ -->
+  <section id="practica">
+    <div class="sec-head"><span class="sec-num">05</span><h2 class="sec-title">Práctica activa y autoevaluación</h2></div>
+    <p class="sec-kicker">Resuelve los cuatro problemas antes de abrir las soluciones. Los guiados incluyen una pista sobre el primer paso; los de desafío tienen la dificultad de los ejercicios más exigentes de la guía.</p>
+
+    <div class="practice-grid">
+      <div class="card prob">
+        <span class="prob-kicker guided"><span class="dot"></span>Guiado · G1</span>
+        <p class="statement">Determine el valor de k∈ℝ para que exista <span class="mx">lím<sub>x→2</sub> f(x)</span>, con f(x) = <span class="mx">(√(x+7)−3)/(x−2)</span> si x&gt;2, y f(x)=kx−1 si x≤2.</p>
+        <p class="hint">Pista: racionaliza multiplicando por el conjugado √(x+7)+3 antes de evaluar el límite lateral derecho.</p>
+      </div>
+      <div class="card prob">
+        <span class="prob-kicker guided"><span class="dot"></span>Guiado · G2</span>
+        <p class="statement">Calcule <span class="mx">lím<sub>x→0</sub> (e³ˣ−1)/(2x)</span>.</p>
+        <p class="hint">Pista: reescribe como (e³ˣ−1)/(3x) · (3/2) para usar el límite notable (eᵘ−1)/u=1 con u=3x.</p>
+      </div>
+      <div class="card prob">
+        <span class="prob-kicker challenge"><span class="dot"></span>Desafío · C1</span>
+        <p class="statement">Determine, si existe, el valor de m∈ℝ tal que <span class="mx">lím<sub>x→∞</sub> ((5x+m)/(5x+2))<sup>3x</sup> = e⁻⁶</span>.</p>
+      </div>
+      <div class="card prob">
+        <span class="prob-kicker challenge"><span class="dot"></span>Desafío · C2</span>
+        <p class="statement">Sabiendo que lím<sub>x→3</sub> h(x) existe y que <span class="mx">(x²−4x+3)/(x−1) ≤ h(x)/x ≤ (x²−2x−3)/(x+1)</span> para x cercano a 3, determine lím<sub>x→3</sub> h(x).</p>
+      </div>
+    </div>
+
+    <details class="solutions">
+      <summary>Ver soluciones completas (inténtalo primero)</summary>
+      <div class="sol-body">
+
+        <div class="sol-item">
+          <h5>G1 — Solución</h5>
+          <div class="eq mx">lím<sub>x→2⁺</sub> (√(x+7)−3)/(x−2) → 0/0 en x=2 (√9−3=0)</div>
+          <div class="eq mx">Racionalizando: [(x+7)−9] / [(x−2)(√(x+7)+3)] = (x−2) / [(x−2)(√(x+7)+3)] = 1/(√(x+7)+3)</div>
+          <div class="eq mx">lím<sub>x→2⁺</sub> = 1/(√9+3) = 1/6</div>
+          <div class="eq mx">Lado izquierdo: lím<sub>x→2⁻</sub>(kx−1) = 2k−1</div>
+          <div class="eq mx">Igualando: 2k−1 = 1/6 ⟹ 2k = 7/6 ⟹ k = 7/12</div>
+          <div class="answer-box"><span class="tick">✓</span> k = 7/12</div>
+        </div>
+
+        <div class="sol-item">
+          <h5>G2 — Solución</h5>
+          <div class="eq mx">(e³ˣ−1)/(2x) = (e³ˣ−1)/(3x) · (3x)/(2x) = [(e³ˣ−1)/(3x)] · (3/2)</div>
+          <div class="eq mx">lím<sub>x→0</sub> = 1 · (3/2) = 3/2</div>
+          <div class="answer-box"><span class="tick">✓</span> El límite vale 3/2</div>
+        </div>
+
+        <div class="sol-item">
+          <h5>C1 — Solución</h5>
+          <div class="eq mx">Base=(5x+m)/(5x+2)→1, exponente=3x→∞ ⟹ forma 1<sup>∞</sup></div>
+          <div class="eq mx">f(x)−1 = (5x+m−5x−2)/(5x+2) = (m−2)/(5x+2)</div>
+          <div class="eq mx">lím<sub>x→∞</sub> 3x·(m−2)/(5x+2) = 3(m−2)/5</div>
+          <div class="eq mx">Se pide que e<sup>3(m−2)/5</sup> = e⁻⁶ ⟹ 3(m−2)/5 = −6 ⟹ m−2 = −10 ⟹ m = −8</div>
+          <div class="answer-box"><span class="tick">✓</span> m = −8</div>
+        </div>
+
+        <div class="sol-item">
+          <h5>C2 — Solución</h5>
+          <div class="eq mx">Cota inferior: x²−4x+3 = (x−1)(x−3) ⟹ (x−1)(x−3)/(x−1) = x−3</div>
+          <div class="eq mx">Cota superior: x²−2x−3 = (x−3)(x+1) ⟹ (x−3)(x+1)/(x+1) = x−3</div>
+          <div class="eq mx">Ambas cotas → 0 cuando x→3 ⟹ por Sandwich, lím<sub>x→3</sub> h(x)/x = 0</div>
+          <div class="eq mx">h(x) = x·(h(x)/x) ⟹ lím<sub>x→3</sub> h(x) = 3·0</div>
+          <div class="answer-box"><span class="tick">✓</span> lím<sub>x→3</sub> h(x) = 0</div>
+        </div>
+
+      </div>
+    </details>
+  </section>
+
+</div>
+
+<footer>
+  <span>Dominio de Límites · construido a partir de "Guía preparatoria PEP 2"</span>
+  <span>Cálculo diferencial · MAyEI</span>
+</footer>
+
+</body>
+</html>

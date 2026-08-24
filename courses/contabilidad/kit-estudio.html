@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajustes de Cierre y PPE — Mi Semestre</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  p{ color: inherit; }
+
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --paper: #f2f3ee;
+    --paper-raised: #ffffff;
+    --ink: #1c2b3a;
+    --ink-soft: #55636f;
+    --ink-faint: #8a97a1;
+    --accent: #1f7a5c;
+    --accent-ink: #0f4a37;
+    --accent-soft: #e3efe8;
+    --amber: #a86a1c;
+    --amber-soft: #f5e9d4;
+    --amber-ink: #6e460f;
+    --line: rgba(28,43,58,0.13);
+    --line-strong: rgba(28,43,58,0.24);
+    --shadow: 0 1px 2px rgba(20,30,40,0.04), 0 6px 20px -8px rgba(20,30,40,0.12);
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper: #0f1720;
+      --paper-raised: #17222c;
+      --ink: #e7ecef;
+      --ink-soft: #a3b1bb;
+      --ink-faint: #6d7b86;
+      --accent: #45b489;
+      --accent-ink: #b7ecd7;
+      --accent-soft: rgba(69,180,137,0.14);
+      --amber: #dc9c53;
+      --amber-ink: #f3d5a8;
+      --amber-soft: rgba(220,156,83,0.14);
+      --line: rgba(231,236,239,0.12);
+      --line-strong: rgba(231,236,239,0.22);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 28px -10px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper: #0f1720;
+    --paper-raised: #17222c;
+    --ink: #e7ecef;
+    --ink-soft: #a3b1bb;
+    --ink-faint: #6d7b86;
+    --accent: #45b489;
+    --accent-ink: #b7ecd7;
+    --accent-soft: rgba(69,180,137,0.14);
+    --amber: #dc9c53;
+    --amber-ink: #f3d5a8;
+    --amber-soft: rgba(220,156,83,0.14);
+    --line: rgba(231,236,239,0.12);
+    --line-strong: rgba(231,236,239,0.22);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 28px -10px rgba(0,0,0,0.55);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    line-height:1.6;
+    font-size:16.5px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  a{color:var(--accent-ink); }
+  ::selection{background:var(--accent-soft);}
+
+  .num{font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums;}
+
+  h1,h2,h3,h4{
+    font-family:'Fraunces', Georgia, serif;
+    font-weight:600;
+    text-wrap:balance;
+    margin:0;
+    color:var(--ink);
+  }
+
+  /* ---------- shell ---------- */
+  .shell{max-width:860px; margin:0 auto; padding:0 20px 100px;}
+
+  /* ---------- cover ---------- */
+  .cover{
+    background: linear-gradient(165deg, var(--ink) 0%, #0f2a24 130%);
+    color:#f2f3ee;
+    margin:0 0 0;
+    padding:56px 20px 46px;
+  }
+  :root[data-theme="dark"] .cover, :root:not([data-theme="light"]) .cover{
+    background: linear-gradient(165deg, #0a1319 0%, #0b1f1a 130%);
+  }
+  .cover-inner{max-width:860px; margin:0 auto;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.10em;
+    text-transform:uppercase;
+    color:#9fd9c0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:#9fd9c0; opacity:0.7;}
+  .cover h1{
+    color:#f7f8f4;
+    font-size:clamp(2rem, 4.4vw, 2.9rem);
+    line-height:1.08;
+    margin:16px 0 14px;
+    max-width:14ch;
+  }
+  .cover p{
+    color:#c7cfc9;
+    font-size:1.02rem;
+    max-width:56ch;
+    margin:0 0 22px;
+  }
+  .cover-meta{
+    display:flex; flex-wrap:wrap; gap:10px 22px;
+    font-size:13px; color:#a9b6b0;
+    font-family:'IBM Plex Mono', monospace;
+    border-top:1px solid rgba(247,248,244,0.16);
+    padding-top:16px;
+  }
+  .cover-meta b{color:#e7ece7; font-weight:500;}
+
+  /* ---------- toc ---------- */
+  .toc{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin:-24px 0 44px;
+    position:relative;
+    z-index:2;
+  }
+  .toc a{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+    color:var(--ink);
+    text-decoration:none;
+    font-size:13px;
+    font-weight:500;
+    padding:9px 14px;
+    border-radius:8px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .toc a .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--accent-ink);
+    background:var(--accent-soft);
+    border-radius:4px;
+    padding:1px 6px;
+  }
+
+  /* ---------- sections ---------- */
+  section.block{margin:0 0 64px; scroll-margin-top:20px;}
+  .block-head{
+    display:flex; align-items:baseline; gap:14px;
+    margin-bottom:22px;
+    padding-bottom:14px;
+    border-bottom:1px solid var(--line-strong);
+  }
+  .block-head .idx{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    color:var(--accent-ink);
+    background:var(--accent-soft);
+    border-radius:6px;
+    padding:3px 9px;
+    flex:none;
+  }
+  .block-head h2{font-size:1.5rem;}
+  .block-sub{
+    color:var(--ink-soft);
+    font-size:0.95rem;
+    margin:-14px 0 26px;
+    font-style:italic;
+    font-family:'Fraunces', serif;
+  }
+
+  /* ---------- idea central ---------- */
+  .thesis{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-left:4px solid var(--accent);
+    border-radius:4px 10px 10px 4px;
+    padding:22px 26px;
+    box-shadow:var(--shadow);
+    margin-bottom:30px;
+  }
+  .thesis .label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--accent-ink);
+    margin-bottom:8px;
+    display:block;
+  }
+  .thesis p{
+    font-family:'Fraunces', serif;
+    font-size:1.22rem;
+    line-height:1.42;
+    margin:0;
+    color:var(--ink);
+  }
+
+  h3.sub{
+    font-size:1.02rem;
+    color:var(--ink);
+    margin:0 0 14px;
+    display:flex; align-items:center; gap:9px;
+  }
+  h3.sub .dot{width:7px; height:7px; border-radius:50%; background:var(--accent); flex:none;}
+
+  /* ---------- hitos ---------- */
+  .hitos{display:grid; gap:12px; margin-bottom:34px;}
+  .hito{
+    display:grid; grid-template-columns:34px 1fr; gap:14px;
+    background:var(--paper-raised); border:1px solid var(--line);
+    border-radius:10px; padding:14px 16px; box-shadow:var(--shadow);
+  }
+  .hito .n{
+    font-family:'IBM Plex Mono', monospace; font-weight:600;
+    color:var(--accent-ink); background:var(--accent-soft);
+    border-radius:7px; display:flex; align-items:center; justify-content:center;
+    height:34px; font-size:14px;
+  }
+  .hito h4{font-size:0.98rem; margin-bottom:4px;}
+  .hito p{margin:0; color:var(--ink-soft); font-size:0.92rem;}
+
+  /* ---------- mitos ---------- */
+  .mitos{display:grid; gap:10px; margin-bottom:34px;}
+  .mito{
+    display:grid; grid-template-columns:1fr 1fr; gap:0;
+    border:1px solid var(--line); border-radius:10px; overflow:hidden;
+    box-shadow:var(--shadow);
+  }
+  .mito > div{padding:14px 16px;}
+  .mito .m{background:var(--amber-soft); border-right:1px solid var(--line);}
+  .mito .r{background:var(--accent-soft);}
+  .mito .tag{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    letter-spacing:0.06em; text-transform:uppercase; display:block; margin-bottom:6px;
+  }
+  .mito .m .tag{color:var(--amber-ink);}
+  .mito .r .tag{color:var(--accent-ink);}
+  .mito p{margin:0; font-size:0.89rem; color:var(--ink);}
+  @media (max-width:600px){ .mito{grid-template-columns:1fr;} .mito .m{border-right:none; border-bottom:1px solid var(--line);} }
+
+  /* ---------- mapa conceptual ---------- */
+  .map{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:12px;
+    padding:22px 24px; box-shadow:var(--shadow); font-size:0.93rem;
+  }
+  .map ul{margin:6px 0 6px 0; padding-left:20px; list-style:none;}
+  .map > ul{padding-left:0;}
+  .map li{position:relative; padding-left:16px; margin:7px 0;}
+  .map li::before{content:"–"; position:absolute; left:0; color:var(--ink-faint);}
+  .map > ul > li{font-weight:600; color:var(--ink); margin-top:14px;}
+  .map > ul > li::before{content:"§"; color:var(--accent-ink);}
+  .map li li{color:var(--ink-soft); font-weight:400;}
+  .map b{color:var(--ink); font-weight:600;}
+
+  /* ---------- flashcards ---------- */
+  .cards{display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:14px;}
+  .card{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow); overflow:hidden;
+  }
+  .card summary{
+    list-style:none; cursor:pointer; padding:16px 18px 14px;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .card summary::-webkit-details-marker{display:none;}
+  .card summary .qn{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-faint);
+    flex:none; padding-top:3px;
+  }
+  .card summary .qt{font-size:0.94rem; font-weight:500; color:var(--ink); flex:1;}
+  .card summary .chev{
+    flex:none; width:20px; height:20px; border-radius:50%;
+    border:1px solid var(--line-strong); color:var(--ink-soft);
+    display:flex; align-items:center; justify-content:center; font-size:12px;
+    transition:transform .18s ease;
+  }
+  .card[open] summary .chev{transform:rotate(45deg);}
+  .card .ans{
+    padding:0 18px 16px 46px; margin:0; color:var(--accent-ink);
+    font-size:0.9rem; border-top:1px dashed var(--line);
+    padding-top:12px;
+  }
+  .card[open] .ans{background:var(--accent-soft);}
+
+  /* ---------- feynman ---------- */
+  .feyn{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow); padding:22px 24px; margin-bottom:18px;
+  }
+  .feyn h4{font-size:1.08rem; margin-bottom:4px;}
+  .feyn .concept-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-faint);
+    text-transform:uppercase; letter-spacing:0.06em; margin-bottom:2px; display:block;
+  }
+  .feyn p{margin:10px 0; color:var(--ink); font-size:0.95rem;}
+  .analogy{
+    background:var(--amber-soft); border-radius:8px; padding:12px 16px;
+    font-size:0.9rem; color:var(--amber-ink); margin-top:12px;
+    border-left:3px solid var(--amber);
+  }
+  .analogy b{color:var(--ink);}
+
+  /* ---------- quiz ---------- */
+  .quiz-item{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow); padding:18px 20px; margin-bottom:14px;
+  }
+  .quiz-item .qhead{display:flex; gap:10px; margin-bottom:12px;}
+  .quiz-item .qn{
+    font-family:'IBM Plex Mono', monospace; font-weight:600; color:var(--accent-ink);
+    background:var(--accent-soft); border-radius:6px; padding:1px 8px; height:fit-content; font-size:13px;
+  }
+  .quiz-item .qtext{font-size:0.96rem; color:var(--ink);}
+  .opts{list-style:none; margin:0; padding:0; display:grid; gap:7px;}
+  .opts li{
+    display:flex; gap:9px; align-items:flex-start; font-size:0.9rem; color:var(--ink-soft);
+    padding:8px 10px; border-radius:7px; border:1px solid var(--line);
+  }
+  .opts li .letter{
+    font-family:'IBM Plex Mono', monospace; font-weight:600; color:var(--ink-faint);
+    flex:none; width:16px;
+  }
+  .dev-box{
+    border:1px dashed var(--line-strong); border-radius:8px; padding:12px 14px;
+    color:var(--ink-faint); font-size:0.86rem; margin-top:10px; font-style:italic;
+  }
+
+  details.answers{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:12px;
+    box-shadow:var(--shadow); margin-top:22px;
+  }
+  details.answers summary{
+    cursor:pointer; padding:16px 20px; font-weight:600; font-size:0.95rem;
+    color:var(--ink); display:flex; align-items:center; gap:10px; list-style:none;
+  }
+  details.answers summary::-webkit-details-marker{display:none;}
+  details.answers summary::before{content:"🔑"; font-size:0.9em;}
+  .answers-body{padding:0 20px 20px; border-top:1px solid var(--line);}
+  .akey{margin:16px 0; padding-bottom:14px; border-bottom:1px solid var(--line);}
+  .akey:last-child{border-bottom:none; margin-bottom:0; padding-bottom:0;}
+  .akey .correct{
+    font-family:'IBM Plex Mono', monospace; color:var(--accent-ink); font-weight:600; font-size:0.88rem;
+  }
+  .akey p{font-size:0.88rem; color:var(--ink-soft); margin:6px 0 0;}
+
+  /* ---------- glosario ---------- */
+  .gloss{display:grid; gap:0; border:1px solid var(--line); border-radius:12px; overflow:hidden; box-shadow:var(--shadow);}
+  .gterm{
+    display:grid; grid-template-columns:200px 1fr; gap:18px;
+    padding:14px 20px; border-bottom:1px solid var(--line);
+    background:var(--paper-raised);
+  }
+  .gterm:last-child{border-bottom:none;}
+  .gterm dt{font-weight:600; font-family:'Fraunces', serif; font-size:0.98rem; color:var(--ink);}
+  .gterm dd{margin:0; color:var(--ink-soft); font-size:0.9rem;}
+  @media (max-width:600px){ .gterm{grid-template-columns:1fr; gap:4px;} }
+
+  footer{
+    text-align:center; color:var(--ink-faint); font-size:12.5px;
+    font-family:'IBM Plex Mono', monospace; padding-top:30px; border-top:1px solid var(--line);
+  }
+
+</style>
+</head>
+<body>
+
+<script src="../../assets/nav.js" data-base="../../" data-course="contabilidad"></script>
+
+
+<div class="cover">
+  <div class="cover-inner">
+    <span class="eyebrow">Contabilidad General · Cierre del Ejercicio</span>
+    <h1>Ajustes de Cierre y Propiedad, Planta y Equipo</h1>
+    <p>Kit de estudio integrado a partir de dos unidades — Regularizaciones Periódicas (devengo, estimaciones, NIC 21) y NIC 16 (reconocimiento, depreciación y baja de PPE) — más la guía de ejercicios asociada.</p>
+    <div class="cover-meta">
+      <span><b>Fuente</b> · Guía + 2 sets de apuntes USACH</span>
+      <span><b>Normas</b> · NIC 1 · NIC 16 · NIC 21 · NIC 37 · NIIF 9</span>
+      <span><b>Uso</b> · Repaso previo a evaluación</span>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+
+  <nav class="toc">
+    <a href="#resumen"><span class="chip">1</span> Resumen por capas</a>
+    <a href="#flashcards"><span class="chip">2</span> Flashcards</a>
+    <a href="#feynman"><span class="chip">3</span> Técnica Feynman</a>
+    <a href="#test"><span class="chip">4</span> Autoevaluación</a>
+    <a href="#glosario"><span class="chip">5</span> Glosario</a>
+  </nav>
+
+  <!-- ======================= 1. RESUMEN ======================= -->
+  <section class="block" id="resumen">
+    <div class="block-head"><span class="idx">01</span><h2>Resumen de procesamiento profundo</h2></div>
+
+    <div class="thesis">
+      <span class="label">Idea central macro</span>
+      <p>Los estados financieros deben reflejar el hecho económico cuando realmente ocurre —no cuando se mueve el efectivo— y todo activo tangible de uso duradero debe reconocerse, medirse y depreciarse con reglas sistemáticas, de modo que el resultado de cada período muestre lo que la empresa efectivamente ganó, gastó y consumió.</p>
+    </div>
+
+    <h3 class="sub"><span class="dot"></span>Puntos de inflexión — 5 hitos</h3>
+    <div class="hitos">
+      <div class="hito"><div class="n">1</div><div><h4>Devengo, no caja</h4><p>La NIC 1 exige reconocer ingresos y gastos cuando ocurren, con independencia del cobro o pago. Es la hipótesis que sostiene todos los ajustes de cierre.</p></div></div>
+      <div class="hito"><div class="n">2</div><div><h4>La matriz de los cuatro ajustes</h4><p>Cruzando "momento del flujo" (antes / después) con "naturaleza" (gasto / ingreso) se obtienen los cuatro ajustes clásicos: gasto anticipado, ingreso adelantado, gasto por pagar e ingreso por cobrar.</p></div></div>
+      <div class="hito"><div class="n">3</div><div><h4>Ajustes por estimación exigen juicio</h4><p>Deterioro de cuentas por cobrar (NIIF 9), provisiones (NIC 37) y diferencias de cambio (NIC 21) no son solo aritmética: requieren estimar probabilidad, cuantía o tipo de cambio de cierre.</p></div></div>
+      <div class="hito"><div class="n">4</div><div><h4>Un activo solo se activa si pasa el test del párrafo 7</h4><p>Todo desembolso —inicial o posterior— se capitaliza como PPE únicamente si es probable que genere beneficios futuros y su costo es medible con fiabilidad. Si no, es gasto del período.</p></div></div>
+      <div class="hito"><div class="n">5</div><div><h4>Medición posterior y baja siguen la misma lógica de comparación</h4><p>El costo se deprecia sistemáticamente (o se revalúa); al vender o retirar el activo, el resultado siempre es "lo recibido menos el importe en libros", dando de baja el costo bruto y la depreciación acumulada por separado.</p></div></div>
+    </div>
+
+    <h3 class="sub"><span class="dot"></span>Aclaraciones y contrarios — mitos que el texto desmiente</h3>
+    <div class="mitos">
+      <div class="mito"><div class="m"><span class="tag">Mito</span><p>Pagar es lo mismo que gastar.</p></div><div class="r"><span class="tag">Aclaración</span><p>Un pago por adelantado crea un <b>activo</b> (seguro, arriendo pagado); se vuelve gasto solo a medida que se consume.</p></div></div>
+      <div class="mito"><div class="m"><span class="tag">Mito</span><p>Cobrar es lo mismo que ganar un ingreso.</p></div><div class="r"><span class="tag">Aclaración</span><p>Un cobro anticipado crea un <b>pasivo</b>; el ingreso se reconoce solo cuando el servicio se presta.</p></div></div>
+      <div class="mito"><div class="m"><span class="tag">Mito</span><p>Toda reparación o mejora posterior a la compra es gasto.</p></div><div class="r"><span class="tag">Aclaración</span><p>Se capitaliza si aumenta capacidad, vida útil o calidad; si solo restituye la condición original, es gasto del período (párr. 12–14).</p></div></div>
+      <div class="mito"><div class="m"><span class="tag">Error frecuente</span><p>Al vender un activo, abonar solo su importe neto en libros.</p></div><div class="r"><span class="tag">Aclaración</span><p>Deben darse de baja <b>dos</b> cuentas: el costo bruto del activo y su depreciación acumulada, por separado (párr. 71).</p></div></div>
+      <div class="mito"><div class="m"><span class="tag">Mito</span><p>La depreciación siempre es gasto del estado de resultados.</p></div><div class="r"><span class="tag">Aclaración</span><p>Si el activo participa en fabricar existencias, su depreciación se incorpora al costo del inventario (NIC 2) y llega a resultado solo cuando ese inventario se vende (párr. 48).</p></div></div>
+      <div class="mito"><div class="m"><span class="tag">Mito</span><p>Todo aumento por revaluación es utilidad del ejercicio.</p></div><div class="r"><span class="tag">Aclaración</span><p>Los aumentos van a Otro Resultado Integral (superávit de revaluación); solo las disminuciones —o la reversión de una disminución previa— pasan por resultado (párr. 39–40).</p></div></div>
+    </div>
+
+    <h3 class="sub"><span class="dot"></span>Mapa conceptual teórico</h3>
+    <div class="map">
+      <ul>
+        <li><b>Regularizaciones periódicas</b> (base de devengo, NIC 1 párr. 27–28)
+          <ul>
+            <li>El efectivo se movió <b>antes</b> del devengo
+              <ul>
+                <li>Gasto pagado por anticipado → nace un <b>activo</b></li>
+                <li>Ingreso percibido por adelantado → nace un <b>pasivo</b></li>
+              </ul>
+            </li>
+            <li>El efectivo se moverá <b>después</b> del devengo
+              <ul>
+                <li>Gasto devengado por pagar → gasto contra pasivo</li>
+                <li>Ingreso devengado por cobrar → ingreso contra activo</li>
+              </ul>
+            </li>
+            <li>Ajustes por estimación
+              <ul>
+                <li>Deterioro de cuentas por cobrar (NIIF 9) — pérdida esperada</li>
+                <li>Provisiones (NIC 37) — obligación presente, cuantía incierta</li>
+                <li>Diferencia de cambio (NIC 21) — reexpresión al cierre</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><b>NIC 16 — Propiedad, Planta y Equipo</b>
+          <ul>
+            <li>Reconocimiento → tangible + uso en la operación + más de un período, y pasa el test de probabilidad/fiabilidad (párr. 7)</li>
+            <li>Medición inicial al costo
+              <ul>
+                <li>Precio de adquisición (neto de descuentos, + aranceles no recuperables)</li>
+                <li>Costos directamente atribuibles (flete, instalación, pruebas)</li>
+                <li>Estimación de desmantelamiento</li>
+              </ul>
+            </li>
+            <li>Costos posteriores → ¿mejora (capitaliza) o mantenimiento (gasto)?</li>
+            <li>Medición posterior → modelo del costo <i>o</i> modelo de revaluación (misma clase completa)</li>
+            <li>Depreciación → (costo − valor residual) ÷ vida útil, revisable cada cierre</li>
+            <li>Baja en cuentas → resultado = importe neto recibido − importe en libros</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ======================= 2. FLASHCARDS ======================= -->
+  <section class="block" id="flashcards">
+    <div class="block-head"><span class="idx">02</span><h2>Flashcards</h2></div>
+    <p class="block-sub">Toca cada tarjeta para revelar la respuesta. Formato listo para transcribir a Anki (pregunta / respuesta).</p>
+
+    <div class="cards">
+      <details class="card"><summary><span class="qn">01</span><span class="qt">¿Qué diferencia la base de devengo de la base de caja?</span><span class="chev">+</span></summary><p class="ans">El devengo reconoce los efectos de las transacciones cuando ocurren; la caja solo registra al mover el efectivo.</p></details>
+
+      <details class="card"><summary><span class="qn">02</span><span class="qt">¿Qué tipo de cuenta genera un gasto pagado por anticipado?</span><span class="chev">+</span></summary><p class="ans">Un activo: el derecho a recibir el servicio en el futuro.</p></details>
+
+      <details class="card"><summary><span class="qn">03</span><span class="qt">¿Qué tipo de cuenta genera un ingreso percibido por adelantado?</span><span class="chev">+</span></summary><p class="ans">Un pasivo: la obligación de prestar el servicio o devolver el dinero.</p></details>
+
+      <details class="card"><summary><span class="qn">04</span><span class="qt">En el ajuste de un gasto devengado por pagar, ¿qué cuentas se mueven?</span><span class="chev">+</span></summary><p class="ans">Se debita un gasto y se acredita un pasivo (ej. cuenta por pagar).</p></details>
+
+      <details class="card"><summary><span class="qn">05</span><span class="qt">¿Cuál es la diferencia entre un gasto devengado por pagar y una provisión?</span><span class="chev">+</span></summary><p class="ans">El gasto devengado tiene monto y vencimiento ciertos; la provisión (NIC 37) tiene cuantía o vencimiento inciertos y debe estimarse.</p></details>
+
+      <details class="card"><summary><span class="qn">06</span><span class="qt">Según NIIF 9, ¿cómo se reconoce el deterioro de cuentas por cobrar?</span><span class="chev">+</span></summary><p class="ans">Estimando la pérdida crediticia esperada, con cargo a gasto por deterioro y abono a una cuenta correctora del activo.</p></details>
+
+      <details class="card"><summary><span class="qn">07</span><span class="qt">¿A qué tipo de cambio se reexpresan las partidas monetarias en moneda extranjera al cierre?</span><span class="chev">+</span></summary><p class="ans">Al tipo de cambio de cierre (NIC 21); la diferencia se lleva a resultado del período.</p></details>
+
+      <details class="card"><summary><span class="qn">08</span><span class="qt">¿Qué tres condiciones cumple copulativamente un activo para ser PPE (párr. 6)?</span><span class="chev">+</span></summary><p class="ans">Ser tangible, usarse en la operación (producción, arriendo o fines administrativos) y esperarse su uso por más de un período.</p></details>
+
+      <details class="card"><summary><span class="qn">09</span><span class="qt">¿Cuáles son los dos criterios de reconocimiento de un desembolso como PPE (párr. 7)?</span><span class="chev">+</span></summary><p class="ans">Que sea probable obtener los beneficios económicos futuros del elemento, y que su costo pueda medirse con fiabilidad.</p></details>
+
+      <details class="card"><summary><span class="qn">10</span><span class="qt">¿El IVA crédito fiscal recuperable forma parte del costo de un activo PPE?</span><span class="chev">+</span></summary><p class="ans">No. Solo los impuestos o aranceles NO recuperables forman parte del costo del activo.</p></details>
+
+      <details class="card"><summary><span class="qn">11</span><span class="qt">¿Cuándo un desembolso posterior se capitaliza como mejora?</span><span class="chev">+</span></summary><p class="ans">Cuando aumenta la capacidad, la vida útil o la calidad del producto, o reduce costos operativos; si no, es gasto del período.</p></details>
+
+      <details class="card"><summary><span class="qn">12</span><span class="qt">¿Cuál es la fórmula general de la depreciación bajo el método lineal?</span><span class="chev">+</span></summary><p class="ans">(Importe en libros − Valor residual) ÷ Vida útil restante.</p></details>
+
+      <details class="card"><summary><span class="qn">13</span><span class="qt">Bajo el modelo de revaluación, ¿dónde se reconoce un AUMENTO de valor?</span><span class="chev">+</span></summary><p class="ans">En Otro Resultado Integral (ORI), acumulado en patrimonio como superávit de revaluación.</p></details>
+
+      <details class="card"><summary><span class="qn">14</span><span class="qt">¿Cómo se calcula el resultado en la baja de un activo PPE?</span><span class="chev">+</span></summary><p class="ans">Importe neto obtenido por la disposición menos el importe en libros del activo.</p></details>
+
+      <details class="card"><summary><span class="qn">15</span><span class="qt">Al vender un activo, ¿qué error común debe evitarse en el asiento?</span><span class="chev">+</span></summary><p class="ans">Abonar solo el importe neto; deben darse de baja por separado el costo bruto y la depreciación acumulada.</p></details>
+    </div>
+  </section>
+
+  <!-- ======================= 3. FEYNMAN ======================= -->
+  <section class="block" id="feynman">
+    <div class="block-head"><span class="idx">03</span><h2>Explicaciones — técnica Feynman</h2></div>
+    <p class="block-sub">Los tres conceptos más abstractos, explicados sin jerga.</p>
+
+    <div class="feyn">
+      <span class="concept-tag">Concepto 1</span>
+      <h4>Devengo (base de acumulación)</h4>
+      <p>Imagina que en marzo cortas el pasto del vecino y él te dice "te pago el sábado". Ganaste esa plata el día que cortaste el pasto, aunque el billete llegue a tu bolsillo recién el sábado. La contabilidad hace exactamente eso: anota que ganaste (o gastaste) algo en el momento en que realmente pasó, no en el momento en que el dinero se mueve.</p>
+      <div class="analogy"><b>Analogía:</b> es como anotar en tu agenda "hice la tarea el lunes", aunque la profesora recién la revise y te ponga la nota el viernes. La tarea se hizo el lunes; eso es lo que importa para saber qué pasó esa semana.</div>
+    </div>
+
+    <div class="feyn">
+      <span class="concept-tag">Concepto 2</span>
+      <h4>Depreciación e importe en libros</h4>
+      <p>Piensa en una vela encendida. No se apaga de golpe: se va consumiendo un poquito cada hora, en línea recta, hasta que queda solo un cabo pequeño (el "valor residual"). La depreciación es contar cuánta vela se gastó cada mes. El "importe en libros" es simplemente cuánta vela queda hoy: lo que costó al principio, menos lo que ya se ha ido consumiendo.</p>
+      <div class="analogy"><b>Analogía:</b> tu mochila del colegio cuesta $50.000 y dura 5 años. No pierde valor toda de una vez el primer día de clases: cada año "se gasta" un poco (1/5 de su valor), como la vela, hasta que al final solo vale lo que podrías venderla usada.</div>
+    </div>
+
+    <div class="feyn">
+      <span class="concept-tag">Concepto 3</span>
+      <h4>Revaluación y Otro Resultado Integral (ORI)</h4>
+      <p>Imagina que tienes una figura de colección que compraste en $10.000, y un experto tasador te dice que hoy vale $15.000. Todavía no la vendiste, así que esos $5.000 extra no son "plata que ganaste haciendo tu trabajo" (como vender un producto); es solo que el mundo dice que tu figura vale más ahora. Por eso esa ganancia se guarda en un cajón aparte del "resultado del negocio" —el ORI— y no se mezcla con las ganancias normales hasta que efectivamente vendas la figura.</p>
+      <div class="analogy"><b>Analogía:</b> es la diferencia entre el sueldo que ganaste trabajando (resultado del ejercicio) y que tu casa haya subido de precio en el barrio (ORI): ambas son "riqueza", pero una la ganaste operando y la otra es solo un cambio de valoración que aún no se ha hecho realidad en efectivo.</div>
+    </div>
+  </section>
+
+  <!-- ======================= 4. TEST ======================= -->
+  <section class="block" id="test">
+    <div class="block-head"><span class="idx">04</span><h2>Test de autoevaluación</h2></div>
+    <p class="block-sub">Resuelve primero sin mirar la clave; ábrela solo al terminar.</p>
+
+    <div class="quiz-item">
+      <div class="qhead"><span class="qn">P1</span><span class="qtext">Comercial Ltda. paga el 1 de octubre un seguro anual de $2.400.000, al contado. Al 31 de diciembre, ¿cuánto debe reconocerse como <b>gasto</b> del ejercicio?</span></div>
+      <ul class="opts">
+        <li><span class="letter">a)</span> $2.400.000</li>
+        <li><span class="letter">b)</span> $600.000</li>
+        <li><span class="letter">c)</span> $1.800.000</li>
+        <li><span class="letter">d)</span> $200.000</li>
+      </ul>
+    </div>
+
+    <div class="quiz-item">
+      <div class="qhead"><span class="qn">P2</span><span class="qtext">¿Cuál de las siguientes situaciones corresponde a una <b>provisión</b> (NIC 37) y no a un simple gasto devengado por pagar?</span></div>
+      <ul class="opts">
+        <li><span class="letter">a)</span> Sueldo de diciembre pendiente de pago</li>
+        <li><span class="letter">b)</span> Interés de un préstamo a tasa fija, ya devengado</li>
+        <li><span class="letter">c)</span> Estimación de garantías por productos vendidos, de monto incierto</li>
+        <li><span class="letter">d)</span> Factura de arriendo del mes, ya recibida y no pagada</li>
+      </ul>
+    </div>
+
+    <div class="quiz-item">
+      <div class="qhead"><span class="qn">P3</span><span class="qtext">Una empresa adquiere una máquina e incurre en: flete de traslado, instalación y montaje, pruebas de funcionamiento y capacitación del personal operador. ¿Cuál de estos costos <b>NO</b> se capitaliza al activo?</span></div>
+      <ul class="opts">
+        <li><span class="letter">a)</span> Flete de traslado</li>
+        <li><span class="letter">b)</span> Instalación y montaje</li>
+        <li><span class="letter">c)</span> Capacitación del personal operador</li>
+        <li><span class="letter">d)</span> Pruebas de funcionamiento</li>
+      </ul>
+    </div>
+
+    <div class="quiz-item">
+      <div class="qhead"><span class="qn">P4</span><span class="qtext">Explique por qué el superávit de revaluación de un activo PPE, al momento en que ese activo se da de baja, se transfiere directamente a resultados acumulados y nunca pasa por el resultado del ejercicio. Fundamente con la norma.</span></div>
+      <div class="dev-box">Desarrolle en 4–6 líneas, citando el párrafo de la NIC 16 correspondiente.</div>
+    </div>
+
+    <div class="quiz-item">
+      <div class="qhead"><span class="qn">P5</span><span class="qtext">Una empresa mantiene una cuenta por cobrar de USD 6.000, registrada a $930/USD. Al cierre, el tipo de cambio es $970/USD. Determine el efecto en resultados, indique si es ganancia o pérdida y su fundamento normativo.</span></div>
+      <div class="dev-box">Calcule el monto y explique el signo del resultado antes de revisar la clave.</div>
+    </div>
+
+    <details class="answers">
+      <summary>Clave de respuestas y justificación</summary>
+      <div class="answers-body">
+        <div class="akey"><span class="correct">P1 → b) $600.000</span><p>La póliza cubre 12 meses ($200.000/mes). Entre el 1 de octubre y el 31 de diciembre transcurren 3 meses: 3 × $200.000 = $600.000 de gasto consumido; los $1.800.000 restantes quedan como seguro pagado por anticipado (activo).</p></div>
+        <div class="akey"><span class="correct">P2 → c) Estimación de garantías por productos vendidos</span><p>Su cuantía y la fecha en que se materializarán los reclamos son inciertas: exige estimación, por eso es una provisión (NIC 37, párr. 14). Las opciones a), b) y d) tienen monto y vencimiento ciertos: son gastos devengados por pagar comunes.</p></div>
+        <div class="akey"><span class="correct">P3 → c) Capacitación del personal operador</span><p>La capacitación es un costo de puesta en marcha del negocio, no del activo en sí; se reconoce como gasto del período (NIC 16, párr. 19). Flete, instalación y pruebas de funcionamiento sí son costos directamente atribuibles necesarios para dejar el activo en condiciones de operar (párr. 17).</p></div>
+        <div class="akey"><span class="correct">P4 → Ver fundamento</span><p>El superávit de revaluación es una ganancia no realizada acumulada en patrimonio (Otro Resultado Integral) mientras el activo sigue en uso. Cuando el activo se da de baja, esa ganancia recién se "realiza" por completo, pero la norma (NIC 16, párr. 41) establece que su traspaso es directo a resultados acumulados y no debe pasar por el resultado del ejercicio, porque no es una ganancia operativa del período: es simplemente el reconocimiento final de un cambio de valor ya ocurrido en periodos anteriores.</p></div>
+        <div class="akey"><span class="correct">P5 → Ganancia de $240.000, a resultado del período</span><p>(970 − 930) × 6.000 = $240.000. Como la cuenta por cobrar es un activo en moneda extranjera y el peso se depreció frente al dólar (subió el tipo de cambio), el activo vale más en pesos al cierre: es una diferencia de cambio favorable (ganancia), que según NIC 21 párr. 28 se reconoce directamente en el resultado del período, sin pasar por ORI.</p></div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ======================= 5. GLOSARIO ======================= -->
+  <section class="block" id="glosario">
+    <div class="block-head"><span class="idx">05</span><h2>Glosario y palabras clave</h2></div>
+
+    <dl class="gloss">
+      <div class="gterm"><dt>Devengo</dt><dd>Principio contable que reconoce los efectos de una transacción cuando ocurre el hecho económico, con independencia de cuándo se cobra o paga en efectivo (NIC 1).</dd></div>
+      <div class="gterm"><dt>Importe en libros</dt><dd>Valor por el que se reconoce un activo en el estado de situación financiera, neto de depreciación y deterioro acumulados (NIC 16, párr. 6).</dd></div>
+      <div class="gterm"><dt>Valor residual</dt><dd>Importe estimado que la empresa obtendría hoy por la disposición del activo, si ya tuviera la edad y condición esperadas al final de su vida útil.</dd></div>
+      <div class="gterm"><dt>Vida útil</dt><dd>Periodo durante el cual se espera utilizar un activo, o el número de unidades de producción que se espera obtener de él.</dd></div>
+      <div class="gterm"><dt>Deterioro (NIIF 9)</dt><dd>Pérdida crediticia esperada sobre cuentas por cobrar, reconocida como gasto contra una cuenta correctora del activo, sin esperar a que el incumplimiento ocurra efectivamente.</dd></div>
+      <div class="gterm"><dt>Provisión (NIC 37)</dt><dd>Pasivo de cuantía o vencimiento incierto, reconocido cuando existe una obligación presente, es probable la salida de recursos y el monto puede estimarse con fiabilidad.</dd></div>
+      <div class="gterm"><dt>Diferencia de cambio (NIC 21)</dt><dd>Efecto en resultado que surge al reexpresar partidas monetarias en moneda extranjera al tipo de cambio de cierre del periodo.</dd></div>
+      <div class="gterm"><dt>Superávit de revaluación</dt><dd>Cuenta de patrimonio (Otro Resultado Integral) donde se acumulan los aumentos de valor de un activo PPE bajo el modelo de revaluación.</dd></div>
+      <div class="gterm"><dt>Costo directamente atribuible</dt><dd>Desembolso necesario para dejar un activo en la ubicación y condiciones necesarias para operar según lo previsto por la gerencia (flete, instalación, pruebas).</dd></div>
+      <div class="gterm"><dt>Baja en cuentas</dt><dd>Eliminación de un activo del estado de situación financiera al venderlo o al no esperar más beneficios económicos de él; el resultado es el importe neto recibido menos el importe en libros.</dd></div>
+    </dl>
+  </section>
+
+  <footer>Kit de estudio generado a partir de material de cátedra USACH · Contabilidad General — uso personal de repaso</footer>
+</div>
+
+</body>
+</html>
