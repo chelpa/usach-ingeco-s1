@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compendio MAyEI I — Mi Semestre</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  p{ color: inherit; }
+
+  :root{
+    --paper:#faf9f5;
+    --paper-raised:#ffffff;
+    --ink:#1f2933;
+    --ink-soft:#5b6672;
+    --ink-faint:#8a94a0;
+    --grid:#dbe4f0;
+    --line:#dfd9cb;
+    --accent:#20509e;
+    --accent-ink:#14345f;
+    --accent-soft:#e7edf9;
+    --accent-soft-line:#c4d3ee;
+    --plum:#7c3159;
+    --plum-soft:#f3e6ee;
+    --plum-soft-line:#dcb9cd;
+    --good:#2b6e4f;
+    --good-soft:#e5f1ea;
+    --sidebg:#f3f1ea;
+    --shadow: 0 1px 2px rgba(31,41,51,.06), 0 6px 20px -12px rgba(31,41,51,.18);
+    --font-display: 'Fraunces', ui-serif, Georgia, serif;
+    --font-body: 'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#12161c; --paper-raised:#181e26; --ink:#e9edf2; --ink-soft:#aab4c0; --ink-faint:#78828e;
+      --grid:#223047; --line:#2c3542; --accent:#7ba7e8; --accent-ink:#bcd4f5; --accent-soft:#1b2739;
+      --accent-soft-line:#2d4468; --plum:#d891b3; --plum-soft:#2a1c25; --plum-soft-line:#4a2c3b;
+      --good:#7fbf9c; --good-soft:#16261e; --sidebg:#161b22;
+      --shadow: 0 1px 2px rgba(0,0,0,.35), 0 10px 28px -14px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#12161c; --paper-raised:#181e26; --ink:#e9edf2; --ink-soft:#aab4c0; --ink-faint:#78828e;
+    --grid:#223047; --line:#2c3542; --accent:#7ba7e8; --accent-ink:#bcd4f5; --accent-soft:#1b2739;
+    --accent-soft-line:#2d4468; --plum:#d891b3; --plum-soft:#2a1c25; --plum-soft-line:#4a2c3b;
+    --good:#7fbf9c; --good-soft:#16261e; --sidebg:#161b22;
+    --shadow: 0 1px 2px rgba(0,0,0,.35), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box;}
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:var(--font-body); font-size:16.5px; line-height:1.6;
+  }
+  ::selection{ background:var(--accent-soft-line); }
+  a{ color:var(--accent); }
+
+  /* ---------- Layout shell ---------- */
+  .shell{ display:flex; min-height:100vh; }
+
+  .side{
+    width:300px; flex:0 0 300px;
+    background:var(--sidebg);
+    border-right:1px solid var(--line);
+    position:sticky; top:56px; height:calc(100vh - 56px); overflow-y:auto;
+    padding: 22px 16px 40px;
+  }
+  .side-brand{ padding: 2px 6px 16px; }
+  .side-brand .kicker{ font-family:var(--font-mono); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); }
+  .side-brand h1{ font-family:var(--font-display); font-size:1.35rem; font-weight:600; margin:.25em 0 0; color:var(--ink); line-height:1.15; }
+
+  .side-search{ position:relative; margin: 12px 6px 18px; }
+  .side-search input{
+    width:100%; font-family:var(--font-body); font-size:.88rem;
+    padding:.6em .8em; border-radius:9px; border:1px solid var(--line);
+    background:var(--paper-raised); color:var(--ink); outline:none;
+  }
+  .side-search input:focus{ border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+
+  .side-group{ margin: 0 0 6px; }
+  .side-group-label{
+    font-family:var(--font-mono); font-size:.68rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ink-faint); padding: 14px 10px 6px;
+  }
+  .side-link{
+    display:block; text-decoration:none; color:var(--ink-soft);
+    font-size:.88rem; padding:.42em .7em; border-radius:8px; margin: 1px 0;
+    border-left:2px solid transparent;
+  }
+  .side-link .num{ font-family:var(--font-mono); color:var(--ink-faint); margin-right:.4em; font-size:.85em; }
+  .side-link:hover{ background:var(--paper-raised); color:var(--ink); }
+  .side-link.active{ background:var(--accent-soft); color:var(--accent-ink); border-left-color:var(--accent); font-weight:600; }
+  .side-empty{ font-size:.82rem; color:var(--ink-faint); padding:.5em .7em; display:none; }
+
+  .side-toggle{
+    display:none; position:fixed; z-index:40; top:70px; left:14px;
+    width:40px; height:40px; border-radius:10px; border:1px solid var(--line);
+    background:var(--paper-raised); color:var(--ink); box-shadow:var(--shadow);
+    align-items:center; justify-content:center; font-size:1.1rem; cursor:pointer;
+  }
+
+  .main{ flex:1 1 auto; min-width:0; }
+  .wrap{ max-width:860px; margin:0 auto; padding: 48px 32px 100px; }
+
+  header.hero{
+    padding: 8px 0 28px; border-bottom:1px solid var(--line); margin-bottom:36px;
+    position:relative;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:.5em;
+    font-family:var(--font-mono); font-size:.76rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--accent-soft-line);
+    padding:.32em .75em; border-radius:100px;
+  }
+  h1.title{
+    font-family:var(--font-display); font-weight:600; font-size:clamp(1.9rem, 4vw, 2.7rem);
+    line-height:1.08; margin:.5em 0 .3em; text-wrap:balance;
+  }
+  .subtitle{ font-size:1.02rem; color:var(--ink-soft); max-width:64ch; margin:0; }
+  .hero-stats{ display:flex; flex-wrap:wrap; gap:8px; margin-top:16px; font-family:var(--font-mono); font-size:.78rem; color:var(--ink-soft); }
+  .hero-stats span{ background:var(--paper-raised); border:1px solid var(--line); border-radius:8px; padding:.35em .65em; }
+
+  .part-divider{
+    display:flex; align-items:center; gap:14px; margin: 56px 0 28px;
+  }
+  .part-divider .tag{
+    font-family:var(--font-mono); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--accent-soft-line);
+    padding:.3em .7em; border-radius:7px; white-space:nowrap;
+  }
+  .part-divider .rule{ height:1px; background:var(--line); flex:1; }
+
+  section.doc{ margin-bottom:46px; scroll-margin-top: 24px; }
+  .doc-card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); overflow:hidden; }
+  .doc-head{ padding: 20px 26px 16px; border-bottom:1px solid var(--line); background: linear-gradient(180deg, var(--accent-soft) 0%, transparent 130%); }
+  .doc-head .doc-eyebrow{ font-family:var(--font-mono); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--accent-ink); margin-bottom:.4em; }
+  .doc-head h2{ font-family:var(--font-display); font-weight:600; font-size:1.45rem; margin:0 0 .2em; color:var(--ink); }
+  .doc-head .doc-sub{ font-size:.86rem; color:var(--ink-soft); margin:0; }
+  .doc-body{ padding: 22px 26px 26px; display:grid; gap:20px; }
+
+  h3.blk{ font-family:var(--font-display); font-size:1.08rem; font-weight:600; margin:0 0 .5em; color:var(--ink); }
+  p{ margin:.4em 0; }
+
+  .defbox{
+    border-left:3px solid var(--accent); background:var(--accent-soft);
+    border-radius:0 10px 10px 0; padding:14px 18px;
+  }
+  .defbox .lbl{ font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; color:var(--accent-ink); margin-bottom:.4em; }
+
+  .obsbox{
+    border-left:3px solid var(--plum); background:var(--plum-soft);
+    border-radius:0 10px 10px 0; padding:12px 18px; font-size:.92rem;
+  }
+  .obsbox .lbl{ font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; color:var(--plum); margin-bottom:.3em; }
+
+  .exbox{ border:1px solid var(--line); border-radius:10px; padding:14px 18px; background: color-mix(in srgb, var(--paper) 55%, var(--paper-raised)); }
+  .exbox .lbl{ font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint); margin-bottom:.4em; }
+
+  .eq{ font-family:var(--font-mono); font-size:.94rem; overflow-x:auto; padding:2px 0; }
+  .eq.display{ background: color-mix(in srgb, var(--accent-soft) 45%, transparent); border-radius:8px; padding:.6em .9em; margin:.3em 0; }
+
+  .answer-box{
+    display:inline-flex; align-items:center; gap:.5em; font-family:var(--font-mono); font-size:.95rem;
+    border:1.5px solid var(--good); color:var(--good); background:var(--good-soft);
+    padding:.45em .85em; border-radius:8px;
+  }
+
+  table.mini{ width:100%; border-collapse:collapse; font-size:.88rem; }
+  table.mini th, table.mini td{ text-align:left; padding:.5em .7em; border-bottom:1px solid var(--line); }
+  table.mini th{ font-family:var(--font-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); background:var(--accent-soft); }
+  .table-scroll{ overflow-x:auto; border:1px solid var(--line); border-radius:10px; }
+
+  ol.steps, ul.plain{ margin:.2em 0; padding-left:1.3em; }
+  ol.steps li, ul.plain li{ margin-bottom:.45em; font-size:.94rem; }
+
+  .prob-list{ display:grid; gap:10px; }
+  .prob-item{ border:1px solid var(--line); border-radius:10px; padding:10px 14px; font-size:.9rem; background:var(--paper-raised); }
+
+  footer.page{
+    max-width:860px; margin: 60px auto 0; padding: 24px 32px 60px;
+    border-top:1px solid var(--line); font-size:.82rem; color:var(--ink-faint);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+  }
+
+  @media (max-width: 900px){
+    .side{ position:fixed; left:0; top:56px; z-index:35; transform:translateX(-100%); transition:transform .25s ease; box-shadow:var(--shadow); }
+    .side.open{ transform:translateX(0); }
+    .side-toggle{ display:flex; }
+    .wrap{ padding: 76px 20px 80px; }
+    .shell{ display:block; }
+  }
+  @media (prefers-reduced-motion: reduce){ .side{ transition:none; } }
+</style>
+</head>
+<body>
+<script src="../../assets/nav.js" data-base="../../" data-course="maye1"></script>
+
+<button class="side-toggle" id="sideToggle" aria-label="Abrir navegación">☰</button>
+
+<div class="shell">
+  <nav class="side" id="side">
+    <div class="side-brand">
+      <div class="kicker">Matemáticas para la administración y economía I</div>
+      <h1>Compendio MAyEI I</h1>
+    </div>
+    <div class="side-search">
+      <input type="text" id="sideFilter" placeholder="Buscar tema o ejercicio…" autocomplete="off">
+    </div>
+
+    <div class="side-group" data-group="clases">
+      <div class="side-group-label">Clases</div>
+      <a class="side-link" href="#c17"><span class="num">17</span>Función logarítmica</a>
+      <a class="side-link" href="#c18"><span class="num">18</span>Preliminares de límite</a>
+      <a class="side-link" href="#c19"><span class="num">19</span>Álgebra de límites</a>
+      <a class="side-link" href="#c20"><span class="num">20</span>Teoremas de límite</a>
+      <a class="side-link" href="#c21"><span class="num">21</span>Continuidad</a>
+      <a class="side-link" href="#c22"><span class="num">22</span>Asíntotas</a>
+    </div>
+
+    <div class="side-group" data-group="controles">
+      <div class="side-group-label">Controles</div>
+      <a class="side-link" href="#ctrl2v1"><span class="num">C2</span>V1 · Monotonía y rectas</a>
+      <a class="side-link" href="#ctrl2v2"><span class="num">C2</span>V2 · Gráficas y oferta</a>
+      <a class="side-link" href="#ctrl2v3"><span class="num">C2</span>V3 · Rectas y utilidad</a>
+      <a class="side-link" href="#ctrl3v2"><span class="num">C3</span>V2 · Exponencial y trig.</a>
+      <a class="side-link" href="#ctrl3v3"><span class="num">C3</span>V3 · Exponencial y ángulos</a>
+    </div>
+
+    <div class="side-group" data-group="guias">
+      <div class="side-group-label">Guías de ejercicios</div>
+      <a class="side-link" href="#g-repaso">Repaso de límites</a>
+      <a class="side-link" href="#g-sandwich">Sandwich y exponenciales</a>
+      <a class="side-link" href="#g-pep2">Preparatoria PEP 2</a>
+    </div>
+
+    <div class="side-empty" id="sideEmpty">Sin resultados.</div>
+  </nav>
+
+  <main class="main">
+    <div class="wrap">
+
+      <header class="hero">
+        <span class="eyebrow">Cátedra FAE · Coordinación matemáticas</span>
+        <h1 class="title">Compendio MAyEI I</h1>
+        <p class="subtitle">Toda la materia de límites, continuidad y asíntotas — más los controles resueltos y guías de ejercicios — reunida en una sola referencia navegable.</p>
+        <div class="hero-stats">
+          <span>6 clases</span>
+          <span>5 controles resueltos</span>
+          <span>3 guías de ejercicios</span>
+          <span>14 documentos fuente</span>
+        </div>
+      </header>
+
+      <!-- ============================================================ -->
+      <div class="part-divider"><span class="tag">Parte I</span><span class="rule"></span></div>
+
+      <!-- CLASE 17 -->
+      <section class="doc" id="c17">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Clase 17</div>
+            <h2>Función logarítmica</h2>
+            <p class="doc-sub">Definición, propiedades, gráficas y aplicaciones a interés compuesto.</p>
+          </div>
+          <div class="doc-body">
+            <div class="defbox">
+              <div class="lbl">Definición</div>
+              <p>Sea <span class="mx">a</span> un número positivo con <span class="mx">a ≠ 1</span>. La función logarítmica con base <span class="mx">a</span>, denotada log<sub>a</sub>, está definida por <span class="mx">log_a x = y ⇔ a^y = x</span>, con f : ℝ⁺ → ℝ. Es decir, log<sub>a</sub>(x) es el exponente al cual hay que elevar la base <span class="mx">a</span> para obtener x.</p>
+            </div>
+
+            <div class="table-scroll">
+              <table class="mini">
+                <thead><tr><th>Forma logarítmica</th><th>Forma exponencial</th></tr></thead>
+                <tbody>
+                  <tr><td class="mx">log₁₀ 100.000 = 5</td><td class="mx">10⁵ = 100.000</td></tr>
+                  <tr><td class="mx">log₂ 8 = 3</td><td class="mx">2³ = 8</td></tr>
+                  <tr><td class="mx">log₂ (1/8) = −3</td><td class="mx">2⁻³ = 1/8</td></tr>
+                  <tr><td class="mx">log₅ s = r</td><td class="mx">5ʳ = s</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="mx" style="font-size:.9rem;color:var(--ink-soft)">El logaritmo es la inversa de la exponencial; ambas son biyectivas.</p>
+
+            <div>
+              <h3 class="blk">Propiedades</h3>
+              <ul class="plain">
+                <li class="mx">a) log_a 1 = 0</li>
+                <li class="mx">b) log_a a = 1</li>
+                <li class="mx">c) log_a aˣ = x</li>
+                <li class="mx">d) a^(log_a x) = x</li>
+                <li class="mx">e) log_a(xy) = log_a x + log_a y</li>
+                <li class="mx">f) log_a(x/y) = log_a x − log_a y</li>
+                <li class="mx">g) log_a(x^y) = y·log_a x</li>
+                <li class="mx">h) log_a x = log_b x / log_b a (cambio de base)</li>
+              </ul>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">Ejercicio</div>
+              <p>Encuentre el dominio de <span class="mx">g(x) = 2 + log₅ x</span> y trace su gráfica.</p>
+              <p><strong>Solución:</strong> la gráfica de g se obtiene de la de f(x)=log₅x desplazada 2 unidades hacia arriba. Dom(f) = (0, ∞).</p>
+            </div>
+
+            <div class="obsbox">
+              <div class="lbl">Dos logaritmos importantes</div>
+              <p class="mx">Logaritmo decimal (a=10): y = log₁₀x = log x &nbsp;·&nbsp; Logaritmo natural (a=e): y = log_e x = ln x</p>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">Ejemplo</div>
+              <p>Encuentre el dominio de <span class="mx">f(x) = ln(4 − x²)</span>.</p>
+              <p><strong>Solución:</strong> ln x está definida para x&gt;0. dom(f) = {x | 4−x²&gt;0} = {x | |x|&lt;2} = (−2, 2).</p>
+            </div>
+
+            <div>
+              <h3 class="blk">Aplicaciones — modelo de aprendizaje</h3>
+              <p>Si una tarea se aprende a nivel P₀, tras t meses el recordatorio P satisface <span class="mx">log P = log P₀ − c·log(t+1)</span>.</p>
+              <p><strong>a)</strong> Despejando: <span class="mx">P = P₀ / (t+1)^c</span>.<br>
+              <strong>b)</strong> Con P₀=90, c=0,2: a los 2 meses P≈72; al año (t=12) P≈54.</p>
+            </div>
+
+            <div>
+              <h3 class="blk">Fórmulas de interés</h3>
+              <ul class="plain">
+                <li class="mx">Simple (1 año): A = P(1+r)</li>
+                <li class="mx">Capitalizado n veces/año: A(t) = P(1+r/n)^(nt)</li>
+                <li class="mx">Capitalizado continuamente: A(t) = P·e^(rt)</li>
+              </ul>
+              <div class="exbox">
+                <div class="lbl">Ejemplo</div>
+                <p>$5000 al 5% anual — ¿cuánto tarda en duplicarse?</p>
+                <p class="mx">a) Semestral: 5000(1,025)^(2t)=10000 ⟹ t ≈ 14,04 años<br>
+                b) Continua: 5000e^(0,05t)=10000 ⟹ t = ln2/0,05 ≈ 13,86 años</p>
+              </div>
+            </div>
+
+            <div class="obsbox">
+              <div class="lbl">Pon en práctica</div>
+              <p>a) Grafique f(x)=log₃x, g(x)=log₄x, f(x)=2log x, g(x)=1+log x &nbsp; b) Dominio de f(x)=log₁₀(x+3) y f(x)=log₅(8−2x) &nbsp; c) $1000 al 4% anual continuo: ¿tiempo para llegar a $4000?</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLASE 18 -->
+      <section class="doc" id="c18">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Clase 18</div>
+            <h2>Preliminares de límite de funciones</h2>
+            <p class="doc-sub">Intuición numérica, definición ε–δ, límites laterales.</p>
+          </div>
+          <div class="doc-body">
+            <p>Ejemplo introductorio: <span class="mx">f(x)=x²−x+2</span> cerca de x=2 — al aproximarse por ambos lados, f(x)→4, sin necesidad de evaluar en x=2: <span class="mx">lím_{x→2} (x²−x+2) = 4</span>.</p>
+
+            <div class="obsbox">
+              <div class="lbl">Observación fundamental</div>
+              <p>El valor al que se aproxima x no necesita pertenecer al dominio de f. El límite describe el comportamiento de f <em>cerca</em> de un punto, no <em>en</em> ese punto.</p>
+            </div>
+
+            <p><strong>Ejemplo:</strong> <span class="mx">f(x)=(x−1)/(x²−1)</span>, no definida en x=1. Mediante tabla de valores se conjetura <span class="mx">lím_{x→1} f(x) = 1/2</span>.</p>
+
+            <div class="exbox">
+              <div class="lbl">Ejemplo — un límite que no existe</div>
+              <p><span class="mx">lím_{x→0} sen(π/x)</span>. Con x=1/n (n entero): sen(nπ)=0, lo que sugeriría erróneamente que el límite es 0. Pero con x=1/(n+½), la función vale ±1: <strong>la función oscila entre −1 y 1 infinitamente y el límite no existe.</strong></p>
+              <p style="font-size:.88rem;color:var(--ink-soft)">Lección: analizar una sucesión particular de puntos puede engañar — se requiere analizar todos los valores próximos a a.</p>
+            </div>
+
+            <div class="defbox">
+              <div class="lbl">Definición ε–δ</div>
+              <p class="mx">lím_{x→a} f(x) = L &nbsp;⇔&nbsp; ∀ε&gt;0, ∃δ&gt;0 : 0&lt;|x−a|&lt;δ ⇒ |f(x)−L|&lt;ε</p>
+              <p style="font-size:.9rem">Para cualquier margen de error ε alrededor de L, existe un radio δ tal que si x está en (a−δ,a+δ) (excluyendo a), entonces f(x) cae en (L−ε,L+ε).</p>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">Ejemplo — demostración por definición</div>
+              <p>Demostrar que <span class="mx">lím_{x→2} (4x−5) = 3</span>.</p>
+              <p class="mx">|(4x−5)−3| = 4|x−2| &lt; ε ⟺ |x−2| &lt; ε/4 ⟹ se toma δ = ε/4.<br>
+              Si 0&lt;|x−2|&lt;δ: |(4x−5)−3| = 4|x−2| &lt; 4δ = ε. ∎</p>
+            </div>
+
+            <div>
+              <h3 class="blk">Límites laterales</h3>
+              <p class="mx">Derecha: lím_{x→a+} f(x)=L ⇔ ∀ε∃δ: a&lt;x&lt;a+δ ⇒ |f(x)−L|&lt;ε<br>
+              Izquierda: lím_{x→a−} f(x)=L ⇔ ∀ε∃δ: a−δ&lt;x&lt;a ⇒ |f(x)−L|&lt;ε</p>
+              <div class="answer-box" style="background:transparent;border-color:var(--line);color:var(--ink)">Teorema: lím_{x→a} f(x)=L existe ⇔ lím_{x→a−} f(x) = lím_{x→a+} f(x) = L</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">Ejemplo — función con salto</div>
+              <p>En x=2: lím izq=3, lím der=1 → <strong>no existe</strong> (3≠1). En x=5: lím izq=lím der=2 → lím=2, aunque f(5)=3≠2 (el valor puntual no afecta el límite).</p>
+            </div>
+
+            <div class="obsbox">
+              <div class="lbl">Desafíos de la clase</div>
+              <p>a) g(x)=(x²+x−6)/|x−2|: calcule los límites laterales en x=2 y determine si existe lím_{x→2} g(x).<br>
+              b) Determine m para que exista lím_{x→0} f(x), con f(x)=[sen x−sen(mx)]/x si x≤0, f(x)=m√(4x²+x³)/(2x) si x&gt;0.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLASE 19 -->
+      <section class="doc" id="c19">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Clase 19</div>
+            <h2>Álgebra de límites</h2>
+            <p class="doc-sub">Propiedades operatorias, formas indeterminadas, límites al infinito.</p>
+          </div>
+          <div class="doc-body">
+            <div class="defbox">
+              <div class="lbl">Propiedades (con lím f=L, lím g=M, λ∈ℝ)</div>
+              <ul class="plain">
+                <li class="mx">a) lím[f±g] = L±M</li>
+                <li class="mx">b) lím[λf] = λL</li>
+                <li class="mx">c) lím[f·g] = L·M</li>
+                <li class="mx">d) lím[f/g] = L/M &nbsp;(M≠0)</li>
+                <li class="mx">e) lím[f]ⁿ = Lⁿ</li>
+                <li class="mx">f) lím ⁿ√f = ⁿ√L &nbsp;(si n par, L&gt;0)</li>
+              </ul>
+              <p style="font-size:.88rem">Válidas solo cuando los límites existen por separado.</p>
+            </div>
+
+            <p><strong>Observación:</strong> si lím f(x) resulta en la forma k/0 con k≠0, el límite no existe.</p>
+
+            <div class="obsbox">
+              <div class="lbl">Formas indeterminadas</div>
+              <p class="mx">0/0 &nbsp;·&nbsp; ∞/∞ &nbsp;·&nbsp; ∞−∞ &nbsp;·&nbsp; 0·(±∞) &nbsp;·&nbsp; 0⁰ &nbsp;·&nbsp; 1^∞ &nbsp;·&nbsp; ∞⁰</p>
+              <p style="font-size:.85rem">No bastan por sí solas para determinar si el límite existe.</p>
+            </div>
+
+            <div>
+              <h3 class="blk">Límites al infinito — fórmulas útiles</h3>
+              <ul class="plain">
+                <li class="mx">a) lím_{x→+∞} 1/x = 0</li>
+                <li class="mx">b) lím_{x→∞} 1/xⁿ = 0, ∀n∈ℕ</li>
+                <li class="mx">c) lím_{n→+∞} rⁿ = 0, si |r|&lt;1</li>
+              </ul>
+            </div>
+
+            <div class="obsbox">
+              <div class="lbl">Pon en práctica</div>
+              <div class="prob-list">
+                <div class="prob-item mx">a) lím_{x→+∞} (2x⁴+5x²+x−3)/(x−3)</div>
+                <div class="prob-item mx">b) lím_{x→∞} (2x³−5x²+x−3)/(x³−2x−3)</div>
+                <div class="prob-item mx">c) lím_{x→∞} (2x³−4x²+x)/(3x³+x+4)</div>
+                <div class="prob-item mx">d) lím_{x→+∞} (−4x)/(x³+3x+1)</div>
+                <div class="prob-item mx">e) Encuentre α∈ℝ tal que lím_{x→+∞} xᵅ/(x²+x+1) exista.</div>
+                <div class="prob-item mx">f) lím_{x→+∞} x/√(x²+1) y lím_{x→−∞} x/√(x²+1)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLASE 20 -->
+      <section class="doc" id="c20">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Clase 20</div>
+            <h2>Teoremas interesantes de límite</h2>
+            <p class="doc-sub">Sandwich, cambio de variable, límites notables algebraicos, exponenciales y logarítmicos.</p>
+          </div>
+          <div class="doc-body">
+
+            <div class="defbox">
+              <div class="lbl">Teorema del Sandwich</div>
+              <p>Si <span class="mx">g(x) ≤ f(x) ≤ h(x)</span> ∀x∈I, x≠a, y <span class="mx">lím_{x→a} g(x) = lím_{x→a} h(x) = L</span>, entonces <span class="mx">lím_{x→a} f(x) = L</span>.</p>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">Ejemplo</div>
+              <p>Calcule <span class="mx">lím_{x→∞} (x+1)/(x²−1)</span> con Sandwich.</p>
+              <p class="mx">Para x&gt;2: x²−1&gt;x²/2, x+1&lt;2x ⟹ 0 &lt; (x+1)/(x²−1) &lt; 4/x. Ambas cotas → 0.</p>
+              <div class="answer-box">lím = 0</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">Ejemplo — cuando el Sandwich no concluye</div>
+              <p>f satisface <span class="mx">x²−x ≤ f(x) ≤ x²+x</span> ∀x∈ℝ.</p>
+              <p class="mx">lím_{x→0} f(x): ambas cotas → 0 ⟹ lím_{x→0} f(x) = 0.<br>
+              lím_{x→1} f(x)/x: dividiendo entre x&gt;0 cerca de 1, x−1 ≤ f(x)/x ≤ x+1 → cotas 0 y 2 (distintas): <strong>el Sandwich no permite concluir</strong>.</p>
+              <div class="obsbox" style="margin-top:8px"><div class="lbl">Moraleja</div><p style="font-size:.88rem">El Sandwich solo funciona cuando ambas cotas tienen el mismo límite.</p></div>
+            </div>
+
+            <div class="defbox">
+              <div class="lbl">Teorema de cambio de variable</div>
+              <p>Si lím_{x→a} f(x)=L, lím_{x→x₀} g(x)=a, y g(x)≠a cerca de x₀ (salvo en x₀), entonces <span class="mx">lím_{x→x₀} (f∘g)(x) = L</span>. Intuición: con u=g(x), cuando x→x₀, u→a.</p>
+            </div>
+            <div class="exbox">
+              <div class="lbl">Ejemplo</div>
+              <p class="mx">lím_{x→27} (x−27)/(∛x−3). Con u=∛x, x=u³: (u³−27)/(u−3) = (u−3)(u²+3u+9)/(u−3) → 27.</p>
+            </div>
+
+            <div class="defbox">
+              <div class="lbl">Límites notables algebraicos</div>
+              <ul class="plain">
+                <li class="mx">a) lím_{x→a} (xⁿ−aⁿ)/(x−a) = n·aⁿ⁻¹</li>
+                <li class="mx">b) lím_{x→∞} k/xⁿ = 0 (k≠0, n≥1)</li>
+                <li class="mx">c) lím_{x→∞} P(x)/Q(x) = aₙ/bₘ si mismo grado; 0 si deg P&lt;deg Q; ±∞ si deg P&gt;deg Q</li>
+              </ul>
+              <p style="font-size:.88rem">Ejemplos: lím_{x→2}(x⁴−16)/(x−2)=4·2³=32 &nbsp;·&nbsp; lím_{x→∞}(5x³−2x+1)/(3x³+x²−7)=5/3 &nbsp;·&nbsp; lím_{x→∞}(4x²−1)/(x³+2)=0</p>
+            </div>
+
+            <div class="defbox">
+              <div class="lbl">El número e y sus formas equivalentes</div>
+              <p class="mx">lím_{x→∞} (1+1/x)^x = e &nbsp;·&nbsp; lím_{x→0+} (1+x)^(1/x) = e &nbsp;·&nbsp; lím_{x→∞} (1+a/x)^x = eᵃ</p>
+            </div>
+            <div class="exbox">
+              <div class="lbl">Ejemplo resuelto — forma 1^∞</div>
+              <p class="mx">lím_{x→∞} [(2x²+x+1)/(2x²−1)]^x</p>
+              <p>Se reescribe la base como 1+(x+2)/(2x²−1) y se fuerza la forma (1+1/n)^n con el exponente ajustado. Resultado: <strong>e^(1/2)</strong>.</p>
+            </div>
+
+            <div class="defbox">
+              <div class="lbl">Límites logarítmicos notables</div>
+              <p class="mx">a) lím_{x→0} (a^(kx)−1)/x = k·ln(a) &nbsp;·&nbsp; b) lím_{x→0} (e^(kx)−1)/(kx) = 1</p>
+            </div>
+            <div class="exbox">
+              <div class="lbl">Ejemplo</div>
+              <p class="mx">a) lím_{x→0} (e^(−4x)−1)/x = −4·1 = −4<br>
+              b) lím_{x→0} (5ˣ−2ˣ)/x = ln5 − ln2 = ln(5/2)</p>
+            </div>
+
+            <div class="obsbox">
+              <div class="lbl">Pon en práctica</div>
+              <div class="prob-list">
+                <div class="prob-item mx">1a) lím_{x→∞}[(4x−3)/(4x+5)]^(3x+1)</div>
+                <div class="prob-item mx">1b) lím_{x→∞}[(2x+1)/(2x−3)]^(x+5)</div>
+                <div class="prob-item mx">1c) lím_{x→∞}[(x−1)/(x−4)]^(2x+3)</div>
+                <div class="prob-item mx">1d) lím_{x→0}[(x²+1)/(2x+1)]^(1/x)</div>
+                <div class="prob-item mx">1e) lím_{h→0}[log(x+h)+log(x−h)−2log x]/h²</div>
+                <div class="prob-item mx">2) Seis límites de práctica adicionales (potencias, raíces, cocientes de exponenciales)</div>
+                <div class="prob-item mx">3b) Sandwich: si (λ²+λ−2)/(λ+3) ≤ f(λ)/λ² ≤ (λ²+2λ−1)/(λ+3), encuentre lím_{λ→−1−} f(λ)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLASE 21 -->
+      <section class="doc" id="c21">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Clase 21</div>
+            <h2>Continuidad</h2>
+            <p class="doc-sub">Definición formal, composición de funciones continuas, discontinuidades reparables e irreparables.</p>
+          </div>
+          <div class="doc-body">
+            <div class="defbox">
+              <div class="lbl">Definición</div>
+              <p>f es continua en a ⇔ se cumplen: <strong>a)</strong> f(a) está definida &nbsp; <strong>b)</strong> lím_{x→a} f(x) existe &nbsp; <strong>c)</strong> lím_{x→a} f(x) = f(a).</p>
+              <p style="font-size:.9rem">Si alguna falla, f es discontinua en a (a: punto de discontinuidad).</p>
+            </div>
+
+            <div class="obsbox">
+              <div class="lbl">Interpretación intuitiva</div>
+              <p>Una función es continua en a si su gráfica puede trazarse sin levantar el lápiz en ese punto: no hay saltos, agujeros ni asíntotas verticales.</p>
+            </div>
+
+            <div class="defbox">
+              <div class="lbl">Teorema</div>
+              <p>Si f, g continuas en a: también f±g, f·g, f/g (con g(a)≠0). Si f continua en b y lím_{x→a} g(x)=b: <span class="mx">lím_{x→a} f(g(x)) = f(lím_{x→a} g(x)) = f(b)</span>.</p>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">Ejemplos — límites de composiciones</div>
+              <p class="mx">a) lím_{x→1} ln[(x²−1)/(x−1)] = ln(lím(x+1)) = ln 2</p>
+              <p class="mx">b) lím_{x→2} √[(x³−8)/(x−2)] = √(lím(x²+2x+4)) = √12 = 2√3</p>
+            </div>
+
+            <div>
+              <h3 class="blk">Discontinuidades reparables e irreparables</h3>
+              <p><strong>Irreparable:</strong> lím_{x→x₀} f(x) no existe. Ej: f(x)=1/x (x≠0), f(0)=100 — lím_{x→0} 1/x no existe.</p>
+              <p><strong>Reparable:</strong> lím_{x→x₀} f(x)=L existe, pero f(x₀) no está definida o f(x₀)≠L. Ej: f(x)=(x²−1)/(x−1) en x₀=1 — lím=2, pero f(1) no definida.</p>
+            </div>
+
+            <div class="defbox">
+              <div class="lbl">Extensión por continuidad</div>
+              <p>Si lím_{x→x₀} f(x)=L existe: g(x)=f(x) si x≠x₀, g(x₀)=L es continua en x₀ — "reparar" la discontinuidad.</p>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">Ejercicio — continuidad por partes (tipo PEP)</div>
+              <p class="mx">f(x) = x²−2ax+3b si x&lt;1; f(1)=2; f(x)=ax³−3ax²+2bx si x&gt;1. Determine a, b∈ℝ para que f sea continua en ℝ.</p>
+              <p class="mx">f(x) = [(n−m)x²+x]/x si x&lt;0; f(0)=nx+5|_{x=0}; f(x)=m√(4x²+x³)/(2x) si x&gt;0. Determine m,n∈ℝ para continuidad en x=0.</p>
+            </div>
+
+            <div class="obsbox">
+              <div class="lbl">Pon en práctica</div>
+              <div class="prob-list">
+                <div class="prob-item mx">1) Analice continuidad de f(x)=x²−1 si −1≤x≤1, f(x)=|x−1| si |x|&gt;1</div>
+                <div class="prob-item mx">2) Verifique que f(x)=(x²+1)/(3−x) tiene discontinuidad irreparable en x=3</div>
+                <div class="prob-item mx">3) f por tramos con parámetro a: analice continuidad en x=0, x=1, y determine a</div>
+                <div class="prob-item mx">4) Determine α, β para continuidad en x=0 de una función con raíz</div>
+                <div class="prob-item mx">5) ¿Es f(x)=(1−|x−1|)/x continua en ℝ? Repare si es posible</div>
+                <div class="prob-item mx">6) Pruebe que x³+2x−1=0 tiene al menos una raíz real (TVI)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLASE 22 -->
+      <section class="doc" id="c22">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Clase 22</div>
+            <h2>Asíntotas</h2>
+            <p class="doc-sub">Horizontales, verticales y oblicuas.</p>
+          </div>
+          <div class="doc-body">
+            <div class="defbox">
+              <div class="lbl">Definición</div>
+              <p>Una asíntota ℓ es una recta tal que la distancia entre (x,f(x)) y ℓ puede hacerse tan pequeña como se desee, sin que la curva la toque.</p>
+              <ul class="plain">
+                <li class="mx"><strong>Horizontal:</strong> y=y₀ ⇔ lím_{x→±∞} f(x) = y₀</li>
+                <li class="mx"><strong>Vertical:</strong> x=x₀ ⇔ lím_{x→x₀±} f(x) = ±∞</li>
+                <li class="mx"><strong>Oblicua:</strong> y=mx+b, con m = lím_{x→±∞} f(x)/x, &nbsp; b = lím_{x→±∞} [f(x)−mx]</li>
+              </ul>
+              <p style="font-size:.88rem">Puede haber hasta dos asíntotas oblicuas; solo existen cuando no hay asíntota horizontal en esa dirección.</p>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">Ejemplos</div>
+              <p class="mx">a) f(x) = (x+2)/(3x+1) &nbsp;·&nbsp; b) f(x) = 4x/(x²−9)</p>
+            </div>
+
+            <div class="obsbox">
+              <div class="lbl">Desafíos</div>
+              <p class="mx">f(x) = (x−1)/(x²−4): determine todas las asíntotas.</p>
+              <p class="mx">f(x) = (c·x²+x−3)/(6x²−5x−1), x≠1, x≠−1/6. Si y=1/3 es asíntota horizontal, determine c∈ℝ; luego halle las asíntotas verticales para ese c.</p>
+            </div>
+
+            <div class="obsbox">
+              <div class="lbl">Pon en práctica</div>
+              <div class="prob-list">
+                <div class="prob-item mx">1) f(x) = x/(x²−1)</div>
+                <div class="prob-item mx">2) f(x) = x²/(x−1)</div>
+                <div class="prob-item mx">3) f(x) = x/√(x²+1)</div>
+                <div class="prob-item mx">4) f(x) = (x²−1)/√(x²+1)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <div class="part-divider"><span class="tag">Parte II</span><span class="rule"></span></div>
+
+      <!-- CONTROL 2 V1 -->
+      <section class="doc" id="ctrl2v1">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Control N.° 2 · V1 — 1er semestre 2025</div>
+            <h2>Monotonía y rectas</h2>
+            <p class="doc-sub">USACH · Departamento de Matemática y C.C. (80 min)</p>
+          </div>
+          <div class="doc-body">
+            <div class="exbox">
+              <div class="lbl">P1 (20 ptos.) — Monotonía de f(x) = 3/(x+9)</div>
+              <p class="mx">Dom(f)=ℝ\{−9}. Para x1&lt;x2: f(x1)−f(x2) = 3(x2−x1) / [(x1+9)(x2+9)] — numerador siempre positivo.</p>
+              <p>En ]−∞,−9[ y en ]−9,+∞[ el denominador es positivo en ambos casos ⟹ f(x1)&gt;f(x2).</p>
+              <div class="answer-box">f es decreciente en ]−∞,−9[ y en ]−9,+∞[</div>
+            </div>
+            <div class="exbox">
+              <div class="lbl">P2 (20 ptos.) — ¿Paralelas, perpendiculares o ninguna? 3x+y−1=0 y x+2y−4=0</div>
+              <p class="mx">m₁=−3 (de 3x+y−1=0) &nbsp;·&nbsp; m₂=−1/2 (de x+2y−4=0). m₁≠m₂ y m₁·m₂=3/2≠−1.</p>
+              <div class="answer-box">No son paralelas ni perpendiculares</div>
+            </div>
+            <div class="exbox">
+              <div class="lbl">P3 (20 ptos.) — Ingreso de una tienda de audífonos</div>
+              <p>3000 unidades, $6/u este mes, $7/u el próximo. Meta: ingreso total $20000.</p>
+              <p class="mx">Ingreso = 6x + 7(3000−x) = 20000 ⟹ −x+21000=20000 ⟹ x=1000</p>
+              <div class="answer-box">1000 audífonos este mes</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTROL 2 V2 -->
+      <section class="doc" id="ctrl2v2">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Control N.° 2 · V2 — 1er semestre 2025</div>
+            <h2>Gráficas transformadas y oferta lineal</h2>
+            <p class="doc-sub">USACH · Departamento de Matemática y C.C. (80 min)</p>
+          </div>
+          <div class="doc-body">
+            <div class="exbox">
+              <div class="lbl">P1 (20 ptos.) — Monotonía de f(x) = −√(x−1) + 7</div>
+              <p>Gráfica de √x reflejada respecto al eje x, trasladada 1 a la derecha y 7 hacia arriba.</p>
+              <div class="answer-box">f es decreciente en todo su dominio [1,+∞)</div>
+            </div>
+            <div class="exbox">
+              <div class="lbl">P2 (20 ptos.) — Recta por (0,4) y la intersección de y=3x−1, y=−2x+4</div>
+              <p class="mx">Intersección: 3x−1=−2x+4 ⟹ x=1, y=2 → punto (1,2). m=(4−2)/(0−1)=−2.</p>
+              <div class="answer-box">y = −2x + 4</div>
+            </div>
+            <div class="exbox">
+              <div class="lbl">P3 (20 ptos.) — Oferta lineal de mesas: (15,375) y (25,425)</div>
+              <p class="mx">m = 50/10 = 5. p−375 = 5(q−15) ⟹ p = 5q+300. Para p=1000: q=140.</p>
+              <div class="answer-box">140 mesas</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTROL 2 V3 -->
+      <section class="doc" id="ctrl2v3">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Control N.° 2 · V3 — 1er semestre 2025</div>
+            <h2>Monotonía, rectas con parámetro y utilidad</h2>
+            <p class="doc-sub">USACH · Departamento de Matemática y C.C. (80 min)</p>
+          </div>
+          <div class="doc-body">
+            <div class="exbox">
+              <div class="lbl">P1 (20 ptos.) — Monotonía de f(x) = (1−x)/(x+2)</div>
+              <p class="mx">f(x1)−f(x2) = 3(x2−x1) / [(x1+2)(x2+2)] — numerador positivo, denominador positivo en ambos subintervalos del dominio.</p>
+              <div class="answer-box">f es decreciente en ]−∞,−2[ y en ]−2,+∞[</div>
+            </div>
+            <div class="exbox">
+              <div class="lbl">P2 (20 ptos.) — L: 2x−5ky+10=0. Halle k para paralela a L1: x−2y−3=0 y perpendicular a L2: 3x−y−2=0</div>
+              <p class="mx">m_L = 2/(5k). a) Paralela: 2/(5k)=1/2 ⟹ k=4/5. b) Perpendicular: (2/(5k))·3=−1 ⟹ k=−6/5.</p>
+              <div class="answer-box">k=4/5 (paralela) · k=−6/5 (perpendicular)</div>
+            </div>
+            <div class="exbox">
+              <div class="lbl">P3 (20 ptos.) — Fabricante de sillas: costo fijo $1200, variable $30/u, precio $50/u</div>
+              <p class="mx">C(x)=30x+1200, I(x)=50x. a) C=I ⟹ x=60. b) U(x)=20x−1200; U=1200 ⟹ x=120.</p>
+              <div class="answer-box">60 sillas (equilibrio) · 120 sillas (utilidad $1200)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTROL 3 V2 -->
+      <section class="doc" id="ctrl3v2">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Control N.° 3 · V2 — 1er semestre 2025</div>
+            <h2>Modelo exponencial, trigonometría y límites (raíz cúbica)</h2>
+            <p class="doc-sub">USACH · Departamento de Matemática y C.C. (80 min)</p>
+          </div>
+          <div class="doc-body">
+            <div class="exbox">
+              <div class="lbl">P1 (20 ptos.) — Q(t)=120(1−e^(−0,05t))+60, ejercicios resueltos tras t semanas</div>
+              <p class="mx">a) Q(20) = 120(1−e⁻¹)+60 ≈ 135,85 → 136 ejercicios<br>
+              b) 107 ejercicios: e^(−0,05t)=73/120 ⟹ t≈9,95 → 10 semanas</p>
+            </div>
+            <div class="exbox">
+              <div class="lbl">P2 (20 ptos.) — Demuestre [tan α − cot α]/[tan α + cot α] = 2sen²α − 1</div>
+              <p class="mx">Escribiendo en sen/cos: = (sen²α−cos²α)/(sen²α+cos²α) = sen²α−cos²α = sen²α−(1−sen²α) = 2sen²α−1 ∎</p>
+            </div>
+            <div class="exbox">
+              <div class="lbl">P3 (20 ptos.) — Indicando la indeterminación: lím_{x→0} [∛(x²+8)−2]/x²</div>
+              <p class="mx">= 0/0. Racionalizando con conjugado cúbico: numerador queda x², se cancela.</p>
+              <div class="answer-box">1/12</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTROL 3 V3 -->
+      <section class="doc" id="ctrl3v3">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Control N.° 3 · V3 — 1er semestre 2025</div>
+            <h2>Modelo exponencial aplicado, ángulos de elevación y límites (raíces mixtas)</h2>
+            <p class="doc-sub">USACH · Departamento de Matemática y C.C. (80 min)</p>
+          </div>
+          <div class="doc-body">
+            <div class="exbox">
+              <div class="lbl">P1 (20 ptos.) — f(n) = (2000 − 9·e^(0,32n)) / 15, material particulado</div>
+              <p class="mx">a) f(3) ≈ 131,77 ppm<br>
+              b) f(n)=129 ⟹ e^(0,32n)=65/9 ⟹ n≈6,18 → 6 dígitos</p>
+            </div>
+            <div class="exbox">
+              <div class="lbl">P2 (20 ptos.) — Altura de una colina con poste de 40 m, ángulos 60° y 30°</div>
+              <p class="mx">y·tan30° = y·tan60°−40 ⟹ y=20√3 ⟹ x=y·tan30°=20</p>
+              <div class="answer-box">Altura total: 60 metros</div>
+            </div>
+            <div class="exbox">
+              <div class="lbl">P3 (20 ptos.) — Indicando la indeterminación: lím_{x→0} [√(4+x)−2]/[∛(8+x)−2]</div>
+              <p class="mx">= 0/0. Racionalizando numerador (conjugado) y denominador (conjugado cúbico) a la vez, cancelando el factor x común.</p>
+              <div class="answer-box">3</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <div class="part-divider"><span class="tag">Parte III</span><span class="rule"></span></div>
+
+      <!-- GUIA REPASO -->
+      <section class="doc" id="g-repaso">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Guía de ejercicios</div>
+            <h2>Repaso de límites</h2>
+            <p class="doc-sub">Racionalización con raíces de distinto índice, límites trigonométricos, logarítmicos y forma 1^∞.</p>
+          </div>
+          <div class="doc-body">
+
+            <div class="exbox">
+              <div class="lbl">lím_{x→1} sen(2(x−1)) / (x³−1)</div>
+              <p class="mx">Se factoriza x³−1=(x−1)(x²+x+1) y se fuerza sen(u)/u→1 con u=2(x−1).</p>
+              <div class="answer-box">2/3</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">lím_{x→0} [sen(3x)−sen(5x)] / [√(x+1)−1]</div>
+              <p class="mx">Racionalizando el denominador (conjugado √(x+1)+1) y usando sen(u)/u→1 en cada término.</p>
+              <div class="answer-box">−4</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">lím_{x→0} [∛(x²+8)−2] / x²</div>
+              <p class="mx">Conjugado cúbico: numerador queda x², se cancela.</p>
+              <div class="answer-box">1/12</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">lím_{h→0} [ln(x+h)+ln(x−h)−2ln x] / h² &nbsp;(x&gt;0)</div>
+              <p class="mx">Se agrupan logaritmos: = ln(1−h²/x²). Se fuerza ln(1+u)/u→1 con u=−h²/x².</p>
+              <div class="answer-box">−1/x²</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">lím_{x→+∞} [(x²+x−3)/(3x²+2)]^(2x+3)</div>
+              <p>La base tiende a 1/3 (no a 1) — <strong>no</strong> es forma 1^∞. Como 0&lt;1/3&lt;1, una base así elevada a un exponente que tiende a +∞ converge a 0.</p>
+              <div class="answer-box">0</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">lím_{x→0+} (eˣ−1+x)^(2/x)</div>
+              <p class="mx">Factorizando la base: eˣ−1+x = x·[(eˣ−1)/x + 1] → x·2. Tomando ln: ln L = (2/x)·[ln x + ln 2] → (+∞)·(−∞) = −∞.</p>
+              <div class="answer-box">L = 0</div>
+            </div>
+
+            <h3 class="blk">Con Teorema del Sandwich</h3>
+            <div class="exbox">
+              <div class="lbl">Pruebe que lím_{x→∞} 3sen(x)/(2√x) = 0, x&gt;0</div>
+              <p class="mx">−1≤senx≤1 ⟹ −3/(2√x) ≤ 3senx/(2√x) ≤ 3/(2√x). Ambas cotas → 0.</p>
+            </div>
+            <div class="exbox">
+              <div class="lbl">Si (5eˣ−11)/eˣ &lt; f(x) &lt; 5√x/√(x−2) para x&gt;2, determine lím_{x→+∞} f(x)</div>
+              <p class="mx">Cota inf. → 5. Cota sup. → 5.</p>
+              <div class="answer-box">5</div>
+            </div>
+            <div class="exbox">
+              <div class="lbl">lím_{x→∞} x/3^x</div>
+              <p class="mx">Para x grande, 3ˣ≥x² ⟹ 0 ≤ x/3ˣ ≤ 1/x → 0.</p>
+              <div class="answer-box">0</div>
+            </div>
+            <div class="exbox">
+              <div class="lbl">lím_{x→0} x·cos(1/x)</div>
+              <p class="mx">|x·cos(1/x)| = |x|·|cos(1/x)| ≤ |x| ⟹ −|x| ≤ x·cos(1/x) ≤ |x| → 0.</p>
+              <div class="answer-box">0</div>
+              <p style="font-size:.85rem;color:var(--ink-soft);margin-top:6px">Aunque cos(1/x) oscila sin límite, la amplitud queda limitada por |x|→0.</p>
+            </div>
+
+            <h3 class="blk">Forma 1^∞</h3>
+            <div class="exbox">
+              <div class="lbl">lím_{x→0} [(3+x)/(3−x)]^(1/x)</div>
+              <p class="mx">f(x)−1 = 2x/(3−x); g(x)·(f(x)−1) = 2/(3−x) → 2/3.</p>
+              <div class="answer-box">e^(2/3) = ∛(e²)</div>
+            </div>
+            <div class="exbox">
+              <div class="lbl">lím_{m→∞} [(2m+1)/(2m+4)]^(m²/(m+1))</div>
+              <p class="mx">f(x)−1 = −3/(2m+4); g(x)·(f(x)−1) → −3/2.</p>
+              <div class="answer-box">e^(−3/2) = 1/√(e³)</div>
+            </div>
+            <div class="exbox">
+              <div class="lbl">lím_{x→0} (1−2x)^(1/x)</div>
+              <p class="mx">= [(1+(−2x))^(1/(−2x))]^(−2) → e^(−2)</p>
+              <div class="answer-box">1/e²</div>
+            </div>
+
+            <div class="obsbox">
+              <div class="lbl">Desafío (enunciado)</div>
+              <p class="mx">Demuestre que lím_{x→∞} [3x²−sen(2x)] / (x²+1) = 3.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GUIA SANDWICH -->
+      <section class="doc" id="g-sandwich">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Guía de ejercicios</div>
+            <h2>Teorema del Sandwich y límites exponenciales</h2>
+            <p class="doc-sub">Acotación algebraica y forma indeterminada 1^∞, paso a paso.</p>
+          </div>
+          <div class="doc-body">
+
+            <div class="exbox">
+              <div class="lbl">(2) Pruebe con Sandwich que lím_{x→∞} 3sen(x)/(2√x) = 0, x&gt;0</div>
+              <ol class="steps">
+                <li class="mx">Acotar el seno: −1≤senx≤1 ⟹ −3/(2√x) ≤ 3senx/(2√x) ≤ 3/(2√x)</li>
+                <li class="mx">Límites de las cotas: ambas → 0</li>
+                <li>Por Sandwich, el límite central también → 0</li>
+              </ol>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">(4) Si (5eˣ−11)/eˣ &lt; f(x) &lt; 5√x/√(x−2) ∀x&gt;2, determine lím_{x→+∞} f(x)</div>
+              <p class="mx">Cota inf. = 5−11/eˣ → 5. Cota sup. = 5√(1/(1−2/x)) → 5.</p>
+              <div class="answer-box">lím f(x) = 5</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">(33) lím_{x→0} [(3+x)/(3−x)]^(1/x)</div>
+              <ol class="steps">
+                <li>Forma 1^∞: se toma ln L = lím (1/x)·[ln(3+x)−ln(3−x)]</li>
+                <li class="mx">Se separa: ln(3+x)=ln3+ln(1+x/3); ln(3−x)=ln3+ln(1−x/3)</li>
+                <li class="mx">Forzando ln(1+u)/u→1: ln(1+x/3)/x → 1/3; ln(1−x/3)/x → −1/3</li>
+                <li class="mx">ln L = 1/3−(−1/3) = 2/3</li>
+              </ol>
+              <div class="answer-box">L = e^(2/3) = ∛(e²)</div>
+              <p style="font-size:.85rem;color:var(--ink-soft);margin-top:6px">Verificación directa: f(x)−1=2x/(3−x); g(x)(f(x)−1)=2/(3−x)→2/3. Coincide.</p>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">Relacionado: lím_{x→∞} x/3^x</div>
+              <p class="mx">La exponencial crece más rápido que cualquier polinomio; para x grande 3ˣ≥x² ⟹ 0≤x/3ˣ≤1/x→0.</p>
+              <div class="answer-box">0</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">(34) lím_{m→∞} [(2m+1)/(2m+4)]^(m²/(m+1))</div>
+              <p class="mx">f(x)−1 = −3/(2m+4). g(x)·(f(x)−1) = −3m²/(2m²+6m+4) → −3/2 (mismo grado, coef. líderes −3 y 2).</p>
+              <div class="answer-box">e^(−3/2) = 1/√(e³)</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">(35) lím_{x→0} (1−2x)^(1/x)</div>
+              <p class="mx">Con u=−2x: (1−2x)^(1/x) = [(1+u)^(1/u)]^(−2) → e^(−2)</p>
+              <div class="answer-box">1/e²</div>
+            </div>
+
+            <div class="obsbox">
+              <div class="lbl">Desafío (enunciado)</div>
+              <p class="mx">Demuestre que lím_{x→∞} [3x²−sen(2x)] / (x²+1) = 3. Justifique.</p>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">lím_{x→0} x·cos(1/x) = 0 — con cuidado de signo</div>
+              <p>cos(1/x) oscila infinitamente cerca de 0 y no tiene límite por sí sola. No conviene multiplicar directamente por x (puede ser + o −): se usa valor absoluto.</p>
+              <p class="mx">|x·cos(1/x)| = |x|·|cos(1/x)| ≤ |x| ⟹ −|x| ≤ x·cos(1/x) ≤ |x| → 0</p>
+              <div class="answer-box">0</div>
+              <p style="font-size:.85rem;color:var(--ink-soft);margin-top:6px">La amplitud de la oscilación queda limitada por |x|→0, así que la función completa sí tiene límite.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- GUIA PEP2 -->
+      <section class="doc" id="g-pep2">
+        <div class="doc-card">
+          <div class="doc-head">
+            <div class="doc-eyebrow">Guía preparatoria</div>
+            <h2>Preparatoria PEP 2</h2>
+            <p class="doc-sub">7 ejercicios con desarrollo completo — continuidad, límites notables, forma 1^∞, racionalización y Sandwich.</p>
+          </div>
+          <div class="doc-body">
+
+            <div class="exbox">
+              <div class="lbl">1) Continuidad a trozos con parámetro k</div>
+              <p class="mx">f(x) = [√(x+3)−2]/(x−1) si x&gt;1; f(x) = kx+1 si x≤1. Determine k para que exista lím_{x→1} f(x).</p>
+              <p class="mx">Der.: racionalizando, lím_{x→1+} f(x) = 1/(√4+2) = 1/4. Izq.: lím_{x→1−} f(x) = k+1. Igualando: k+1=1/4.</p>
+              <div class="answer-box">k = −3/4 (y f es continua en x=1)</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">2) Límites notables con parámetro k</div>
+              <p class="mx">lím_{x→0} (e^(4kx)−5^(2x))/x = 8−2ln5. Separando en (eᵘ−1)/u→1 y (aᵘ−1)/u→ln a: resultado = 4k−2ln5.</p>
+              <div class="answer-box">k = 2</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">3) Forma indeterminada 1^∞</div>
+              <p class="mx">lím_{x→∞} [(3x+1)/(3x+4)]^x. f(x)−1=−3/(3x+4); x·(f(x)−1) → −1.</p>
+              <div class="answer-box">e⁻¹ = 1/e</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">4) Límite exponencial con parámetro β</div>
+              <p class="mx">lím_{x→+∞} [x²e^(3β/x)−x²−1]/x = −24. Forzando el notable con u=3β/x: resultado = 3β.</p>
+              <div class="answer-box">β = −8</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">5) Racionalización en punto finito</div>
+              <p class="mx">lím_{x→8} [3−√(x+1)] / (x²−64). Racionalizando: −1/[(x+8)(3+√(x+1))].</p>
+              <div class="answer-box">−1/96</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">6) Límite racional al infinito con diferencia de cubos</div>
+              <p class="mx">lím_{x→∞} (x³−8) / [(x−2)(x+2)²]. Factorizando x³−8=(x−2)(x²+2x+4) y cancelando (x−2): (x²+2x+4)/(x+2)².</p>
+              <div class="answer-box">1</div>
+            </div>
+
+            <div class="exbox">
+              <div class="lbl">7) Teorema del Sandwich</div>
+              <p class="mx">(x²−3x+2)/(x−1) ≤ g(x)/x ≤ (x²−x−2)/(x+1), x→2+. Ambas cotas factorizan a (x−2) → 0.</p>
+              <p class="mx">lím g(x)/x = 0 ⟹ g(x)=x·(g(x)/x) ⟹ lím g(x) = 2·0</p>
+              <div class="answer-box">lím_{x→2+} g(x) = 0</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="page">
+      <span>Compendio MAyEI I · consolidado a partir de 14 documentos de cátedra</span>
+      <span>Cálculo diferencial · FAE</span>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.doc'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('.side-link'));
+  var linkById = {};
+  links.forEach(function(l){ linkById[l.getAttribute('href').slice(1)] = l; });
+
+  if('IntersectionObserver' in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var link = linkById[entry.target.id];
+        if(!link) return;
+        if(entry.isIntersecting){
+          links.forEach(function(l){ l.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-10% 0px -75% 0px', threshold: 0 });
+    sections.forEach(function(s){ obs.observe(s); });
+  }
+
+  var toggle = document.getElementById('sideToggle');
+  var side = document.getElementById('side');
+  if(toggle && side){
+    toggle.addEventListener('click', function(){ side.classList.toggle('open'); });
+    links.forEach(function(l){ l.addEventListener('click', function(){ side.classList.remove('open'); }); });
+  }
+
+  var filterInput = document.getElementById('sideFilter');
+  var groups = Array.prototype.slice.call(document.querySelectorAll('.side-group'));
+  var emptyMsg = document.getElementById('sideEmpty');
+  if(filterInput){
+    filterInput.addEventListener('input', function(){
+      var q = filterInput.value.trim().toLowerCase();
+      var anyVisible = false;
+      groups.forEach(function(g){
+        var groupHasMatch = false;
+        var items = g.querySelectorAll('.side-link');
+        items.forEach(function(l){
+          var text = l.textContent.toLowerCase();
+          var match = q === '' || text.indexOf(q) !== -1;
+          l.style.display = match ? '' : 'none';
+          if(match) groupHasMatch = true;
+        });
+        g.style.display = groupHasMatch ? '' : 'none';
+        if(groupHasMatch) anyVisible = true;
+      });
+      emptyMsg.style.display = anyVisible ? 'none' : 'block';
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
