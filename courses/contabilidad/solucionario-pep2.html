@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solucionario PEP 2 — Mi Semestre</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  p{ color: inherit; }
+
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --paper: #f2f3ee; --paper-raised: #ffffff; --ink: #1c2b3a; --ink-soft: #55636f; --ink-faint: #8a97a1;
+    --accent: #1f7a5c; --accent-ink: #0f4a37; --accent-soft: #e3efe8;
+    --amber: #a86a1c; --amber-soft: #f5e9d4; --amber-ink: #6e460f;
+    --red: #a83f3f; --red-soft: #f7e6e6; --red-ink: #7a2323;
+    --line: rgba(28,43,58,0.13); --line-strong: rgba(28,43,58,0.24);
+    --shadow: 0 1px 2px rgba(20,30,40,0.04), 0 6px 20px -8px rgba(20,30,40,0.12);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper: #0f1720; --paper-raised: #17222c; --ink: #e7ecef; --ink-soft: #a3b1bb; --ink-faint: #6d7b86;
+      --accent: #45b489; --accent-ink: #b7ecd7; --accent-soft: rgba(69,180,137,0.14);
+      --amber: #dc9c53; --amber-ink: #f3d5a8; --amber-soft: rgba(220,156,83,0.14);
+      --red: #d97a7a; --red-ink: #f3c2c2; --red-soft: rgba(217,122,122,0.14);
+      --line: rgba(231,236,239,0.12); --line-strong: rgba(231,236,239,0.22);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 28px -10px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper: #0f1720; --paper-raised: #17222c; --ink: #e7ecef; --ink-soft: #a3b1bb; --ink-faint: #6d7b86;
+    --accent: #45b489; --accent-ink: #b7ecd7; --accent-soft: rgba(69,180,137,0.14);
+    --amber: #dc9c53; --amber-ink: #f3d5a8; --amber-soft: rgba(220,156,83,0.14);
+    --red: #d97a7a; --red-ink: #f3c2c2; --red-soft: rgba(217,122,122,0.14);
+    --line: rgba(231,236,239,0.12); --line-strong: rgba(231,236,239,0.22);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 28px -10px rgba(0,0,0,0.55);
+  }
+
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans', system-ui, sans-serif; line-height:1.6; font-size:16.5px;}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important; transition-duration:.001ms !important;}}
+  ::selection{background:var(--accent-soft);}
+  .num{font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums;}
+  h1,h2,h3,h4{font-family:'Fraunces', Georgia, serif; font-weight:600; text-wrap:balance; margin:0; color:var(--ink);}
+
+  .shell{max-width:920px; margin:0 auto; padding:0 20px 100px;}
+
+  .cover{background: linear-gradient(165deg, var(--ink) 0%, #0f2a24 130%); color:#f2f3ee; padding:56px 20px 46px;}
+  :root[data-theme="dark"] .cover, :root:not([data-theme="light"]) .cover{background: linear-gradient(165deg, #0a1319 0%, #0b1f1a 130%);}
+  .cover-inner{max-width:920px; margin:0 auto;}
+  .eyebrow{font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:.10em; text-transform:uppercase; color:#9fd9c0; display:flex; align-items:center; gap:10px;}
+  .eyebrow::before{content:""; width:22px; height:1px; background:#9fd9c0; opacity:.7;}
+  .cover h1{color:#f7f8f4; font-size:clamp(2rem,4.4vw,2.8rem); line-height:1.1; margin:16px 0 14px; max-width:18ch;}
+  .cover p{color:#c7cfc9; font-size:1.02rem; max-width:62ch; margin:0 0 22px;}
+  .cover-meta{display:flex; flex-wrap:wrap; gap:10px 22px; font-size:13px; color:#a9b6b0; font-family:'IBM Plex Mono', monospace; border-top:1px solid rgba(247,248,244,.16); padding-top:16px;}
+  .cover-meta b{color:#e7ece7; font-weight:500;}
+
+  .toc{display:flex; flex-wrap:wrap; gap:8px; margin:-24px 0 44px; position:relative; z-index:2;}
+  .toc a{background:var(--paper-raised); border:1px solid var(--line); box-shadow:var(--shadow); color:var(--ink); text-decoration:none; font-size:13px; font-weight:500; padding:8px 13px; border-radius:8px; display:flex; align-items:center; gap:7px;}
+  .toc a .chip{font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--accent-ink); background:var(--accent-soft); border-radius:4px; padding:1px 6px;}
+
+  .intro-note{background:var(--paper-raised); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:4px 10px 10px 4px; padding:18px 22px; box-shadow:var(--shadow); margin-bottom:36px; font-size:.93rem; color:var(--ink-soft);}
+  .intro-note b{color:var(--ink);}
+
+  section.blk{margin:0 0 46px; scroll-margin-top:16px;}
+  .blk-head{display:flex; align-items:flex-start; gap:14px; margin-bottom:18px; padding-bottom:12px; border-bottom:1px solid var(--line-strong);}
+  .blk-head .idx{font-family:'IBM Plex Mono', monospace; font-size:14px; font-weight:600; color:var(--accent-ink); background:var(--accent-soft); border-radius:6px; padding:4px 10px; flex:none;}
+  .blk-head h2{font-size:1.28rem;}
+
+  /* Sección I: pareados */
+  table.match{width:100%; border-collapse:collapse; font-size:.89rem; box-shadow:var(--shadow); border-radius:10px; overflow:hidden; margin-bottom:10px;}
+  table.match th{background:var(--ink); color:#eef1ec; text-align:left; font-size:.76rem; padding:9px 12px; font-family:'IBM Plex Mono', monospace; letter-spacing:.03em;}
+  :root[data-theme="dark"] table.match th, :root:not([data-theme="light"]) table.match th{background:#0a141c; color:#cfe7db;}
+  table.match td{padding:9px 12px; border-bottom:1px solid var(--line); background:var(--paper-raised); color:var(--ink); vertical-align:top;}
+  table.match tr:last-child td{border-bottom:none;}
+  table.match .letter{font-family:'IBM Plex Mono', monospace; font-weight:700; color:var(--accent-ink); width:34px;}
+  .sobran{background:var(--amber-soft); border-left:3px solid var(--amber); border-radius:6px; padding:9px 14px; font-size:.85rem; color:var(--amber-ink); margin-top:8px;}
+
+  /* Sección II: complete */
+  .fill{background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; padding:13px 16px; margin-bottom:9px; box-shadow:var(--shadow); font-size:.9rem;}
+  .fill .q{color:var(--ink-soft); margin-bottom:5px;}
+  .fill .a{color:var(--accent-ink); font-weight:600;}
+  .fill .a .blank{color:var(--ink-faint); font-weight:400;}
+
+  /* Sección III / IV */
+  .qa{background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; padding:13px 16px; margin-bottom:9px; box-shadow:var(--shadow); font-size:.9rem;}
+  .qa .q{color:var(--ink); margin-bottom:6px;}
+  .qa .ans{display:inline-flex; align-items:center; gap:7px; font-weight:600; color:var(--accent-ink); background:var(--accent-soft); border-radius:6px; padding:2px 10px; font-size:.85rem;}
+  .qa .just{color:var(--ink-soft); margin-top:6px; font-size:.86rem;}
+  .qa.vf .ans.true{background:var(--accent-soft); color:var(--accent-ink);}
+  .qa.vf .ans.false{background:var(--red-soft); color:var(--red-ink);}
+
+  /* Casos */
+  .statement{background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; padding:14px 18px; margin-bottom:16px; font-size:.9rem; color:var(--ink-soft); box-shadow:var(--shadow);}
+  .statement b{color:var(--ink);}
+  .step{margin:16px 0;}
+  .step-label{font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; letter-spacing:.07em; color:var(--accent-ink); display:flex; align-items:center; gap:8px; margin-bottom:8px;}
+  .step-label::before{content:""; width:16px; height:1px; background:var(--accent); opacity:.6;}
+  .calc{background:var(--accent-soft); border-radius:8px; padding:11px 15px; font-size:.87rem; color:var(--ink); margin:8px 0;}
+  .calc div{padding:2px 0;}
+  .calc .r{color:var(--ink-soft);}
+  .calc .eq{font-weight:600; color:var(--accent-ink);}
+  .exwrap{overflow-x:auto;}
+  table.jt{width:100%; border-collapse:collapse; margin:8px 0 4px; font-size:.89rem; box-shadow:var(--shadow); border-radius:8px; overflow:hidden;}
+  table.jt th{background:var(--ink); color:#eef1ec; text-align:left; font-weight:500; font-size:.78rem; padding:8px 12px; font-family:'IBM Plex Mono', monospace; letter-spacing:.03em;}
+  :root[data-theme="dark"] table.jt th, :root:not([data-theme="light"]) table.jt th{background:#0a141c; color:#cfe7db;}
+  table.jt th:not(:first-child), table.jt td:not(:first-child){text-align:right;}
+  table.jt td{padding:8px 12px; border-bottom:1px solid var(--line); background:var(--paper-raised); color:var(--ink);}
+  table.jt tr:last-child td{border-bottom:none;}
+  table.jt td.acc-d{padding-left:12px;}
+  table.jt td.acc-h{padding-left:30px; color:var(--ink-soft);}
+  table.jt td.acc-h::before{content:"a "; color:var(--ink-faint);}
+  table.jt td.amt{font-family:'IBM Plex Mono', monospace;}
+  .note{background:var(--amber-soft); border-left:3px solid var(--amber); border-radius:6px; padding:9px 14px; font-size:.85rem; color:var(--amber-ink); margin:12px 0;}
+  .note b{color:var(--ink);}
+  .warn{background:var(--red-soft); border-left:3px solid var(--red); border-radius:6px; padding:9px 14px; font-size:.85rem; color:var(--red-ink); margin:12px 0;}
+  .warn b{color:var(--ink);}
+  .scenario-tag{font-family:'IBM Plex Mono', monospace; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); margin-bottom:6px; display:block;}
+
+  footer{text-align:center; color:var(--ink-faint); font-size:12.5px; font-family:'IBM Plex Mono', monospace; padding-top:30px; border-top:1px solid var(--line);}
+
+</style>
+</head>
+<body>
+
+<script src="../../assets/nav.js" data-base="../../" data-course="contabilidad"></script>
+
+
+<div class="cover">
+  <div class="cover-inner">
+    <span class="eyebrow">Contabilidad General · Preparación PEP 2</span>
+    <h1>Guía PEP 2 — Resuelta</h1>
+    <p>Solucionario completo: remuneraciones, cierre mensual de IVA, PPE (mejora, depreciación y revalorización) y regularizaciones periódicas.</p>
+    <div class="cover-meta">
+      <span><b>Docente</b> · Camila Valdés</span>
+      <span><b>Secciones</b> · I–V</span>
+      <span><b>Normas</b> · NIC 16 · NIC 21 · NIC 37 · NIIF 9</span>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+
+  <nav class="toc">
+    <a href="#s1"><span class="chip">I</span> Términos pareados</a>
+    <a href="#s2"><span class="chip">II</span> Complete la frase</a>
+    <a href="#s3"><span class="chip">III</span> Selección múltiple</a>
+    <a href="#s4"><span class="chip">IV</span> Verdadero o falso</a>
+    <a href="#c1"><span class="chip">C1</span> Remuneraciones</a>
+    <a href="#c2"><span class="chip">C2</span> Cierre de IVA</a>
+    <a href="#c3"><span class="chip">C3</span> PPE: mejora y revalorización</a>
+    <a href="#c4"><span class="chip">C4</span> PPE: baja por venta</a>
+    <a href="#c5"><span class="chip">C5</span> Regularizaciones</a>
+    <a href="#c6"><span class="chip">C6</span> Caso integrado</a>
+  </nav>
+
+  <div class="intro-note"><b>Cómo usar este solucionario:</b> resuelve primero cada sección en tu guía impresa o en un borrador, y usa esta página solo para verificar. Las Secciones I–IV traen la respuesta y una justificación breve; los seis Casos de la Sección V están resueltos paso a paso, igual que en el solucionario de Regularizaciones.</div>
+
+  <!-- SECCIÓN I -->
+  <section class="blk" id="s1">
+    <div class="blk-head"><span class="idx">I</span><h2>Términos pareados</h2></div>
+    <table class="match">
+      <thead><tr><th>Término</th><th></th><th>Definición correcta</th></tr></thead>
+      <tbody>
+        <tr><td>1. Remuneraciones por pagar</td><td class="letter">a</td><td>Pasivo que representa el líquido adeudado al trabajador.</td></tr>
+        <tr><td>2. Aportes patronales</td><td class="letter">b</td><td>Costo de la empresa que no se descuenta al trabajador.</td></tr>
+        <tr><td>3. IVA crédito fiscal</td><td class="letter">c</td><td>Cuenta de saldo deudor que acumula el IVA de las compras.</td></tr>
+        <tr><td>4. IVA débito fiscal</td><td class="letter">d</td><td>Cuenta de saldo acreedor que acumula el IVA de las ventas.</td></tr>
+        <tr><td>5. PPM</td><td class="letter">e</td><td>Activo que registra el anticipo del impuesto a la renta.</td></tr>
+        <tr><td>6. Impuestos por pagar (F29)</td><td class="letter">f</td><td>Pasivo mensual con el Fisco que consolida IVA, PPM y retenciones.</td></tr>
+        <tr><td>7. Depreciación acumulada</td><td class="letter">g</td><td>Cuenta correctora que reduce el valor del activo en el balance.</td></tr>
+        <tr><td>8. Superávit de revaluación</td><td class="letter">h</td><td>Mayor valor del activo reconocido en otro resultado integral.</td></tr>
+      </tbody>
+    </table>
+    <div class="sobran"><b>Sobran (i) y (j):</b> "i" describe un descuento del trabajador hacia la AFP —es decir, la cotización, no el aporte patronal— y "j" describe un gasto de mantenimiento, concepto que no figura entre los ocho términos listados.</div>
+  </section>
+
+  <!-- SECCIÓN II -->
+  <section class="blk" id="s2">
+    <div class="blk-head"><span class="idx">II</span><h2>Complete la frase</h2></div>
+
+    <div class="fill"><div class="q">1. En el asiento de remuneraciones, el líquido a pagar se acredita a la cuenta <span class="blank">___</span>, y el impuesto único retenido queda como un pasivo con el <span class="blank">___</span>.</div><div class="a">Remuneraciones por pagar · el Fisco (Impuesto único por pagar)</div></div>
+
+    <div class="fill"><div class="q">2. Las cotizaciones descontadas al trabajador se registran como un <span class="blank">___</span> hasta enterarlas; los aportes patronales se registran como un <span class="blank">___</span> de la empresa.</div><div class="a">pasivo (cotizaciones por pagar) · gasto (costo)</div></div>
+
+    <div class="fill"><div class="q">3. En el cierre mensual de impuestos se <span class="blank">___</span> el IVA débito fiscal y se <span class="blank">___</span> el IVA crédito fiscal, para saldar ambas cuentas.</div><div class="a">debita · acredita</div></div>
+
+    <div class="fill"><div class="q">4. El PPM se registra como un <span class="blank">___</span>, mientras que la diferencia entre débito y crédito fiscal se reconoce como parte de <span class="blank">___</span>.</div><div class="a">activo (anticipo de impuesto a la renta) · Impuestos por pagar (F29)</div></div>
+
+    <div class="fill"><div class="q">5. La depreciación del ejercicio se registra debitando <span class="blank">___</span> y acreditando <span class="blank">___</span>.</div><div class="a">Gasto por depreciación · Depreciación acumulada</div></div>
+
+    <div class="fill"><div class="q">6. En la venta de un activo se dan de baja su costo y su <span class="blank">___</span>; la diferencia con el precio de venta se reconoce como una <span class="blank">___</span> o pérdida.</div><div class="a">depreciación acumulada · utilidad</div></div>
+
+    <div class="fill"><div class="q">7. Un ingreso percibido por adelantado se registra inicialmente como un <span class="blank">___</span> y, al devengarse, se reconoce como <span class="blank">___</span>.</div><div class="a">pasivo · ingreso (ingreso por servicios)</div></div>
+
+    <div class="fill"><div class="q">8. El mayor valor de una revalorización se acredita a la cuenta <span class="blank">___</span>, que forma parte del <span class="blank">___</span>.</div><div class="a">Superávit de revaluación · patrimonio (Otro Resultado Integral)</div></div>
+  </section>
+
+  <!-- SECCIÓN III -->
+  <section class="blk" id="s3">
+    <div class="blk-head"><span class="idx">III</span><h2>Selección múltiple</h2></div>
+
+    <div class="qa"><div class="q">1. Cuenta que representa el monto a pagar al trabajador:</div><span class="ans">b) Remuneraciones por pagar</span></div>
+
+    <div class="qa"><div class="q">2. El PPM del mes se registra como:</div><span class="ans">c) Un activo (anticipo de impuesto a la renta)</span></div>
+
+    <div class="qa"><div class="q">3. Al saldar el IVA crédito fiscal (saldo deudor) en el cierre mensual, esta se:</div><span class="ans">b) Acredita</span><div class="just">Para llevar a cero una cuenta de saldo deudor, se acredita por el mismo monto.</div></div>
+
+    <div class="qa"><div class="q">4. Cuentas PASIVOS que surgen del asiento de remuneraciones:</div><span class="ans">c) I, III y IV</span><div class="just">Remuneraciones por pagar, Cotizaciones por pagar e Impuesto único por pagar son pasivos; Gasto por remuneraciones (II) es una cuenta de resultado, no un pasivo.</div></div>
+
+    <div class="qa"><div class="q">5. Cuentas que intervienen en el cierre mensual de impuestos:</div><span class="ans">b) I, II y III</span><div class="just">IVA crédito fiscal, IVA débito fiscal y PPM se consolidan en el F29; la Depreciación acumulada (IV) no tiene relación con este cierre.</div></div>
+
+    <div class="qa"><div class="q">6. Cuentas que integran la baja de un activo vendido CON UTILIDAD:</div><span class="ans">b) I, II y III</span><div class="just">Banco (por el cobro), Depreciación acumulada (se da de baja) y Utilidad en venta de PPE (hay ganancia); Pérdida en venta de PPE (IV) no aplica porque el resultado es una utilidad.</div></div>
+  </section>
+
+  <!-- SECCIÓN IV -->
+  <section class="blk" id="s4">
+    <div class="blk-head"><span class="idx">IV</span><h2>Verdadero o falso</h2></div>
+
+    <div class="qa vf"><div class="q">1. Los aportes patronales se registran como un descuento al trabajador.</div><span class="ans false">FALSO</span><div class="just">Los aportes patronales son un costo de la empresa (gasto); los descuentos al trabajador son las cotizaciones (AFP, salud, cesantía) y el impuesto único.</div></div>
+
+    <div class="qa vf"><div class="q">2. El líquido a pagar al trabajador se registra como un pasivo (remuneraciones por pagar).</div><span class="ans true">VERDADERO</span></div>
+
+    <div class="qa vf"><div class="q">3. Si el IVA débito fiscal supera al crédito fiscal, la diferencia es un IVA por pagar.</div><span class="ans true">VERDADERO</span></div>
+
+    <div class="qa vf"><div class="q">4. El PPM se registra como un gasto del periodo.</div><span class="ans false">FALSO</span><div class="just">Es un activo: anticipo del impuesto a la renta, no un gasto.</div></div>
+
+    <div class="qa vf"><div class="q">5. La depreciación se registra debitando 'Depreciación acumulada' y acreditando 'Gasto por depreciación'.</div><span class="ans false">FALSO</span><div class="just">Es al revés: se debita Gasto por depreciación y se acredita Depreciación acumulada.</div></div>
+
+    <div class="qa vf"><div class="q">6. En la baja de un activo se acredita su costo bruto y se debita su depreciación acumulada.</div><span class="ans true">VERDADERO</span><div class="just">El activo (saldo deudor) se acredita para eliminarlo; la depreciación acumulada (saldo acreedor) se debita para eliminarla.</div></div>
+
+    <div class="qa vf"><div class="q">7. El impuesto único retenido a los trabajadores es un pasivo de la empresa con el Fisco.</div><span class="ans true">VERDADERO</span></div>
+
+    <div class="qa vf"><div class="q">8. La cuenta IVA crédito fiscal tiene saldo acreedor.</div><span class="ans false">FALSO</span><div class="just">Tiene saldo deudor: es un derecho a favor de la empresa (activo), no una obligación.</div></div>
+  </section>
+
+  <!-- CASO 1 -->
+  <section class="blk" id="c1">
+    <div class="blk-head"><span class="idx">C1</span><h2>Registro de remuneraciones</h2></div>
+    <div class="statement">Servicios Andinos Ltda. Total haberes <b>$1.400.000</b>; AFP por pagar 148.720; Salud por pagar 91.000; Seguro de cesantía (trabajador) 7.800; Impuesto único 18.000; líquido a pagar 1.134.480. Aportes patronales: SIS 19.890 · cesantía empleador 31.200 · mutual 11.700.</div>
+
+    <div class="step"><span class="step-label">Paso 1 · Total de aportes patronales (costo empresa)</span>
+      <div class="calc"><div class="eq">19.890 + 31.200 + 11.700 = $62.790</div></div>
+    </div>
+
+    <div class="step"><span class="step-label">Paso 2 · Asiento de la remuneración del mes</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por remuneraciones</td><td class="amt num">1.400.000</td><td></td></tr>
+        <tr><td class="acc-d">Gasto por aportes patronales</td><td class="amt num">62.790</td><td></td></tr>
+        <tr><td class="acc-h">AFP por pagar</td><td></td><td class="amt num">148.720</td></tr>
+        <tr><td class="acc-h">Salud por pagar</td><td></td><td class="amt num">91.000</td></tr>
+        <tr><td class="acc-h">Seguro de cesantía por pagar (trabajador)</td><td></td><td class="amt num">7.800</td></tr>
+        <tr><td class="acc-h">Impuesto único por pagar</td><td></td><td class="amt num">18.000</td></tr>
+        <tr><td class="acc-h">Remuneraciones por pagar</td><td></td><td class="amt num">1.134.480</td></tr>
+        <tr><td class="acc-h">Aportes patronales por pagar</td><td></td><td class="amt num">62.790</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="note"><b>Nota:</b> el gasto total para la empresa es 1.462.790 (haberes + aportes patronales), no solo el líquido de 1.134.480. Los descuentos del trabajador (AFP, salud, cesantía, impuesto único) no son gasto — solo cambian de manos hasta enterarse a cada institución.</div>
+  </section>
+
+  <!-- CASO 2 -->
+  <section class="blk" id="c2">
+    <div class="blk-head"><span class="idx">C2</span><h2>Cierre mensual de IVA</h2></div>
+    <div class="statement">Comercial Aconcagua Ltda. IVA débito fiscal acumulado (ventas): <b>$7.600.000</b>. IVA crédito fiscal acumulado (compras): $4.750.000. PPM: 0,5% sobre ingresos de $40.000.000. Impuesto único retenido en el mes: $120.000.</div>
+
+    <div class="step"><span class="step-label">Paso 1 · Calcular cada componente</span>
+      <div class="calc">
+        <div class="r">IVA neto (débito − crédito) = 7.600.000 − 4.750.000</div>
+        <div class="eq">= $2.850.000 (IVA por pagar)</div>
+        <div class="r">PPM = 40.000.000 × 0,5%</div>
+        <div class="eq">= $200.000 (activo)</div>
+        <div class="r">Impuesto único retenido = $120.000 (pasivo ya generado en el asiento de remuneraciones)</div>
+      </div>
+    </div>
+
+    <div class="step"><span class="step-label">Paso 2 · Total a consolidar en el F29</span>
+      <div class="calc"><div class="eq">2.850.000 + 200.000 + 120.000 = $3.170.000</div></div>
+    </div>
+
+    <div class="step"><span class="step-label">Paso 3 · Asiento único de cierre mensual de impuestos</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">IVA Débito Fiscal</td><td class="amt num">7.600.000</td><td></td></tr>
+        <tr><td class="acc-d">PPM</td><td class="amt num">200.000</td><td></td></tr>
+        <tr><td class="acc-d">Impuesto único por pagar</td><td class="amt num">120.000</td><td></td></tr>
+        <tr><td class="acc-h">IVA Crédito Fiscal</td><td></td><td class="amt num">4.750.000</td></tr>
+        <tr><td class="acc-h">Impuestos por pagar (F29)</td><td></td><td class="amt num">3.170.000</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="note"><b>Lectura del asiento:</b> se cancelan las dos cuentas de IVA (débito y crédito) contra sí mismas; el PPM se reconoce como activo; y el pasivo de impuesto único —ya registrado en el asiento de remuneraciones— se traspasa al pasivo consolidado del F29, que es el único monto que efectivamente se pagará al Fisco.</div>
+  </section>
+
+  <!-- CASO 3 -->
+  <section class="blk" id="c3">
+    <div class="blk-head"><span class="idx">C3</span><h2>PPE: costo, mejora, depreciación y revalorización</h2></div>
+    <div class="statement">Metalúrgica del Maipo S.A. adquiere el 1 de enero del año 1 una máquina en <b>$50.000.000</b> (valor residual $5.000.000, vida útil 5 años, lineal). El 1 de enero del año 2: mejora capitalizable de $6.000.000. Al 31 de diciembre del año 2: revalorización a valor razonable de $40.000.000.</div>
+
+    <div class="step"><span class="step-label">Año 1 · Depreciación</span>
+      <div class="calc"><div class="eq">(50.000.000 − 5.000.000) ÷ 5 = $9.000.000/año</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por depreciación</td><td class="amt num">9.000.000</td><td></td></tr>
+        <tr><td class="acc-h">Depreciación acumulada</td><td></td><td class="amt num">9.000.000</td></tr>
+      </tbody></table></div>
+      <div class="calc"><div class="eq">Importe en libros al cierre año 1 = 50.000.000 − 9.000.000 = $41.000.000</div></div>
+    </div>
+
+    <div class="step"><span class="step-label">Año 2 · Mejora capitalizable (1 de enero)</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Maquinaria (mejora)</td><td class="amt num">6.000.000</td><td></td></tr>
+        <tr><td class="acc-h">Banco / Proveedores</td><td></td><td class="amt num">6.000.000</td></tr>
+      </tbody></table></div>
+      <div class="calc"><div class="r">Costo bruto = 50.000.000 + 6.000.000 = $56.000.000</div><div class="r">Importe en libros al 1-ene-año2 = 41.000.000 + 6.000.000 = $47.000.000</div></div>
+    </div>
+
+    <div class="step"><span class="step-label">Año 2 · Depreciación (vida útil restante = 4 años)</span>
+      <div class="calc"><div class="eq">(47.000.000 − 5.000.000) ÷ 4 = $10.500.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por depreciación</td><td class="amt num">10.500.000</td><td></td></tr>
+        <tr><td class="acc-h">Depreciación acumulada</td><td></td><td class="amt num">10.500.000</td></tr>
+      </tbody></table></div>
+      <div class="calc">
+        <div class="r">Depreciación acumulada total = 9.000.000 + 10.500.000 = $19.500.000</div>
+        <div class="eq">Importe en libros al 31-dic-año2 (antes de revaluar) = 56.000.000 − 19.500.000 = $36.500.000</div>
+      </div>
+    </div>
+
+    <div class="step"><span class="step-label">Año 2 · Revalorización al 31 de diciembre (valor razonable $40.000.000)</span>
+      <div class="calc"><div class="eq">Superávit de revaluación = 40.000.000 − 36.500.000 = $3.500.000</div></div>
+      <div class="note"><b>Método usado:</b> se elimina la depreciación acumulada contra el costo bruto, y luego se reexpresa el neto resultante al valor revaluado (una de las dos alternativas del párr. 35 de NIC 16).</div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Depreciación acumulada</td><td class="amt num">19.500.000</td><td></td></tr>
+        <tr><td class="acc-h">Maquinaria</td><td></td><td class="amt num">19.500.000</td></tr>
+      </tbody></table></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Maquinaria</td><td class="amt num">3.500.000</td><td></td></tr>
+        <tr><td class="acc-h">Superávit de revaluación (ORI)</td><td></td><td class="amt num">3.500.000</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="note"><b>Para seguir depreciando:</b> desde el año 3, la nueva base depreciable es 40.000.000 − 5.000.000 = 35.000.000, sobre 3 años de vida útil restante → $11.666.667 anuales, en vez de los 10.500.000 que regían antes de revaluar.</div>
+  </section>
+
+  <!-- CASO 4 -->
+  <section class="blk" id="c4">
+    <div class="blk-head"><span class="idx">C4</span><h2>PPE: baja por venta y análisis de valor libro</h2></div>
+    <div class="statement">Transportes del Valle Ltda. Camión: costo <b>$40.000.000</b>, depreciación acumulada ($28.000.000), valor libro $12.000.000.</div>
+
+    <div class="step"><span class="step-label">Escenario base · Venta al contado en $15.000.000</span>
+      <div class="calc"><div class="eq">Resultado = 15.000.000 − 12.000.000 = $3.000.000 (utilidad)</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Banco</td><td class="amt num">15.000.000</td><td></td></tr>
+        <tr><td class="acc-d">Depreciación acumulada</td><td class="amt num">28.000.000</td><td></td></tr>
+        <tr><td class="acc-h">Camión (costo)</td><td></td><td class="amt num">40.000.000</td></tr>
+        <tr><td class="acc-h">Utilidad en venta de PPE</td><td></td><td class="amt num">3.000.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">Escenario alternativo · Venta al 80% del valor libro</span>
+      <div class="calc">
+        <div class="r">Precio = 12.000.000 × 80%</div>
+        <div class="eq">= $9.600.000</div>
+        <div class="eq">Resultado = 9.600.000 − 12.000.000 = ($2.400.000) — pérdida</div>
+      </div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Banco</td><td class="amt num">9.600.000</td><td></td></tr>
+        <tr><td class="acc-d">Depreciación acumulada</td><td class="amt num">28.000.000</td><td></td></tr>
+        <tr><td class="acc-d">Pérdida en venta de PPE</td><td class="amt num">2.400.000</td><td></td></tr>
+        <tr><td class="acc-h">Camión (costo)</td><td></td><td class="amt num">40.000.000</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="note"><b>Idea clave:</b> en ambos escenarios se dan de baja las mismas dos cuentas por los mismos montos (costo 40.000.000 y depreciación acumulada 28.000.000); lo único que cambia es el monto recibido en Banco, y por lo tanto el signo del resultado.</div>
+  </section>
+
+  <!-- CASO 5 -->
+  <section class="blk" id="c5">
+    <div class="blk-head"><span class="idx">C5</span><h2>Regularizaciones periódicas</h2></div>
+    <div class="statement">Comercial del Pacífico Ltda., cierre al 31 de diciembre — cinco ajustes independientes.</div>
+
+    <div class="step"><span class="step-label">a) Seguro anual $2.400.000, pagado 1 de noviembre (2 meses consumidos)</span>
+      <div class="calc"><div class="eq">2.400.000 ÷ 12 × 2 = $400.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por seguros</td><td class="amt num">400.000</td><td></td></tr>
+        <tr><td class="acc-h">Seguros pagados por anticipado</td><td></td><td class="amt num">400.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">b) Ingreso adelantado $1.800.000, plan de 3 meses iniciado en diciembre (1 mes devengado)</span>
+      <div class="calc"><div class="eq">1.800.000 ÷ 3 × 1 = $600.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Ingresos percibidos por adelantado</td><td class="amt num">600.000</td><td></td></tr>
+        <tr><td class="acc-h">Ingresos por servicios</td><td></td><td class="amt num">600.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">c) Préstamo $15.000.000 al 8% anual, 3 meses devengados</span>
+      <div class="calc"><div class="eq">15.000.000 × 8% × 3/12 = $300.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por intereses</td><td class="amt num">300.000</td><td></td></tr>
+        <tr><td class="acc-h">Intereses por pagar</td><td></td><td class="amt num">300.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">d) Provisión por garantías estimada en $500.000</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por garantías</td><td class="amt num">500.000</td><td></td></tr>
+        <tr><td class="acc-h">Provisión por garantías</td><td></td><td class="amt num">500.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">e) Cuentas por cobrar $25.000.000, pérdida esperada 2%</span>
+      <div class="calc"><div class="eq">25.000.000 × 2% = $500.000</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por deterioro de cuentas por cobrar</td><td class="amt num">500.000</td><td></td></tr>
+        <tr><td class="acc-h">Deterioro acumulado (CxC)</td><td></td><td class="amt num">500.000</td></tr>
+      </tbody></table></div>
+    </div>
+  </section>
+
+  <!-- CASO 6 -->
+  <section class="blk" id="c6">
+    <div class="blk-head"><span class="idx">C6</span><h2>Caso integrado — cierre mensual</h2></div>
+    <div class="statement">Industrias Reunidas S.A. prepara su cierre mensual con cinco elementos simultáneos.</div>
+
+    <div class="step"><span class="step-label">1 · Remuneración del mes</span>
+      <div class="calc"><div class="eq">Aportes patronales = 15.300 + 24.000 + 9.000 = $48.300</div></div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por remuneraciones</td><td class="amt num">1.050.000</td><td></td></tr>
+        <tr><td class="acc-d">Gasto por aportes patronales</td><td class="amt num">48.300</td><td></td></tr>
+        <tr><td class="acc-h">AFP por pagar</td><td></td><td class="amt num">114.400</td></tr>
+        <tr><td class="acc-h">Salud por pagar</td><td></td><td class="amt num">70.000</td></tr>
+        <tr><td class="acc-h">Cesantía por pagar (trabajador)</td><td></td><td class="amt num">6.000</td></tr>
+        <tr><td class="acc-h">Impuesto único por pagar</td><td></td><td class="amt num">40.000</td></tr>
+        <tr><td class="acc-h">Remuneraciones por pagar</td><td></td><td class="amt num">819.600</td></tr>
+        <tr><td class="acc-h">Aportes patronales por pagar</td><td></td><td class="amt num">48.300</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">2 · Depreciación mensual</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por depreciación</td><td class="amt num">360.000</td><td></td></tr>
+        <tr><td class="acc-h">Depreciación acumulada</td><td></td><td class="amt num">360.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">3 · Intereses devengados</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por intereses</td><td class="amt num">150.000</td><td></td></tr>
+        <tr><td class="acc-h">Intereses por pagar</td><td></td><td class="amt num">150.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">4 · Deterioro estimado de cuentas por cobrar</span>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">Gasto por deterioro de cuentas por cobrar</td><td class="amt num">200.000</td><td></td></tr>
+        <tr><td class="acc-h">Deterioro acumulado (CxC)</td><td></td><td class="amt num">200.000</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div class="step"><span class="step-label">5 · Cierre de IVA (consolida PPM y retención del punto 1)</span>
+      <div class="calc">
+        <div class="r">IVA neto = 3.800.000 − 2.280.000 = $1.520.000</div>
+        <div class="r">PPM = 20.000.000 × 0,5% = $100.000</div>
+        <div class="r">Impuesto único retenido (del punto 1) = $40.000</div>
+        <div class="eq">Total F29 = 1.520.000 + 100.000 + 40.000 = $1.660.000</div>
+      </div>
+      <div class="exwrap"><table class="jt"><thead><tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr></thead><tbody>
+        <tr><td class="acc-d">IVA Débito Fiscal</td><td class="amt num">3.800.000</td><td></td></tr>
+        <tr><td class="acc-d">PPM</td><td class="amt num">100.000</td><td></td></tr>
+        <tr><td class="acc-d">Impuesto único por pagar</td><td class="amt num">40.000</td><td></td></tr>
+        <tr><td class="acc-h">IVA Crédito Fiscal</td><td></td><td class="amt num">2.280.000</td></tr>
+        <tr><td class="acc-h">Impuestos por pagar (F29)</td><td></td><td class="amt num">1.660.000</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="warn"><b>Punto de atención:</b> el impuesto único de $40.000 ya se había reconocido como pasivo en el asiento 1; en el cierre de IVA no se genera un gasto nuevo, solo se traspasa ese pasivo hacia el consolidado del F29 — el mismo patrón que en el Caso 2.</div>
+  </section>
+
+  <footer>Solucionario elaborado a partir de la Guía de preparación PEP 2 — USACH · Contabilidad General — uso personal de estudio</footer>
+</div>
+
+</body>
+</html>
