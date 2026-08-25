@@ -47,7 +47,7 @@
     }
   }
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
+  html{scroll-behavior:smooth; scroll-padding-top:112px;}
   body{
     margin:0;
     background:var(--bg);
@@ -253,6 +253,60 @@
   .ex-sol.open{ display:block; }
   .ex-sol b{ color:var(--good); }
 
+  /* ---- Guía paso a paso ---- */
+  .guia-tabs{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;}
+  .guia-tab{
+    background:var(--surface-2); color:var(--text-muted); border:1px solid var(--border); border-radius:999px;
+    padding:8px 16px; font-size:13px; font-weight:700; cursor:pointer;
+  }
+  .guia-tab.active{background:var(--accent); color:#fff; border-color:var(--accent);}
+  .guia-progress-track{height:6px; background:var(--surface-2); border-radius:999px; overflow:hidden; margin-bottom:8px;}
+  .guia-progress-bar{height:100%; background:var(--accent); border-radius:999px; transition:width .25s;}
+  .guia-counter{font-size:12.5px; color:var(--text-muted); font-weight:700; margin-bottom:14px;}
+  .guia-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:20px 22px; margin-bottom:16px; min-height:120px;
+  }
+  .guia-badge{
+    display:inline-block; font-size:10.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--accent); background:var(--accent-soft); padding:3px 10px; border-radius:999px; margin-bottom:10px;
+  }
+  .guia-q{font-size:15px; font-weight:600; margin:0 0 14px; line-height:1.45;}
+  .guia-opts{display:grid; gap:8px; margin-bottom:6px;}
+  .opt.selected{border-color:var(--accent); background:var(--accent-soft);}
+  .guia-vf-opts{display:flex; gap:10px; margin-bottom:6px;}
+  .guia-vf-btn{
+    flex:1; border:1px solid var(--border); border-radius:10px; padding:12px; font-size:14px; font-weight:700;
+    cursor:pointer; background:var(--surface); text-align:center;
+  }
+  .guia-vf-btn:hover{border-color:var(--accent);}
+  .guia-vf-btn.selected{border-color:var(--accent); background:var(--accent-soft);}
+  .guia-vf-btn.correct{border-color:var(--good); background:color-mix(in srgb, var(--good) 12%, var(--surface));}
+  .guia-vf-btn.incorrect{border-color:var(--bad); background:color-mix(in srgb, var(--bad) 12%, var(--surface));}
+  .guia-expl{
+    display:none; margin-top:12px; padding:12px 14px; border-radius:10px;
+    background:color-mix(in srgb, var(--accent) 8%, var(--surface)); border-left:3px solid var(--accent);
+    font-size:13.6px; line-height:1.55;
+  }
+  .guia-expl.open{display:block;}
+  .guia-expl b{color:var(--accent-2);}
+  .guia-expl p{margin:0 0 8px;}
+  .guia-expl p:last-child{margin-bottom:0;}
+  .guia-table{width:100%; border-collapse:collapse; margin:10px 0; font-size:12.6px;}
+  .guia-table th, .guia-table td{border:1px solid var(--border); padding:6px 9px; text-align:center;}
+  .guia-table th{background:var(--surface-2); font-weight:800;}
+  .guia-subs{margin:10px 0 4px; padding-left:18px; font-size:13.6px; line-height:1.6;}
+  .guia-subs li{margin-bottom:4px;}
+  .guia-nav{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
+  .guia-nav-btns{display:flex; gap:10px;}
+  .guia-crit{margin-top:10px; padding:8px 12px; border-radius:8px; background:var(--surface-2); font-size:12px; color:var(--text-muted); font-weight:700;}
+  button.secondary{
+    background:var(--surface-2); color:var(--text); border:1px solid var(--border);
+    padding:10px 18px; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer;
+  }
+  button.secondary:hover{background:var(--surface);}
+  button.secondary:disabled{opacity:.45; cursor:not-allowed;}
+
   /* ---- Mapa conceptual ---- */
   .map-col{ display:flex; flex-direction:column; }
   .map-head{
@@ -319,6 +373,7 @@
     <a href="#clase7">Clase 7</a>
     <a href="#clase8">Clase 8</a>
     <a href="#ejercicios">Ejercicios</a>
+    <a href="#guia">Guía paso a paso</a>
     <a href="#mapa">Mapa conceptual</a>
     <a href="#glosario">Glosario</a>
     <a href="#plan">Plan de repaso</a>
@@ -606,9 +661,34 @@
     <div id="exContainer"></div>
   </section>
 
+  <!-- ================= GUÍA PASO A PASO ================= -->
+  <section id="guia">
+    <h2><span class="step">7</span> Guía integradora paso a paso</h2>
+    <p class="lead">Guía oficial del Departamento de Economía USACH para Clase 4 a Clase 8, con pauta docente completa (Robinson Dettoni, Cliff Bahamondes, José Vásquez). Resuelve cada pregunta antes de revisar la respuesta.</p>
+
+    <div class="guia-tabs" id="guiaTabs">
+      <button class="guia-tab active" data-mode="mc">I. Alternativas (24)</button>
+      <button class="guia-tab" data-mode="vf">II. Verdadero o falso (18)</button>
+      <button class="guia-tab" data-mode="dev">III. Desarrollo (8)</button>
+    </div>
+
+    <div class="guia-progress-track"><div class="guia-progress-bar" id="guiaProgressBar" style="width:0%"></div></div>
+    <div class="guia-counter" id="guiaCounter"></div>
+
+    <div class="guia-card" id="guiaCard"></div>
+
+    <div class="guia-nav">
+      <div class="guia-nav-btns">
+        <button class="secondary" id="guiaPrev">← Anterior</button>
+        <button class="primary" id="guiaReveal">Ver respuesta</button>
+        <button class="secondary" id="guiaNext">Siguiente →</button>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= MAPA CONCEPTUAL ================= -->
   <section id="mapa">
-    <h2><span class="step">7</span> Mapa conceptual</h2>
+    <h2><span class="step">8</span> Mapa conceptual</h2>
     <p class="lead">Cómo se conectan los conceptos de Clase 4 a Clase 8.</p>
     <div class="card" style="text-align:center; margin-bottom:20px;">
       <div style="font-weight:800; color:var(--accent-2); font-size:15px;">PEP 2 — Introducción a la Economía</div>
@@ -737,14 +817,14 @@
 
   <!-- ================= GLOSARIO ================= -->
   <section id="glosario">
-    <h2><span class="step">8</span> Glosario — toca para ver la definición</h2>
+    <h2><span class="step">9</span> Glosario — toca para ver la definición</h2>
     <p class="lead">Repasa los 52 conceptos clave antes de la prueba.</p>
     <div class="flip-grid" id="flipGrid"></div>
   </section>
 
   <!-- ================= PLAN DE REPASO ================= -->
   <section id="plan">
-    <h2><span class="step">9</span> Plan de repaso</h2>
+    <h2><span class="step">10</span> Plan de repaso</h2>
     <p class="lead">Desde hoy sábado 22 hasta la prueba, martes 25 de agosto de 2026. Marca las tareas a medida que las completas.</p>
     <div id="planContainer"></div>
     <div class="callout"><b>Cómo usarlo:</b> sesiones cortas al principio y al final, más largas a mitad de semana (35–90 min), repartidas en varios días rinden más que una sola maratón. Si un día te falta tiempo, prioriza los ejercicios por sobre releer el resumen.</div>
@@ -752,7 +832,7 @@
 
   <!-- ================= QUIZ ================= -->
   <section id="quiz">
-    <h2><span class="step">10</span> Autoevaluación rápida</h2>
+    <h2><span class="step">11</span> Autoevaluación rápida</h2>
     <p class="lead">Responde y luego pulsa "Revisar respuestas" para ver tu puntaje.</p>
     <div id="quizContainer"></div>
     <div class="quiz-actions">
@@ -955,6 +1035,211 @@
       e.target.textContent = open ? 'Ocultar solución' : 'Ver solución';
     }
   });
+
+  // ---- Guía integradora paso a paso (USACH, Clases 4-8, con pauta docente) ----
+  var guiaMC = [
+    { n:1, bloque:'Mercados', q:'En un mercado competitivo de café, hay muchos compradores y vendedores, el producto es homogéneo y ninguna cafetería individual representa una parte importante de las ventas. ¿Cuál es la mejor conclusión?', opts:['Cada cafetería puede fijar cualquier precio sin perder clientes.','La demanda de mercado coincide con la demanda de un solo estudiante.','Cada cafetería toma el precio de mercado como un dato y decide principalmente cuánto ofrecer.','El equilibrio requiere que todas las cafeterías tengan los mismos costos.'], correct:2, expl:'La atomización y la homogeneidad hacen que cada empresa sea precio-aceptante. La empresa observa P y elige cantidad; no controla individualmente el precio de mercado.' },
+    { n:2, bloque:'Mercados', q:'Si el precio del café baja de $2.000 a $1.500, sin que cambie ningún otro determinante, ¿qué ocurre en el modelo de oferta y demanda?', opts:['Aumenta la cantidad demandada y disminuye la cantidad ofrecida, mediante movimientos sobre las curvas existentes.','La demanda se desplaza a la derecha y la oferta a la izquierda.','Disminuyen tanto la cantidad demandada como la cantidad ofrecida.','La demanda y la oferta completas aumentan simultáneamente.'], correct:0, expl:'Un cambio en el precio del mismo bien genera movimientos sobre D y S. Por la ley de la demanda QD aumenta; por la ley de la oferta QS disminuye.' },
+    { n:3, bloque:'Mercados', q:'Los almuerzos cerca del campus son un bien normal. Si aumenta el ingreso de los estudiantes y la oferta tiene pendiente positiva, ceteris paribus, ¿qué predice el modelo?', opts:['La oferta se desplaza a la derecha; el precio baja y la cantidad sube.','Hay un movimiento hacia arriba sobre la demanda; el precio y la cantidad suben.','La demanda se desplaza a la izquierda; el precio y la cantidad bajan.','La demanda se desplaza a la derecha; el precio y la cantidad de equilibrio suben.'], correct:3, expl:'El ingreso es un determinante distinto del precio del propio bien. Para un bien normal desplaza D a la derecha, elevando P* y Q* cuando S tiene pendiente positiva.' },
+    { n:4, bloque:'Mercados', q:'En la misma semana aumenta el número de estudiantes que compra café y sube el costo del grano. ¿Qué puede afirmarse sin conocer la magnitud de ambos desplazamientos?', opts:['El precio y la cantidad de equilibrio aumentan necesariamente.','El precio aumenta, mientras la variación de la cantidad de equilibrio es ambigua.','El precio y la cantidad de equilibrio disminuyen necesariamente.','La cantidad aumenta necesariamente, pero el precio es ambiguo.'], correct:1, expl:'D se desplaza a la derecha y S a la izquierda: ambos shocks presionan P al alza, pero ejercen efectos opuestos sobre Q.' },
+    { n:5, bloque:'Decisiones', q:'Camila dispone de $12.000. Un café cuesta $2.000 y una colación $4.000. Con cafés en el eje horizontal y colaciones en el vertical, ¿cuál lectura es correcta?', opts:['Los interceptos son 6 cafés y 3 colaciones; un café adicional cuesta 0,5 colaciones.','Los interceptos son 3 cafés y 6 colaciones; la pendiente es -2.','Los interceptos son 6 cafés y 3 colaciones; un café adicional cuesta 2 colaciones.','Toda combinación bajo la recta es inviable porque no agota el presupuesto.'], correct:0, expl:'La restricción es 2.000C + 4.000A ≤ 12.000. Los interceptos son C=6 y A=3; la pendiente es -PC/PA=-0,5.' },
+    { n:6, bloque:'Decisiones', q:'Con el presupuesto agotado, el beneficio marginal por peso es 1,90 para café, 1,10 para colación y 1,50 para transporte. ¿Qué ajuste mejora inicialmente la asignación?', opts:['Retirar gasto de café y orientarlo hacia colación.','Gastar exactamente lo mismo en los tres bienes.','Aumentar simultáneamente el gasto en todos los bienes sin modificar el ingreso.','Retirar gasto de colación y orientarlo hacia café.'], correct:3, expl:'El siguiente peso rinde más en café y menos en colación. La reasignación continúa hasta igualar BM/P en un óptimo interior o alcanzar una solución de esquina.' },
+    { n:7, bloque:'Decisiones', q:'Una cafetería produce 50 cafés con cinco trabajadores y 54 con seis. Cada trabajador cuesta $12.000 por hora. ¿Cuál es el producto marginal del sexto trabajador y el costo marginal aproximado asociado?', opts:['54 cafés y $222 por café.','4 cafés y $3.000 por café.','9 cafés y $1.333 por café.','6 cafés y $2.000 por café.'], correct:1, expl:'PMg6 = 54-50 = 4 cafés. Si el trabajador cuesta $12.000, el costo por cada café adicional es 12.000/4 = $3.000.' },
+    { n:8, bloque:'Decisiones', q:'Los costos marginales sucesivos de producir hasta 10, 24, 36, 44, 50 y 54 cafés son $1.200, $857, $1.000, $1.500, $2.000 y $3.000 por café. Si P=$1.600, ¿qué cantidad elegiría aproximadamente una empresa competitiva?', opts:['24 cafés, porque después el producto marginal comienza a bajar.','36 cafés, porque allí el costo marginal es exactamente $1.000.','44 cafés, porque el siguiente tramo tiene CMg=$2.000>P.','50 cafés, porque el ingreso total todavía aumenta.'], correct:2, expl:'Conviene producir tramos cuyo CMg no exceda P. El cuarto tramo (hasta 44) cuesta $1.500; el quinto cuesta $2.000 y no es rentable a P=$1.600.' },
+    { n:9, bloque:'Bienestar y política', q:'El precio de un bien sube 8% y la cantidad demandada disminuye 4%. ¿Cómo se clasifica la demanda en ese rango?', opts:['Elástica, porque la cantidad disminuyó.','Unitaria, porque precio y cantidad cambiaron en direcciones opuestas.','No puede calcularse sin conocer las unidades físicas.','Inelástica, porque |εD|=0,5.'], correct:3, expl:'|εD|=4%/8%=0,5<1. La cantidad responde proporcionalmente menos que el precio.' },
+    { n:10, bloque:'Bienestar y política', q:'Una empresa enfrenta una demanda elástica, con |εD|=1,5. Si aumenta el precio en un rango donde esa elasticidad se mantiene, ¿qué ocurre normalmente con su ingreso total?', opts:['Aumenta, porque cada unidad se vende más cara.','Disminuye, porque la caída proporcional de Q supera el aumento proporcional de P.','No cambia, porque la elasticidad es constante.','Se vuelve igual al costo total.'], correct:1, expl:'Con demanda elástica, el efecto cantidad domina al efecto precio. Al subir P, Q cae más proporcionalmente y P × Q disminuye.' },
+    { n:11, bloque:'Bienestar y política', q:'El ingreso de los hogares aumenta 10% y la demanda de almuerzos preparados aumenta 15%. ¿Cuál es la interpretación correcta?', opts:['εY=-1,5: es un bien inferior.','εY=0,67: es un bien normal de primera necesidad.','εY=1,5: es un bien normal y, en ese rango, de lujo.','La información solo permite calcular elasticidad-precio.'], correct:2, expl:'εY=15%/10%=1,5>1. El signo positivo indica bien normal y el valor mayor que uno, respuesta más que proporcional al ingreso.' },
+    { n:12, bloque:'Bienestar y política', q:'Dos mercados reciben un aumento similar de demanda. La oferta de arriendos es más inelástica que la oferta de café. ¿Qué comparación es más razonable?', opts:['En arriendos cambia más el precio y menos la cantidad.','En arriendos cambia menos el precio y más la cantidad.','Ambos mercados muestran exactamente el mismo ajuste.','En café cambia más el precio porque existen más cafeterías.'], correct:0, expl:'Cuando la oferta ajusta poco, una mayor fracción del shock se absorbe mediante el precio. Una oferta más elástica permite un mayor ajuste cuantitativo.' },
+    { n:13, bloque:'Bienestar y política', q:'Ana está dispuesta a pagar $4.200 por una unidad y la compra a $3.000. ¿Cuál es su excedente del consumidor?', opts:['$7.200, porque se suman valoración y gasto.','$1.200, porque es disposición a pagar menos precio pagado.','$3.000, porque coincide con el gasto realizado.','$4.200, porque corresponde al beneficio total.'], correct:1, expl:'EC=4.200-3.000=$1.200. El excedente es la ganancia neta de la transacción, no el gasto.' },
+    { n:14, bloque:'Bienestar y política', q:'¿Cuál descripción corresponde a un precio máximo vinculante?', opts:['Pmax>P*: genera exceso de oferta y la cantidad transada es QD.','Pmax=P*: desplaza la oferta y aumenta la cantidad disponible.','Pmax<P*: elimina la escasez porque todos pagan menos.','Pmax<P*: genera QD>QS y la cantidad transada no puede superar el lado corto, QS.'], correct:3, expl:'Un techo bajo el equilibrio aumenta QD, reduce QS y genera escasez. El precio menor no garantiza acceso; aparecen mecanismos de racionamiento.' },
+    { n:15, bloque:'Bienestar y política', q:'En un mercado competitivo, un precio mínimo se fija por encima de P*. ¿Cuál es el resultado básico?', opts:['QS>QD y la cantidad transada queda limitada por QD.','QD>QS y la cantidad transada queda limitada por QS.','La política no es vinculante y no modifica el equilibrio.','La demanda se desplaza a la derecha hasta eliminar el exceso.'], correct:0, expl:'Un piso vinculante eleva el precio sobre P*: los vendedores ofrecen más y los compradores demandan menos. Aparece exceso de oferta.' },
+    { n:16, bloque:'Bienestar y política', q:'La ley obliga a los vendedores a declarar y enterar un impuesto por unidad. ¿Qué determina quién soporta económicamente la carga?', opts:['Solo la redacción de la ley tributaria.','El número absoluto de compradores y vendedores.','Las elasticidades relativas de demanda y oferta.','Quién posee mayor ingreso inicial.'], correct:2, expl:'La incidencia legal señala quién entrega el impuesto; la incidencia económica depende de cuánto pueden ajustar sus cantidades ambos lados. El lado menos elástico soporta más.' },
+    { n:17, bloque:'Bienestar y política', q:'Un impuesto de $500 reduce la cantidad transada de 100 a 80 unidades. Suponiendo curvas lineales, ¿cuál combinación es correcta?', opts:['Recaudación=$50.000 y pérdida irrecuperable=$10.000.','Recaudación=$40.000 y pérdida irrecuperable=$40.000.','Recaudación=$40.000 y pérdida irrecuperable=$5.000.','Recaudación=$50.000 y no existe pérdida porque el Estado recibe el impuesto.'], correct:2, expl:'La recaudación es 500 pesos por cada una de las 80 unidades transadas: $40.000. Con curvas lineales, la pérdida irrecuperable es la mitad del producto entre el impuesto y la caída de la cantidad: 0,5 x 500 x 20 = $5.000.' },
+    { n:18, bloque:'Macroeconomía', q:'¿Cuál transacción entra directamente en el PIB del período actual?', opts:['Cuadernos nuevos producidos este año y guardados como inventario.','La compra de acciones ya emitidas de una empresa.','La reventa de una bicicleta usada sin servicios de intermediación.','Una transferencia monetaria del Estado a un hogar.'], correct:0, expl:'El inventario nuevo es producción corriente y se registra como inversión. Las otras operaciones cambian propiedad o redistribuyen ingreso sin ser producción actual.' },
+    { n:19, bloque:'Macroeconomía', q:'Harina por $1.000 y pan por $2.000 se utilizan para producir un sándwich final vendido en $5.000. ¿Cómo se evita la doble contabilización?', opts:['Sumando $1.000+$2.000+$5.000=$8.000.','Contando solo la harina, porque inicia la cadena productiva.','Excluyendo todos los alimentos por ser bienes de consumo.','Contando el bien final por $5.000 o, equivalentemente, sumando valores agregados por $5.000.'], correct:3, expl:'Los insumos intermedios ya están incorporados en el valor final. Puede contarse el bien final o el valor agregado en cada etapa, pero no ambos.' },
+    { n:20, bloque:'Macroeconomía', q:'Un hogar compra directamente en el exterior un computador por $800.000. En la identidad Y=C+I+G+XN, ¿cómo se registra su aporte directo al PIB doméstico?', opts:['Solo como M, por lo que el PIB cae $800.000.','Como C por +$800.000 y M por -$800.000, con efecto neto directo cero.','Solo como C, por lo que el PIB sube $800.000.','Como I y M, con efecto neto cero.'], correct:1, expl:'La compra es consumo, pero no producción interna. Restar M corrige el origen y evita atribuir al PIB doméstico el valor producido en el extranjero.' },
+    { n:21, bloque:'Macroeconomía', q:'El PIB nominal pasa de $400.000 a $527.000. Usando los precios del período inicial, el PIB real pasa de $400.000 a $430.000. ¿Cuál conclusión es válida?', opts:['El valor nominal creció 31,75%, pero el volumen producido creció 7,5%.','La producción física creció 31,75%.','Los precios necesariamente crecieron 24,25% para todos los bienes.','El bienestar social creció exactamente 7,5%.'], correct:0, expl:'El PIB real con precios comparables aísla el cambio de cantidades: (430-400)/400=7,5%. El nominal mezcla precios y cantidades.' },
+    { n:22, bloque:'Macroeconomía', q:'Campus Norte tiene PIB real de $600 millones y 1.000 habitantes; Campus Sur, $450 millones y 500 habitantes. ¿Cuál comparación es correcta?', opts:['Sur produce más en total y Norte más por habitante.','Norte produce más en total y también más por habitante.','Norte produce más en total, pero Sur tiene mayor PIB real per cápita.','Ambos tienen el mismo PIB real per cápita.'], correct:2, expl:'Norte: 600.000 por habitante; Sur: 900.000. El PIB total mide tamaño; el PIB per cápita es un promedio por persona.' },
+    { n:23, bloque:'Macroeconomía', q:'En una economía hay 900 ocupados, 100 desocupados que buscan activamente trabajo y 300 personas fuera de la fuerza de trabajo. ¿Cuál es la tasa de desempleo?', opts:['7,7%, porque 100/1.300=0,077.','10%, porque 100/(900+100)=0,10.','25%, porque 100/(100+300)=0,25.','11,1%, porque 100/900=0,111.'], correct:1, expl:'La fuerza de trabajo es O+D=1.000. Quienes están fuera de ella no pertenecen al denominador de la tasa de desempleo.' },
+    { n:24, bloque:'Productividad', q:'La Economía A produce 600 unidades con 100 trabajadores y la Economía B produce 480 unidades con 60 trabajadores. ¿Cuál comparación es correcta?', opts:['La Economía A es más productiva porque produce más en total.','Ambas tienen la misma productividad porque las jornadas son comparables.','La Economía B produce más en total, pero la Economía A produce más por trabajador.','La Economía A produce más en total, pero la Economía B es más productiva: 6 frente a 8 unidades por trabajador.'], correct:3, expl:'A tiene mayor producción total: 600 frente a 480. Sin embargo, Y/L es 6 en A y 8 en B; por ello B obtiene más producción por trabajador.' },
+  ];
+
+  var guiaVF = [
+    { n:1, q:'Si un mercado competitivo alcanza el equilibrio, la asignación resultante es necesariamente justa para todas las personas.', correct:false, expl:'Equilibrio significa compatibilidad de planes (QD=QS), no justicia. Bajo ciertos supuestos puede ser eficiente, pero eficiencia y equidad son conceptos distintos.' },
+    { n:2, q:'Un aumento del precio del café desplaza la curva de demanda de café hacia la izquierda.', correct:false, expl:'El precio del propio bien produce un movimiento sobre la curva de demanda; no desplaza la curva.' },
+    { n:3, q:'La demanda de mercado se obtiene sumando, para cada precio, las cantidades demandadas por todos los compradores.', correct:true, expl:'Es la suma horizontal de las demandas individuales a cada precio.' },
+    { n:4, q:'Si la demanda aumenta y la oferta disminuye simultáneamente, el precio de equilibrio sube, pero el efecto sobre la cantidad puede ser ambiguo.', correct:true, expl:'Ambos shocks elevan el precio; uno aumenta Q y el otro la reduce. La dirección final de Q depende de las magnitudes.' },
+    { n:5, q:'En un óptimo interior del consumidor, igualar BM/P entre bienes significa gastar la misma cantidad de dinero en todos ellos.', correct:false, expl:'Se iguala el beneficio marginal del último peso, no el gasto total. Los montos gastados pueden ser diferentes.' },
+    { n:6, q:'Una solución de esquina puede ser racional si incluso la primera unidad de un bien entrega menor BM/P que las alternativas disponibles.', correct:true, expl:'El consumidor puede elegir cero unidades de un bien porque el presupuesto rinde más en otras opciones.' },
+    { n:7, q:'Cuando el producto marginal del trabajo comienza a disminuir, el producto total necesariamente disminuye de inmediato.', correct:false, expl:'El producto total puede seguir aumentando; lo hace en incrementos cada vez menores mientras el producto marginal siga siendo positivo.' },
+    { n:8, q:'Para una empresa competitiva, IMg=P y conviene producir una unidad adicional si P>CMg.', correct:true, expl:'Cada unidad adicional se vende al precio de mercado. Si el ingreso marginal supera el costo marginal, esa unidad aumenta el beneficio.' },
+    { n:9, q:'Elasticidad y pendiente son equivalentes, porque ambas miden la inclinación de una curva.', correct:false, expl:'La pendiente usa cambios en unidades y depende de la escala; la elasticidad usa porcentajes, no tiene unidades y puede variar a lo largo de una recta.' },
+    { n:10, q:'Si |εD|=0,4, un aumento pequeño del precio tiende a elevar el ingreso total, manteniéndose en el mismo rango de demanda.', correct:true, expl:'La demanda es inelástica: Q cae proporcionalmente menos que P, por lo que suele dominar el efecto precio.' },
+    { n:11, q:'Llamar inferior a un bien significa que su calidad es objetivamente baja.', correct:false, expl:'Inferior solo describe una elasticidad-ingreso negativa: su demanda disminuye cuando aumenta el ingreso, ceteris paribus.' },
+    { n:12, q:'Un precio máximo vinculante garantiza que todos los consumidores obtengan el bien a un precio menor.', correct:false, expl:'Genera QD>QS y la cantidad transada queda limitada por la oferta. Algunos acceden a menor precio; otros enfrentan escasez, colas o racionamiento.' },
+    { n:13, q:'Si el vendedor entrega legalmente un impuesto al Estado, entonces soporta necesariamente toda su carga económica.', correct:false, expl:'La incidencia económica depende de las elasticidades relativas. El lado menos elástico soporta una proporción mayor, sin importar quién declara el impuesto.' },
+    { n:14, q:'La recaudación tributaria es una transferencia al Estado y no constituye, por sí misma, pérdida irrecuperable de eficiencia.', correct:true, expl:'La pérdida irrecuperable proviene de transacciones beneficiosas que dejan de realizarse; la recaudación cambia de destinatario.' },
+    { n:15, q:'La producción nueva que no se vende durante el período queda fuera del PIB.', correct:false, expl:'Se registra como inversión en existencias para que el enfoque del gasto coincida con la producción realizada.' },
+    { n:16, q:'Un crecimiento de 12% del PIB nominal demuestra que las cantidades producidas aumentaron exactamente 12%.', correct:false, expl:'El PIB nominal mezcla precios y cantidades. Se necesita PIB real a precios comparables para medir el cambio del volumen producido.' },
+    { n:17, q:'Una caída de la tasa de desempleo demuestra siempre que aumentó el número de ocupados.', correct:false, expl:'La tasa también puede caer si personas desocupadas dejan de buscar trabajo y salen de la fuerza de trabajo. Deben mirarse ocupación y participación.' },
+    { n:18, q:'Si dos personas trabajan las mismas horas y una produce el doble, esos datos por sí solos prueban que realizó el doble de esfuerzo.', correct:false, expl:'Los datos permiten comparar producción por hora, no esfuerzo. Para atribuir la diferencia al esfuerzo se requeriría evidencia adicional y controlar otras condiciones que afectan la capacidad de producir.' },
+  ];
+
+  var guiaDev = [
+    { n:1, title:'De las decisiones individuales al equilibrio de mercado',
+      body:'<p>En el mercado semanal de café del campus, cada cifra de la primera tabla es la disposición máxima a pagar (beneficio marginal monetizado) por una unidad sucesiva. Cada cifra de la segunda tabla es el costo marginal de producir una unidad sucesiva.</p>' +
+        '<p><b>Consumidores — disposición a pagar por unidad (pesos)</b></p>' +
+        '<table class="guia-table"><tr><th></th><th>Unidad 1</th><th>Unidad 2</th><th>Unidad 3</th><th>Unidad 4</th></tr><tr><td><b>Ana</b></td><td>4.000</td><td>3.000</td><td>2.000</td><td>1.000</td></tr><tr><td><b>Benjamín</b></td><td>3.500</td><td>2.500</td><td>1.500</td><td>–</td></tr><tr><td><b>Camila</b></td><td>3.000</td><td>2.000</td><td>1.000</td><td>–</td></tr></table>' +
+        '<p><b>Productores — costo marginal por unidad (pesos)</b></p>' +
+        '<table class="guia-table"><tr><th></th><th>Unidad 1</th><th>Unidad 2</th><th>Unidad 3</th><th>Unidad 4</th></tr><tr><td><b>Alpha</b></td><td>1.000</td><td>1.500</td><td>2.400</td><td>3.400</td></tr><tr><td><b>Beta</b></td><td>1.000</td><td>1.800</td><td>2.500</td><td>3.000</td></tr><tr><td><b>Gamma</b></td><td>1.200</td><td>1.700</td><td>2.000</td><td>3.300</td></tr></table>' +
+        '<p>Antes de ver la solución, complete usted mismo la tabla de precio, QD, QS y situación para P=1.000, 1.500, 2.000, 2.500, 3.000 y 3.500.</p>',
+      subs:['a) Para cada precio de la tabla siguiente, construya las demandas individuales y la demanda de mercado. Explique la regla de decisión del consumidor.','b) Construya del mismo modo las ofertas individuales y la oferta de mercado. Explique la regla de decisión del productor.','c) Complete la tabla y encuentre el precio y la cantidad de equilibrio.','d) Calcule el exceso de demanda a P=1.500 y el exceso de oferta a P=2.500. Explique el ajuste esperado del precio.','e) Justifique, desde los fundamentos microeconómicos, por qué la demanda tiene pendiente negativa y la oferta positiva. ¿Qué información resume cada curva?'],
+      sol:'<table class="guia-table"><tr><th>P</th><th>1.000</th><th>1.500</th><th>2.000</th><th>2.500</th><th>3.000</th><th>3.500</th></tr><tr><td><b>Q<sub>D</sub></b></td><td>10</td><td>8</td><td>7</td><td>5</td><td>4</td><td>2</td></tr><tr><td><b>Q<sub>S</sub></b></td><td>2</td><td>4</td><td>7</td><td>9</td><td>10</td><td>12</td></tr></table>' +
+        '<p>Equilibrio: <b>P*=$2.000 y Q*=7</b>. A P=$1.500, Q<sub>D</sub>−Q<sub>S</sub>=8−4=4: hay exceso de demanda y presión al alza. A P=$2.500, Q<sub>S</sub>−Q<sub>D</sub>=9−5=4: hay exceso de oferta y presión a la baja.</p>' +
+        '<p>La demanda tiene pendiente negativa porque el beneficio marginal de unidades sucesivas disminuye: al subir el precio, menos unidades satisfacen BM≥P. La oferta tiene pendiente positiva porque unidades sucesivas son más costosas: un precio mayor permite cubrir más costos marginales. Las curvas resumen decisiones marginales individuales y su agregación; no son relaciones arbitrarias.</p>',
+      criterio:'Criterio de corrección (10 puntos): 3 por demanda; 3 por oferta; 1 por equilibrio; 1 por excesos y ajuste; 2 por la explicación microeconómica.' },
+    { n:2, title:'Restricción presupuestaria y decisión marginal',
+      body:'<p>Camila dispone de $12.000 para cafés C y colaciones A. Inicialmente, P<sub>C</sub>=$2.000 y P<sub>A</sub>=$4.000.</p>',
+      subs:['a) Escriba la restricción presupuestaria. Calcule los interceptos y la pendiente cuando C está en el eje horizontal.','b) En una asignación que agota el presupuesto, BM<sub>C</sub>=$3.600 y BM<sub>A</sub>=$4.800. Compare BM<sub>C</sub>/P<sub>C</sub> y BM<sub>A</sub>/P<sub>A</sub>. ¿En qué dirección conviene reasignar gasto?','c) El precio del café baja a $1.000. Calcule el nuevo intercepto horizontal y la nueva pendiente. Explique, usando BM/P, por qué aumenta normalmente la cantidad demandada de café.'],
+      sol:'<p>a) 2.000C+4.000A≤12.000. Interceptos: C=6 y A=3. Con A vertical, la pendiente es −P<sub>C</sub>/P<sub>A</sub>=−0,5.</p><p>b) BM<sub>C</sub>/P<sub>C</sub>=3.600/2.000=1,8 y BM<sub>A</sub>/P<sub>A</sub>=4.800/4.000=1,2. Conviene retirar gasto de colaciones y orientarlo hacia café.</p><p>c) Con P<sub>C</sub>=$1.000, el intercepto es C=12 y la pendiente −1.000/4.000=−0,25. Inicialmente aumenta BM<sub>C</sub>/P<sub>C</sub> y se reasigna gasto hacia café hasta un nuevo óptimo o una esquina.</p>',
+      criterio:'Criterio de corrección (5 puntos): 2 por restricción, interceptos y pendiente; 1,5 por BM/P y reasignación; 1,5 por el nuevo presupuesto y el mecanismo de demanda.' },
+    { n:3, title:'Producto marginal, costo marginal y oferta',
+      body:'<p>Una cafetería utiliza una máquina fija y puede variar el número de trabajadores. Cada trabajador adicional cuesta $12.000 por hora.</p>' +
+        '<table class="guia-table"><tr><th>Trabajadores L</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr><tr><th>Producto total q</th><td>0</td><td>10</td><td>24</td><td>36</td><td>44</td><td>50</td><td>54</td></tr></table>',
+      subs:['a) Calcule el producto marginal de cada trabajador y el producto medio para L=4, 5, 6.','b) Calcule el costo marginal aproximado asociado a los trabajadores cuarto, quinto y sexto.','c) Determine la producción elegida si P=$1.600 y si P=$2.200 por café.','d) Explique la cadena causal que conecta producto marginal decreciente, costo marginal creciente y pendiente positiva de la oferta.'],
+      sol:'<p>a) Los productos marginales sucesivos son 10, 14, 12, 8, 6, 4. PMe<sub>4</sub>=44/4=11, PMe<sub>5</sub>=50/5=10 y PMe<sub>6</sub>=54/6=9.</p><p>b) CMg<sub>4</sub>=12.000/8=$1.500; CMg<sub>5</sub>=12.000/6=$2.000; CMg<sub>6</sub>=12.000/4=$3.000 por café.</p><p>c) Con P=$1.600 se produce hasta el cuarto trabajador: q=44. Con P=$2.200 se incorpora el quinto, pero no el sexto: q=50.</p><p>d) Con capital fijo, trabajadores adicionales aportan menos unidades. El mismo costo laboral se distribuye entre menos producción adicional, eleva el costo marginal y exige un precio mayor para expandir la cantidad ofrecida.</p>',
+      criterio:'Criterio de corrección (5 puntos): 1 por PMg/PMe; 1,5 por CMg; 1,5 por las dos decisiones; 1 por la explicación causal.' },
+    { n:4, title:'Elasticidad e ingreso total',
+      body:'<p>Una cafetería eleva su precio de $2.500 a $2.750 (+10%). En el mismo rango, sus ventas caen de 1.000 a 920 cafés (−8%).</p>',
+      subs:['a) Calcule la elasticidad-precio de la demanda con signo y en valor absoluto. Clasifique la demanda.','b) Calcule el ingreso total antes y después. ¿Coincide el resultado con la clasificación de elasticidad?','c) Explique por qué la demanda por una cafetería específica puede ser más elástica que la demanda por bebidas calientes en todo el campus.','d) Si la demanda del local se volviera elástica, ¿qué riesgo tendría una nueva alza de precio para el ingreso total?'],
+      sol:'<p>a) ε<sub>D</sub>=(−8%)/(10%)=−0,8 y |ε<sub>D</sub>|=0,8<1: demanda inelástica.</p><p>b) IT₀=2.500×1.000=$2.500.000; IT₁=2.750×920=$2.530.000. Aumenta $30.000: domina el efecto precio, coherente con demanda inelástica.</p><p>c) Un local específico tiene sustitutos más cercanos. Una definición de mercado más estrecha suele elevar la elasticidad.</p><p>d) Si |ε<sub>D</sub>|>1, la cantidad caería proporcionalmente más que el precio y el ingreso total tendería a disminuir.</p>',
+      criterio:'Criterio de corrección (4 puntos): 0,75 por elasticidad; 1,5 por ingresos; 0,75 por sustitutos; 1 por interpretación del riesgo.' },
+    { n:5, title:'Precio máximo, escasez y acceso',
+      body:'<p>En un mercado de arriendos, P se mide en centenas de miles de pesos y Q en viviendas. Las funciones son Q<sub>D</sub>=150−10P y Q<sub>S</sub>=30+10P.</p>',
+      subs:['a) Calcule el equilibrio competitivo.','b) Se fija un precio máximo P<sub>max</sub>=4. Calcule Q<sub>D</sub>, Q<sub>S</sub>, la escasez y la cantidad máxima que puede transarse.','c) Mencione tres mecanismos de racionamiento no basados en precios que podrían aparecer.','d) Evalúe críticamente: "Como el arriendo permitido es más barato, el acceso necesariamente mejora para todos". Distinga precio, cantidad, asignación, calidad y equidad.'],
+      sol:'<p>150−10P=30+10P implica <b>P*=6 ($600.000) y Q*=90</b>. A P<sub>máx</sub>=4, Q<sub>D</sub>=110, Q<sub>S</sub>=70, la escasez es 40 y la cantidad transada no puede superar 70.</p><p>Pueden aparecer colas, criterios de prioridad, relaciones previas, discriminación, deterioro de calidad o pagos informales. Quienes consiguen vivienda pagan menos, pero se ofrecen 20 viviendas menos que en equilibrio y 40 demandantes quedan sin oferta al precio regulado. Por ello no puede inferirse una mejora universal observando solo el precio legal.</p>',
+      criterio:'Criterio de corrección (4 puntos): 0,75 por equilibrio; 0,75 por techo y escasez; 0,75 por racionamiento; 1,75 por evaluación multidimensional.' },
+    { n:6, title:'Impuesto, incidencia y pérdida de eficiencia',
+      body:'<p>En un mercado competitivo, Q<sub>D</sub>=160−20P<sub>c</sub> y Q<sub>S</sub>=20+20P<sub>v</sub>, donde los precios están en miles de pesos. Se introduce un impuesto específico t=2, de modo que P<sub>c</sub>−P<sub>v</sub>=2.</p>',
+      subs:['a) Calcule P* y Q* sin impuesto.','b) Calcule P<sub>c</sub>, P<sub>v</sub> y Q<sub>t</sub> con impuesto.','c) Determine la carga por unidad de compradores y vendedores.','d) Calcule recaudación y pérdida irrecuperable, suponiendo curvas lineales.','e) Explique cómo cambiaría el reparto de la carga si la demanda fuese mucho más inelástica que la oferta.'],
+      sol:'<p>Sin impuesto, 160−20P=20+20P, de donde <b>P*=3,5 y Q*=90</b>. Con impuesto, P<sub>c</sub>=P<sub>v</sub>+2 y 160−20(P<sub>v</sub>+2)=20+20P<sub>v</sub>, por lo que <b>P<sub>v</sub>=2,5, P<sub>c</sub>=4,5 y Q<sub>t</sub>=70</b>. Compradores y vendedores soportan una unidad cada uno.</p><p>La recaudación es 2×70=140 miles de pesos y la pérdida irrecuperable es ½(2)(90−70)=20 miles. Si la demanda fuera relativamente más inelástica, los compradores ajustarían menos su cantidad y soportarían una proporción mayor.</p>',
+      criterio:'Criterio de corrección (4 puntos): 0,75 por equilibrio; 0,75 por nuevo resultado; 0,75 por incidencia; 1 por recaudación y pérdida; 0,75 por elasticidades relativas.' },
+    { n:7, title:'PIB por el enfoque del gasto',
+      body:'<p>Todas las cifras están en millones de pesos y corresponden al mismo año.</p>' +
+        '<table class="guia-table"><tr><th>Transacción</th><th>Monto</th></tr><tr><td style="text-align:left;">Hogares compran bienes finales producidos en Chile</td><td>400</td></tr><tr><td style="text-align:left;">Una empresa compra maquinaria nueva producida en Chile</td><td>250</td></tr><tr><td style="text-align:left;">El gobierno compra servicios de salud producidos en Chile</td><td>180</td></tr><tr><td style="text-align:left;">Turistas extranjeros compran servicios producidos en Chile</td><td>120</td></tr><tr><td style="text-align:left;">Hogares compran directamente un computador importado</td><td>100</td></tr><tr><td style="text-align:left;">El Estado paga transferencias monetarias a hogares</td><td>70</td></tr><tr><td style="text-align:left;">Empresas producen bienes nuevos que quedan en inventario</td><td>50</td></tr></table>',
+      subs:['a) Clasifique cada transacción en C, I, G, X, M o "no entra directamente".','b) Calcule C, I, G, XN y el PIB mediante Y=C+I+G+XN.','c) Explique por qué se restan las importaciones y por qué la transferencia no entra directamente en G.'],
+      sol:'<p>Bienes domésticos: C=400. Maquinaria: I=250. Servicios públicos: G=180. Turismo receptivo: X=120. Computador importado: C=100 y M=100. Transferencia: no entra directamente. Inventario: I=50.</p><p>Así, C=500, I=300, G=180 y XN=120−100=20; por tanto, <b>Y=500+300+180+20=1.000 millones</b>.</p><p>La importación se resta para no atribuir a Chile producción realizada fuera del país. La transferencia redistribuye ingreso, pero no compra por sí misma producción corriente.</p>',
+      criterio:'Criterio de corrección (4 puntos): 2 por clasificación y agregados; 1 por PIB; 1 por la explicación de importaciones y transferencias.' },
+    { n:8, title:'PIB real, PIB per cápita y productividad',
+      body:'<p>Los precios están en miles de pesos. Use los precios del período 1 como referencia.</p>' +
+        '<table class="guia-table"><tr><th>Bien</th><th>P₁</th><th>Q₁</th><th>P₂</th><th>Q₂</th></tr><tr><td>Café</td><td>2,0</td><td>100</td><td>2,5</td><td>110</td></tr><tr><td>Almuerzo</td><td>5,0</td><td>40</td><td>6,0</td><td>42</td></tr></table>',
+      subs:['a) Calcule el PIB nominal de ambos períodos y el PIB real del período 2 a precios del período 1.','b) Calcule la tasa de crecimiento del PIB real.','c) La población pasa de 100 a 105 y los trabajadores de 50 a 52. Calcule el PIB real per cápita y la productividad laboral en ambos períodos, junto con sus tasas de crecimiento.','d) Verifique Y/N=(Y/L)(L/N) en ambos períodos. Explique por qué PIB real per cápita y productividad laboral responden preguntas distintas y por qué sus tasas pueden diferir.'],
+      sol:'<p>PIB<sub>1N</sub>=2(100)+5(40)=400; PIB<sub>2N</sub>=2,5(110)+6(42)=527; PIB<sub>2R</sub>=2(110)+5(42)=430.</p><p>En el período base, PIB<sub>1R</sub>=400. El crecimiento real es g=(430−400)/400×100=<b>7,5%</b>.</p><p>PIB real per cápita: 400/100=4 y 430/105=4,095, crecimiento aproximado de 2,38%. Productividad laboral: 400/50=8 y 430/52=8,269, crecimiento aproximado de 3,37%.</p><p>La identidad se verifica: en el período 1, 8(50/100)=4; en el período 2, 8,269(52/105)≈4,095. Y/N aproxima producción por habitante; Y/L mide producción por trabajador. Como L/N cae levemente de 0,50 a 0,495, el PIB per cápita crece menos que la productividad.</p>',
+      criterio:'Criterio (4 puntos): PIB, 1,25; crecimiento, 0,75; indicadores, 1,25; identidad e interpretación, 0,75.' },
+  ];
+
+  var guiaState = { mode:'mc', idx:{mc:0, vf:0, dev:0}, selected:{mc:null, vf:null} };
+
+  function guiaList(){ return guiaState.mode==='mc' ? guiaMC : guiaState.mode==='vf' ? guiaVF : guiaDev; }
+
+  function renderGuia(){
+    var list = guiaList();
+    var idx = guiaState.idx[guiaState.mode];
+    var item = list[idx];
+    var card = document.getElementById('guiaCard');
+    guiaState.selected.mc = null;
+    guiaState.selected.vf = null;
+
+    var modeLabel = guiaState.mode === 'mc' ? 'Alternativa' : (guiaState.mode === 'vf' ? 'Verdadero/falso' : 'Desarrollo');
+    document.getElementById('guiaCounter').textContent = modeLabel + ' ' + (idx+1) + ' de ' + list.length;
+    document.getElementById('guiaProgressBar').style.width = Math.round(((idx+1)/list.length)*100) + '%';
+    document.getElementById('guiaReveal').textContent = 'Ver respuesta';
+
+    if(guiaState.mode === 'mc'){
+      var optsHtml = item.opts.map(function(o, oi){
+        return '<label class="opt guia-opt" data-oi="'+oi+'"><input type="radio" name="guiaMcOpt"> <span><b>'+String.fromCharCode(65+oi)+'.</b> '+o+'</span></label>';
+      }).join('');
+      card.innerHTML =
+        '<span class="guia-badge">'+item.bloque+'</span>' +
+        '<p class="guia-q">'+item.n+'. '+item.q+'</p>' +
+        '<div class="guia-opts">'+optsHtml+'</div>' +
+        '<div class="guia-expl" id="guiaExpl"><p><b>Respuesta correcta: '+String.fromCharCode(65+item.correct)+'.</b> '+item.expl+'</p></div>';
+      card.querySelectorAll('.guia-opt').forEach(function(o){
+        o.addEventListener('click', function(){
+          card.querySelectorAll('.guia-opt').forEach(function(x){ x.classList.remove('selected'); });
+          o.classList.add('selected');
+          guiaState.selected.mc = parseInt(o.dataset.oi, 10);
+        });
+      });
+    } else if(guiaState.mode === 'vf'){
+      card.innerHTML =
+        '<p class="guia-q">'+item.n+'. '+item.q+'</p>' +
+        '<div class="guia-vf-opts">' +
+          '<button type="button" class="guia-vf-btn" data-val="true">Verdadero</button>' +
+          '<button type="button" class="guia-vf-btn" data-val="false">Falso</button>' +
+        '</div>' +
+        '<div class="guia-expl" id="guiaExpl"><p><b>Respuesta correcta: '+(item.correct ? 'Verdadero.' : 'Falso.')+'</b> '+item.expl+'</p></div>';
+      card.querySelectorAll('.guia-vf-btn').forEach(function(b){
+        b.addEventListener('click', function(){
+          card.querySelectorAll('.guia-vf-btn').forEach(function(x){ x.classList.remove('selected'); });
+          b.classList.add('selected');
+          guiaState.selected.vf = (b.dataset.val === 'true');
+        });
+      });
+    } else {
+      card.innerHTML =
+        '<span class="guia-badge">Problema '+item.n+'</span>' +
+        '<p class="guia-q" style="margin-bottom:6px;">'+item.title+'</p>' +
+        '<div style="font-size:13.6px; line-height:1.55; margin-bottom:8px;">'+item.body+'</div>' +
+        '<ul class="guia-subs">'+item.subs.map(function(s){ return '<li>'+s+'</li>'; }).join('')+'</ul>' +
+        '<div class="guia-expl" id="guiaExpl">'+item.sol+'<div class="guia-crit">'+item.criterio+'</div></div>';
+    }
+
+    document.getElementById('guiaPrev').disabled = (idx === 0);
+    document.getElementById('guiaNext').disabled = (idx === list.length - 1);
+  }
+
+  document.getElementById('guiaTabs').addEventListener('click', function(e){
+    if(e.target.classList.contains('guia-tab')){
+      document.querySelectorAll('.guia-tab').forEach(function(t){ t.classList.remove('active'); });
+      e.target.classList.add('active');
+      guiaState.mode = e.target.dataset.mode;
+      renderGuia();
+    }
+  });
+
+  document.getElementById('guiaReveal').addEventListener('click', function(){
+    var expl = document.getElementById('guiaExpl');
+    var open = expl.classList.toggle('open');
+    this.textContent = open ? 'Ocultar respuesta' : 'Ver respuesta';
+    if(open && guiaState.mode !== 'dev'){
+      var list = guiaList();
+      var item = list[guiaState.idx[guiaState.mode]];
+      if(guiaState.mode === 'mc'){
+        document.querySelectorAll('.guia-opt').forEach(function(o){
+          var oi = parseInt(o.dataset.oi, 10);
+          if(oi === item.correct) o.classList.add('correct');
+          else if(guiaState.selected.mc === oi) o.classList.add('incorrect');
+        });
+      } else {
+        document.querySelectorAll('.guia-vf-btn').forEach(function(b){
+          var val = (b.dataset.val === 'true');
+          if(val === item.correct) b.classList.add('correct');
+          else if(guiaState.selected.vf === val) b.classList.add('incorrect');
+        });
+      }
+    }
+  });
+
+  document.getElementById('guiaPrev').addEventListener('click', function(){
+    if(guiaState.idx[guiaState.mode] > 0){ guiaState.idx[guiaState.mode]--; renderGuia(); }
+  });
+  document.getElementById('guiaNext').addEventListener('click', function(){
+    var list = guiaList();
+    if(guiaState.idx[guiaState.mode] < list.length - 1){ guiaState.idx[guiaState.mode]++; renderGuia(); }
+  });
+
+  renderGuia();
 
   // ---- Plan de repaso ----
   var plan = [
