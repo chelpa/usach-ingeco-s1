@@ -1,67 +1,33 @@
 /**
- * Shared top navbar for every page of the site.
+ * Shared global navigation.
  *
- * HOW TO RENAME / REORDER YOUR 7 COURSES:
- *   Just edit the COURSES array below. `id` MUST match the folder name
- *   under /courses/ (e.g. id "maye1" -> folder /courses/maye1/).
- *   `short` shows in the navbar, `name` is the full name used on course
- *   home pages and the landing page.
- *
- * HOW EACH PAGE USES THIS FILE:
- *   <script src="<path-to-assets>/nav.js" data-base="<relative-path-to-site-root>" data-course="<course-id-or-empty>"></script>
- *
- *   - data-base: relative path back to the repo root from THIS file.
- *     Root index.html            -> data-base="./"
- *     courses/<id>/index.html    -> data-base="../../"
- *     courses/<id>/anything.html -> data-base="../../"
- *   - data-course: the course `id` this page belongs to (used to
- *     highlight it in the navbar). Leave empty ("") on the landing page.
+ * Existing resource pages already load this file directly. To keep those
+ * pages unchanged while moving course metadata into the registry, the
+ * registry and rendering primitives are loaded synchronously when needed.
  */
 (function () {
-  var COURSES = [
-    { id: "maye1", short: "MAyE I", name: "Matemáticas para la Administración y Economía I" },
-    { id: "contabilidad", short: "Contabilidad", name: "Contabilidad General" },
-    { id: "economia", short: "Economía", name: "Introducción a la Economía" },
-    { id: "administracion", short: "Administración", name: "Administración" },
-    { id: "computacion", short: "Computación", name: "Computación" },
-    { id: "ramo6", short: "Ramo 6", name: "Ramo 6 (pendiente)" },
-    { id: "ramo7", short: "Ramo 7", name: "Ramo 7 (pendiente)" }
-  ];
-
-  // Expose so other pages (e.g. the landing page) can build course cards
-  // from the same single source of truth without duplicating the list.
-  window.SITE_COURSES = COURSES;
-
   var script = document.currentScript;
   var base = script.getAttribute("data-base") || "./";
+
+  if (!window.MI_SEMESTRE_DATA) {
+    document.write('<script src="' + base + 'data/site-data.js"></script>');
+  }
+  if (!window.MI_COMPONENTS) {
+    document.write('<script src="' + base + 'assets/components.js"></script>');
+  }
+
+  var data = window.MI_SEMESTRE_DATA;
+  var components = window.MI_COMPONENTS;
   var active = script.getAttribute("data-course") || "";
 
-  var links = COURSES.map(function (c) {
-    var cls = c.id === active ? ' class="active"' : "";
-    return (
-      '<a href="' + base + "courses/" + c.id + '/index.html"' + cls + ">" + c.short + "</a>"
-    );
-  }).join("");
+  if (!data || !components) {
+    throw new Error("Mi Semestre shared registry could not be loaded");
+  }
 
-  var html =
-    /* Single compact sticky bar (was two stacked bars). Kept as one row so
-       the header takes as little vertical space as possible, leaving more
-       room for each page's own content menu (tabs / sidebar) underneath. */
-    '<div class="site-nav">' +
-    /* NOT class "wrap": several imported pages (e.g. the Economía guides)
-       define their own ".wrap" with large bottom padding meant for their
-       own content column. Reusing that class name here let their padding
-       leak onto our navbar and silently inflate its height. site-nav-inner
-       carries its own max-width/centering below instead. */
-    '<div class="site-nav-inner">' +
-    '<a class="brand" href="' + base + 'index.html">🎓 Mi Semestre</a>' +
-    /* Deliberately a <div>, not a semantic <nav> tag: some imported pages
-       (e.g. the Computación guide) define bare `nav{...}` element styles
-       for their own sidebar, which would otherwise leak onto this menu. */
-    '<div class="course-links">' + links + "</div>" +
-    '<span class="sem-label">2° SEMESTRE 2026</span>' +
-    "</div>" +
-    "</div>";
-
-  script.insertAdjacentHTML("afterend", html);
+  // Backwards compatibility for existing pages that read SITE_COURSES.
+  window.SITE_COURSES = data.courses;
+  script.insertAdjacentHTML("afterend", components.renderGlobalNavigation({
+    base: base,
+    activeCourse: active
+  }));
 })();

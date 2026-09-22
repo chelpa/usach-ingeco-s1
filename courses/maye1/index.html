@@ -8,6 +8,8 @@
 </head>
 <body>
 
+<script src="../../data/site-data.js"></script>
+<script src="../../assets/components.js"></script>
 <script src="../../assets/nav.js" data-base="../../" data-course="maye1"></script>
 
 <header class="hero hero-page">
@@ -22,29 +24,7 @@
 
 <div class="wrap">
   <h2 class="section-heading">Material disponible</h2>
-  <div class="resource-list">
-    <a class="resource-card" href="pep2.html">
-      <div>
-        <div class="rtitle">📘 Resumen y Plan de Estudio — PEP 2</div>
-        <div class="rdesc">Límites, límites laterales, límites al infinito, Teorema del Sándwich, cambio de variable, límites exponenciales y logarítmicos. Incluye 16 ejercicios resueltos y plan de repaso día a día.</div>
-      </div>
-      <div class="rarrow">→</div>
-    </a>
-    <a class="resource-card" href="compendio-mayei.html">
-      <div>
-        <div class="rtitle">📚 Compendio MAyEI I — Clases, Controles y Guías</div>
-        <div class="rdesc">Consolidado de 14 documentos con navegación lateral y buscador: 6 Clases (función logarítmica, preliminares de límite, álgebra de límites, teoremas de límite, continuidad y asíntotas), 5 Controles resueltos y 3 Guías de ejercicios (repaso de límites, sandwich y exponenciales, preparatoria PEP 2).</div>
-      </div>
-      <div class="rarrow">→</div>
-    </a>
-    <a class="resource-card" href="dominio-limites.html">
-      <div>
-        <div class="rtitle">📐 Dominio de Límites — Teoría, arquetipos y práctica</div>
-        <div class="rdesc">Formulario y errores frecuentes, 6 arquetipos de resolución, ejercicios resueltos con comentario paso a paso, 12 fichas de estudio y 4 problemas de práctica con soluciones.</div>
-      </div>
-      <div class="rarrow">→</div>
-    </a>
-  </div>
+  <div id="resource-list" class="resource-list"></div>
 
   <footer class="site-footer">
     Sitio personal de apuntes · actualizado a mano curso por curso.
@@ -52,10 +32,12 @@
 </div>
 
 <script>
-  var course = window.SITE_COURSES.find(function (c) { return c.id === "maye1"; });
+  var course = window.MI_COMPONENTS.courseById("maye1");
   if (course) {
     document.getElementById("course-title").textContent = course.name;
-    document.getElementById("course-name-crumb").textContent = course.short;
+    document.getElementById("course-name-crumb").textContent = course.shortName;
+    document.getElementById("resource-list").innerHTML =
+      window.MI_COMPONENTS.renderCourseMaterials({ courseId: course.id, base: "../../" });
   }
 </script>
 

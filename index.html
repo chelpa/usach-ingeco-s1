@@ -8,6 +8,8 @@
 </head>
 <body>
 
+<script src="data/site-data.js"></script>
+<script src="assets/components.js"></script>
 <script src="assets/nav.js" data-base="./" data-course=""></script>
 
 <header class="hero">
@@ -29,26 +31,8 @@
 </div>
 
 <script>
-  // Builds the landing cards from the same course list used by the navbar
-  // (window.SITE_COURSES is set by assets/nav.js). Each course folder can
-  // define window.COURSE_STATUS-like info later; for now we just check
-  // a hardcoded "ready" list so cards show "Disponible" vs "Próximamente".
-  var READY = ["maye1", "contabilidad", "economia", "administracion", "computacion"]; // add a course id here once it has real content
-
-  var grid = document.getElementById("course-grid");
-  window.SITE_COURSES.forEach(function (c) {
-    var isReady = READY.indexOf(c.id) !== -1;
-    var a = document.createElement("a");
-    a.className = "course-card";
-    a.href = "courses/" + c.id + "/index.html";
-    a.innerHTML =
-      '<span class="short">' + c.short + "</span>" +
-      '<div class="name">' + c.name + "</div>" +
-      '<div class="status' + (isReady ? " ready" : "") + '">' +
-      (isReady ? "✓ Material disponible" : "Próximamente") +
-      "</div>";
-    grid.appendChild(a);
-  });
+  document.getElementById("course-grid").innerHTML =
+    window.MI_COMPONENTS.renderCourseCards({ base: "./" });
 </script>
 
 </body>

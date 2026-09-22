@@ -8,6 +8,8 @@
 </head>
 <body>
 
+<script src="../../data/site-data.js"></script>
+<script src="../../assets/components.js"></script>
 <script src="../../assets/nav.js" data-base="../../" data-course="contabilidad"></script>
 
 <header class="hero hero-page">
@@ -22,29 +24,7 @@
 
 <div class="wrap">
   <h2 class="section-heading">Material disponible</h2>
-  <div class="resource-list">
-    <a class="resource-card" href="kit-estudio.html">
-      <div>
-        <div class="rtitle">🗂️ Kit de Estudio — Ajustes de Cierre y PPE</div>
-        <div class="rdesc">Resumen por capas, flashcards, explicaciones estilo Feynman, test de autoevaluación con clave y glosario. Cubre regularizaciones periódicas (devengo, estimaciones, NIC 21) y NIC 16 (reconocimiento, depreciación y baja de PPE).</div>
-      </div>
-      <div class="rarrow">→</div>
-    </a>
-    <a class="resource-card" href="solucionario.html">
-      <div>
-        <div class="rtitle">✅ Solucionario — Guía de Regularizaciones</div>
-        <div class="rdesc">Desarrollo paso a paso de los 8 bloques de ejercicios: devengos con IVA, intereses, sueldos, moneda extranjera, depreciación, provisiones, deudores incobrables y el caso integrado.</div>
-      </div>
-      <div class="rarrow">→</div>
-    </a>
-    <a class="resource-card" href="solucionario-pep2.html">
-      <div>
-        <div class="rtitle">📝 Solucionario PEP 2 — Guía completa</div>
-        <div class="rdesc">Términos pareados, complete la frase, selección múltiple y verdadero/falso, más 6 casos resueltos paso a paso: remuneraciones, cierre de IVA, PPE (mejora, depreciación y revalorización), baja por venta, regularizaciones y un caso integrado.</div>
-      </div>
-      <div class="rarrow">→</div>
-    </a>
-  </div>
+  <div id="resource-list" class="resource-list"></div>
 
   <footer class="site-footer">
     Sitio personal de apuntes · actualizado a mano curso por curso.
@@ -52,10 +32,12 @@
 </div>
 
 <script>
-  var course = window.SITE_COURSES.find(function (c) { return c.id === "contabilidad"; });
+  var course = window.MI_COMPONENTS.courseById("contabilidad");
   if (course) {
     document.getElementById("course-title").textContent = course.name;
-    document.getElementById("course-name-crumb").textContent = course.short;
+    document.getElementById("course-name-crumb").textContent = course.shortName;
+    document.getElementById("resource-list").innerHTML =
+      window.MI_COMPONENTS.renderCourseMaterials({ courseId: course.id, base: "../../" });
   }
 </script>
 
