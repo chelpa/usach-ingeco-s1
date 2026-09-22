@@ -45,6 +45,19 @@
     practice: "Práctica"
   };
 
+  var DASHBOARD_ACTION_LABELS = {
+    summary: "Repasar",
+    exercises: "Resolver ejercicios",
+    flashcards: "Flashcards",
+    quiz: "Quiz",
+    practice: "Practicar",
+    checklist: "Ver checklist",
+    "study-plan": "Ver plan de estudio",
+    "formula-sheet": "Ver formulario",
+    solutions: "Ver soluciones",
+    code: "Ver código"
+  };
+
   function escapeHtml(value) {
     return String(value == null ? "" : value)
       .replace(/&/g, "&amp;")
@@ -107,6 +120,7 @@
     options = options || {};
     var base = options.base || "./";
     var activeCourse = options.activeCourse || "";
+    var activeHome = options.activeHome || false;
     var activeNotebook = options.activeNotebook || false;
     var showCourseBack = options.showCourseBack || false;
     var currentCourse = courseById(activeCourse);
@@ -132,7 +146,8 @@
     return '<div class="site-nav" data-component="global-navigation">' +
       '<div class="site-nav-inner">' +
       '<a class="brand" href="' + escapeHtml(joinPath(base, "index.html")) + '">🎓 Mi Semestre</a>' +
-      '<a class="site-nav-link" href="' + escapeHtml(joinPath(base, "index.html")) + '">Inicio</a>' +
+      '<a class="site-nav-link' + (activeHome ? " active" : "") + '" href="' +
+      escapeHtml(joinPath(base, "index.html")) + '"' + (activeHome ? ' aria-current="page"' : "") + '>Inicio</a>' +
       '<a class="notebook-link' + (activeNotebook ? " active" : "") + '" href="' +
       escapeHtml(joinPath(base, "notebook.html")) + '"' + (activeNotebook ? ' aria-current="page"' : "") +
       '>Cuaderno</a>' +
@@ -164,6 +179,87 @@
         (ready ? "✓ Material disponible · " + countLabel : "Próximamente") +
         "</div>" +
         "</a>";
+    }).join("");
+  }
+
+  function renderDashboardCourseCards(options) {
+    options = options || {};
+    var base = options.base || "./";
+    var courses = options.courses || data.courses;
+
+    return courses.map(function (course) {
+      var resources = resourcesForCourse(course.id);
+      var assessments = assessmentsForCourse(course.id);
+      var hasMaterial = resources.length > 0;
+      var resourceLabel = resources.length === 1 ? "1 material" : resources.length + " materiales";
+      var assessmentLabel = assessments.length === 1 ? "1 evaluación registrada" : assessments.length + " evaluaciones registradas";
+      var placeholder = course.status === "unnamed";
+
+      return '<article class="dashboard-course-card' + (placeholder ? " is-placeholder" : "") + '" data-course-id="' +
+        escapeHtml(course.id) + '">' +
+        '<div class="dashboard-course-card-top"><span class="dashboard-course-short">' + escapeHtml(course.shortName) +
+        '</span>' + (placeholder ? '<span class="dashboard-course-pending">Pendiente</span>' : "") + '</div>' +
+        '<h3>' + escapeHtml(course.name) + '</h3>' +
+        '<p class="dashboard-course-facts"><span>' + escapeHtml(hasMaterial ? resourceLabel : "Sin material registrado") +
+        '</span><span>' + escapeHtml(assessmentLabel) + '</span></p>' +
+        '<div class="dashboard-course-links"><a href="' + escapeHtml(joinPath(base, "courses/" + course.id + "/index.html")) +
+        '">Entrar al ramo <span aria-hidden="true">→</span></a>' +
+        (hasMaterial ? '<a href="' + escapeHtml(joinPath(base, "notebook.html#curso-" + course.id)) +
+          '">Ver material</a>' : "") + '</div>' +
+        '</article>';
+    }).join("");
+  }
+
+  function renderDashboardAssessments(options) {
+    options = options || {};
+    var base = options.base || "./";
+
+    return data.assessments.map(function (assessment) {
+      var course = courseById(assessment.courseId);
+      var resources = (assessment.resourceIds || []).map(function (resourceId) {
+        return data.resources.find(function (resource) { return resource.id === resourceId; });
+      }).filter(Boolean);
+      var kind = assessment.kind === "pep" ? "PEP" : assessment.kind === "assignment" ? "Trabajo" : assessment.kind;
+      var date = assessment.date ? formatDate(assessment.date) : "Fecha no registrada";
+      var status = STATUS_LABELS[assessment.status] || assessment.status;
+      var resourceLinks = resources.map(function (resource) {
+        return '<a href="' + escapeHtml(joinPath(base, resource.href)) + '">' + escapeHtml(resource.title) + '</a>';
+      }).join("");
+
+      return '<article class="dashboard-assessment-card" data-assessment-id="' + escapeHtml(assessment.id) + '">' +
+        '<div class="dashboard-assessment-kicker"><span>' + escapeHtml(course ? course.shortName : assessment.courseId) +
+        '</span><span>' + escapeHtml(kind) + '</span><span>' + escapeHtml(status) + '</span></div>' +
+        '<h3>' + escapeHtml(assessment.title) + '</h3>' +
+        '<p class="dashboard-assessment-date">' + escapeHtml(date) + '</p>' +
+        '<div class="dashboard-related"><span>Material relacionado</span>' +
+        (resourceLinks ? '<div>' + resourceLinks + '</div>' : '<p>Sin material relacionado registrado.</p>') + '</div>' +
+        '</article>';
+    }).join("");
+  }
+
+  function renderDashboardStudyActions(options) {
+    options = options || {};
+    var base = options.base || "./";
+
+    return data.resources.map(function (resource) {
+      var course = courseById(resource.courseId);
+      var actions = (resource.capabilities || []).filter(function (capability) {
+        return DASHBOARD_ACTION_LABELS[capability];
+      }).map(function (capability) {
+        return '<span>' + escapeHtml(DASHBOARD_ACTION_LABELS[capability]) + '</span>';
+      }).join("");
+      var assessmentNames = (resource.assessmentIds || []).map(function (assessmentId) {
+        var assessment = assessmentById(assessmentId);
+        return assessment ? assessment.title : "";
+      }).filter(Boolean).join(" · ");
+
+      return '<article class="dashboard-action-card" data-resource-id="' + escapeHtml(resource.id) + '">' +
+        '<div class="dashboard-action-course">' + escapeHtml(course ? course.shortName : resource.courseId) + '</div>' +
+        '<h3><a href="' + escapeHtml(joinPath(base, resource.href)) + '">' + escapeHtml(resource.title) + '</a></h3>' +
+        (actions ? '<div class="dashboard-action-tags" aria-label="Acciones disponibles">' + actions + '</div>' : "") +
+        (assessmentNames ? '<p class="dashboard-action-assessment">Material relacionado: ' + escapeHtml(assessmentNames) + '</p>' : "") +
+        '<a class="dashboard-open-resource" href="' + escapeHtml(joinPath(base, resource.href)) + '">Abrir material <span aria-hidden="true">→</span></a>' +
+        '</article>';
     }).join("");
   }
 
@@ -353,6 +449,9 @@
     assessmentById: assessmentById,
     courseById: courseById,
     escapeHtml: escapeHtml,
+    renderDashboardAssessments: renderDashboardAssessments,
+    renderDashboardCourseCards: renderDashboardCourseCards,
+    renderDashboardStudyActions: renderDashboardStudyActions,
     renderAssessmentBadges: renderAssessmentBadges,
     renderCourseCards: renderCourseCards,
     renderCourseMaterials: renderCourseMaterials,

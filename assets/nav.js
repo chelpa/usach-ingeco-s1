@@ -9,6 +9,7 @@
   var script = document.currentScript;
   var base = script.getAttribute("data-base") || "./";
   var active = script.getAttribute("data-course") || "";
+  var activeHome = script.getAttribute("data-home") === "true";
   var activeNotebook = script.getAttribute("data-notebook") === "true";
   var resourceContext = script.getAttribute("data-resource") === "true";
 
@@ -24,6 +25,7 @@
     script.insertAdjacentHTML("afterend", components.renderGlobalNavigation({
       base: base,
       activeCourse: active,
+      activeHome: activeHome,
       activeNotebook: activeNotebook,
       showCourseBack: resourceContext
     }));

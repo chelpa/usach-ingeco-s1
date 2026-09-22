@@ -3,36 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mi Semestre — Apuntes y resúmenes</title>
+<meta name="description" content="Inicio de Mi Semestre: ramos, evaluaciones y material de estudio registrado.">
+<title>Inicio — Mi Semestre</title>
 <link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/dashboard.css">
 </head>
-<body>
+<body class="dashboard-page">
 
 <script src="data/site-data.js"></script>
 <script src="assets/components.js"></script>
-<script src="assets/nav.js" data-base="./" data-course=""></script>
+<script src="assets/nav.js" data-base="./" data-course="" data-home="true"></script>
 
-<header class="hero">
-  <div class="wrap">
-    <div class="eyebrow-rule"></div>
-    <div class="eyebrow">Bienvenido a</div>
-    <h1 class="title">Apuntes y res&uacute;menes<br>del <span class="accent">semestre</span></h1>
-    <div class="subtitle">Res&uacute;menes de estudio, gu&iacute;as de repaso y ejercicios resueltos para cada ramo. Elige un curso del men&uacute; de arriba o desde las tarjetas de abajo.</div>
+<main>
+  <header class="dashboard-hero">
+    <div class="dashboard-wrap">
+      <p class="dashboard-overline">Inicio · 2° semestre 2026</p>
+      <div class="dashboard-hero-layout">
+        <div>
+          <h1>Mi Semestre</h1>
+          <p>Una vista rápida de tus ramos, evaluaciones registradas y material para estudiar.</p>
+        </div>
+        <nav class="dashboard-hero-actions" aria-label="Accesos rápidos">
+          <a href="#dashboard-courses">Ver ramos <span aria-hidden="true">↓</span></a>
+          <a href="notebook.html">Abrir cuaderno <span aria-hidden="true">→</span></a>
+        </nav>
+      </div>
+      <dl class="dashboard-snapshot" aria-label="Resumen del semestre">
+        <div><dt id="dashboard-course-count">0</dt><dd>ramos</dd></div>
+        <div><dt id="dashboard-resource-count">0</dt><dd>materiales</dd></div>
+        <div><dt id="dashboard-assessment-count">0</dt><dd>evaluaciones</dd></div>
+        <div><dt id="dashboard-source-count">0</dt><dd>fuentes</dd></div>
+      </dl>
+    </div>
   </div>
-</header>
+  </header>
 
-<div class="wrap">
-  <h2 class="section-heading">Mis ramos</h2>
-  <div id="course-grid" class="course-grid"></div>
+  <div class="dashboard-wrap dashboard-main">
+    <section class="dashboard-section" id="dashboard-courses" aria-labelledby="dashboard-courses-heading">
+      <div class="dashboard-section-heading">
+        <div><p class="dashboard-overline">Vista de ramos</p><h2 id="dashboard-courses-heading">Entrar a un ramo</h2></div>
+        <p>Cada ramo conserva su índice y el acceso a su material registrado.</p>
+      </div>
+      <div id="dashboard-course-grid" class="dashboard-course-grid"></div>
+    </section>
 
-  <footer class="site-footer">
-    Sitio personal de apuntes · actualizado a mano curso por curso.
-  </footer>
-</div>
+    <section class="dashboard-section dashboard-assessments-section" aria-labelledby="dashboard-assessments-heading">
+      <div class="dashboard-section-heading">
+        <div><p class="dashboard-overline">Registro académico</p><h2 id="dashboard-assessments-heading">Evaluaciones</h2></div>
+        <p>Fechas solo cuando están registradas.</p>
+      </div>
+      <div id="dashboard-assessment-grid" class="dashboard-assessment-grid"></div>
+    </section>
+
+    <section class="dashboard-section dashboard-actions-section" aria-labelledby="dashboard-actions-heading">
+      <div class="dashboard-section-heading">
+        <div><p class="dashboard-overline">Material para estudiar</p><h2 id="dashboard-actions-heading">Abrir por actividad</h2></div>
+        <p>Las acciones reflejan las capacidades indicadas en cada material.</p>
+      </div>
+      <div id="dashboard-action-grid" class="dashboard-action-grid"></div>
+      <a class="dashboard-notebook-link" href="notebook.html">Explorar todo el material en Cuaderno <span aria-hidden="true">→</span></a>
+    </section>
+  </div>
+</main>
 
 <script>
-  document.getElementById("course-grid").innerHTML =
-    window.MI_COMPONENTS.renderCourseCards({ base: "./" });
+  (function () {
+    var data = window.MI_SEMESTRE_DATA;
+    var components = window.MI_COMPONENTS;
+    document.getElementById("dashboard-course-count").textContent = data.courses.length;
+    document.getElementById("dashboard-resource-count").textContent = data.resources.length;
+    document.getElementById("dashboard-assessment-count").textContent = data.assessments.length;
+    document.getElementById("dashboard-source-count").textContent = data.sources.length;
+    document.getElementById("dashboard-course-grid").innerHTML = components.renderDashboardCourseCards({ base: "./" });
+    document.getElementById("dashboard-assessment-grid").innerHTML = components.renderDashboardAssessments({ base: "./" });
+    document.getElementById("dashboard-action-grid").innerHTML = components.renderDashboardStudyActions({ base: "./" });
+  })();
 </script>
 
 </body>

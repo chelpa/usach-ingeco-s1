@@ -68,7 +68,7 @@ p{color:var(--ink-soft);}
   color:#cfd4da; text-decoration:none; font-size:13px; font-weight:700;
   padding:6px 9px; border-radius:6px; white-space:nowrap; flex:none;
 }
-.site-nav .site-nav-link:hover,.site-nav .notebook-link:hover,.site-nav .notebook-link.active,.site-nav .site-nav-context:hover{background:rgba(255,255,255,.1);color:#fff;}
+.site-nav .site-nav-link:hover,.site-nav .site-nav-link.active,.site-nav .notebook-link:hover,.site-nav .notebook-link.active,.site-nav .site-nav-context:hover{background:rgba(255,255,255,.1);color:#fff;}
 .site-nav .site-nav-context{color:#9ed6cf;margin-left:auto;}
 .site-ramo-trigger{appearance:none;border:0;background:transparent;color:#cfd4da;cursor:pointer;font:700 13px var(--sans);padding:6px 9px;border-radius:6px;white-space:nowrap;}
 .site-ramo-trigger:hover,.site-ramo-trigger[aria-expanded="true"]{background:rgba(255,255,255,.1);color:#fff;}
