@@ -25,6 +25,26 @@
     undated: "Sin fecha registrada"
   };
 
+  var CAPABILITY_LABELS = {
+    summary: "Resumen",
+    exercises: "Ejercicios",
+    "concept-map": "Mapa conceptual",
+    flashcards: "Flashcards",
+    "study-plan": "Plan de estudio",
+    "formula-sheet": "Formulario",
+    search: "Buscador",
+    solutions: "Soluciones",
+    navigation: "Navegación",
+    quiz: "Autoevaluación",
+    progress: "Progreso",
+    glossary: "Glosario",
+    feynman: "Explicación Feynman",
+    "dark-mode": "Modo oscuro",
+    code: "Código",
+    checklist: "Checklist",
+    practice: "Práctica"
+  };
+
   function escapeHtml(value) {
     return String(value == null ? "" : value)
       .replace(/&/g, "&amp;")
@@ -48,8 +68,18 @@
     return data.assessments.find(function (assessment) { return assessment.id === assessmentId; });
   }
 
+  function assessmentsForCourse(courseId) {
+    return data.assessments.filter(function (assessment) {
+      return assessment.courseId === courseId;
+    });
+  }
+
   function sourceById(sourceId) {
     return data.sources.find(function (source) { return source.id === sourceId; });
+  }
+
+  function sourcesForCourse(courseId) {
+    return data.sources.filter(function (source) { return source.courseId === courseId; });
   }
 
   function joinPath(base, href) {
@@ -77,18 +107,37 @@
     options = options || {};
     var base = options.base || "./";
     var activeCourse = options.activeCourse || "";
-    var links = data.courses.map(function (course) {
+    var activeNotebook = options.activeNotebook || false;
+    var showCourseBack = options.showCourseBack || false;
+    var currentCourse = courseById(activeCourse);
+    var courseLinks = data.courses.map(function (course) {
       var active = course.id === activeCourse;
-      return '<a href="' + escapeHtml(joinPath(base, "courses/" + course.id + "/index.html")) + '"' +
-        (active ? ' class="active" aria-current="page"' : "") + ">" +
-        escapeHtml(course.shortName) + "</a>";
+      return '<a class="site-drawer-course-link' + (active ? " active" : "") + '" href="' +
+        escapeHtml(joinPath(base, "courses/" + course.id + "/index.html")) + '"' +
+        (active ? ' aria-current="page"' : "") + ">" +
+        '<span>' + escapeHtml(course.shortName) + '</span><small>' + escapeHtml(course.name) + '</small></a>';
     }).join("");
+    var contextLink = showCourseBack && currentCourse ?
+      '<a class="site-nav-context" href="' + escapeHtml(joinPath(base, "courses/" + currentCourse.id + "/index.html")) + '">' +
+      '← ' + escapeHtml(currentCourse.shortName) + '</a>' : "";
+    var courseDrawer =
+      '<button class="site-ramo-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="site-course-drawer">☰ Ramos</button>' +
+      '<div class="site-course-drawer" id="site-course-drawer" data-course-drawer aria-hidden="true">' +
+      '<div class="site-course-drawer-backdrop" data-course-drawer-close aria-hidden="true"></div>' +
+      '<section class="site-course-drawer-panel" role="dialog" aria-modal="true" aria-label="Ramos registrados" tabindex="-1">' +
+      '<div class="site-course-drawer-heading"><div><span>Mi Semestre</span><h2>Ramos</h2></div>' +
+      '<button class="site-course-drawer-close" type="button" data-course-drawer-close aria-label="Cerrar ramos">×</button></div>' +
+      '<div class="site-course-drawer-list">' + courseLinks + '</div></section></div>';
 
     return '<div class="site-nav" data-component="global-navigation">' +
       '<div class="site-nav-inner">' +
       '<a class="brand" href="' + escapeHtml(joinPath(base, "index.html")) + '">🎓 Mi Semestre</a>' +
-      '<div class="course-links" aria-label="Cursos">' + links + "</div>" +
-      '<span class="sem-label">2° SEMESTRE 2026</span>' +
+      '<a class="site-nav-link" href="' + escapeHtml(joinPath(base, "index.html")) + '">Inicio</a>' +
+      '<a class="notebook-link' + (activeNotebook ? " active" : "") + '" href="' +
+      escapeHtml(joinPath(base, "notebook.html")) + '"' + (activeNotebook ? ' aria-current="page"' : "") +
+      '>Cuaderno</a>' +
+      courseDrawer +
+      contextLink +
       "</div>" +
       "</div>";
   }
@@ -184,7 +233,123 @@
       '</div>';
   }
 
+  function notebookTypeLabel(type) {
+    return TYPE_LABELS[type] || type;
+  }
+
+  function notebookCapabilityLabel(capability) {
+    return CAPABILITY_LABELS[capability] || capability;
+  }
+
+  function renderNotebookCourseList(options) {
+    options = options || {};
+    var courses = options.courses || data.courses;
+
+    return courses.map(function (course) {
+      var resources = resourcesForCourse(course.id);
+      var count = resources.length;
+      var countLabel = count === 1 ? "1 material" : count + " materiales";
+      var availability = count ? "Material disponible" : "Sin material registrado";
+      return '<a class="notebook-course-item" href="#curso-' + escapeHtml(course.id) + '" data-notebook-course="' +
+        escapeHtml(course.id) + '">' +
+        '<span class="notebook-course-item-mark" aria-hidden="true"></span>' +
+        '<span class="notebook-course-item-copy"><strong>' + escapeHtml(course.shortName) + '</strong>' +
+        '<span>' + escapeHtml(course.name) + '</span></span>' +
+        '<span class="notebook-course-item-count">' + escapeHtml(countLabel) + '<small>' + availability + '</small></span>' +
+        '</a>';
+    }).join("");
+  }
+
+  function renderNotebookTypeSummary(options) {
+    options = options || {};
+    var resources = options.resources || data.resources;
+    var counts = [];
+    resources.forEach(function (resource) {
+      var item = counts.find(function (count) { return count.type === resource.type; });
+      if (!item) {
+        item = { type: resource.type, count: 0 };
+        counts.push(item);
+      }
+      item.count += 1;
+    });
+    return counts.map(function (item) {
+      return '<li><span>' + escapeHtml(notebookTypeLabel(item.type)) + '</span><strong>' + item.count + '</strong></li>';
+    }).join("");
+  }
+
+  function renderNotebookResource(resource, base) {
+    var sourceRows = (resource.provenance || []).map(function (provenance) {
+      var source = sourceById(provenance.sourceId);
+      var label = source ? sourceLabel(source) : "Provenance pendiente";
+      return '<li><span>' + escapeHtml(provenance.relation || "Fuente") + '</span>' + escapeHtml(label) + '</li>';
+    }).join("");
+    var assessmentRows = (resource.assessmentIds || []).map(function (assessmentId) {
+      var assessment = assessmentById(assessmentId);
+      if (!assessment) return "";
+      return '<span class="notebook-assessment">' + escapeHtml(assessment.title +
+        (assessment.date ? " · " + formatDate(assessment.date) : " · sin fecha registrada")) + '</span>';
+    }).join("");
+    var capabilities = (resource.capabilities || []).map(function (capability) {
+      return '<span>' + escapeHtml(notebookCapabilityLabel(capability)) + '</span>';
+    }).join("");
+
+    return '<article class="notebook-resource" data-resource-id="' + escapeHtml(resource.id) + '">' +
+      '<div class="notebook-resource-kicker"><span>' + escapeHtml(notebookTypeLabel(resource.type)) + '</span>' +
+      '<span class="notebook-resource-status status-' + escapeHtml(resource.status) + '">' +
+      escapeHtml(STATUS_LABELS[resource.status] || resource.status) + '</span></div>' +
+      '<h3>' + escapeHtml(resource.title) + '</h3>' +
+      '<p>' + escapeHtml(resource.description) + '</p>' +
+      (capabilities ? '<div class="notebook-capabilities" aria-label="Incluye">' + capabilities + '</div>' : "") +
+      '<div class="notebook-resource-foot">' +
+      '<div class="notebook-provenance"><span class="notebook-meta-label">Provenencia</span>' +
+      (sourceRows ? '<ul>' + sourceRows + '</ul>' : '<p>Provenance pendiente</p>') +
+      (assessmentRows ? '<div class="notebook-assessments"><span class="notebook-meta-label">Relacionada con</span>' + assessmentRows + '</div>' : "") +
+      '</div>' +
+      '<a class="notebook-open" href="' + escapeHtml(joinPath(base, resource.href)) + '">Abrir recurso <span aria-hidden="true">→</span></a>' +
+      '</div></article>';
+  }
+
+  function renderNotebookCourse(options) {
+    options = options || {};
+    var course = courseById(options.courseId);
+    var base = options.base || "./";
+    if (!course) return "";
+    var resources = resourcesForCourse(course.id);
+    var assessments = assessmentsForCourse(course.id);
+    var groups = [];
+    resources.forEach(function (resource) {
+      var group = groups.find(function (item) { return item.type === resource.type; });
+      if (!group) {
+        group = { type: resource.type, resources: [] };
+        groups.push(group);
+      }
+      group.resources.push(resource);
+    });
+    var assessmentContext = assessments.map(function (assessment) {
+      var date = assessment.date ? formatDate(assessment.date) : "Sin fecha registrada";
+      return '<li><strong>' + escapeHtml(assessment.title) + '</strong><span>' + escapeHtml(date) + '</span></li>';
+    }).join("");
+    var groupMarkup = groups.map(function (group) {
+      return '<section class="notebook-resource-group"><h3>' + escapeHtml(notebookTypeLabel(group.type)) +
+        '<span>' + group.resources.length + '</span></h3>' +
+        group.resources.map(function (resource) { return renderNotebookResource(resource, base); }).join("") + '</section>';
+    }).join("");
+
+    return '<section class="notebook-course-sheet" id="curso-' + escapeHtml(course.id) + '" data-notebook-sheet="' +
+      escapeHtml(course.id) + '" tabindex="-1">' +
+      '<header class="notebook-course-heading"><div><p class="notebook-overline">Curso · ' +
+      escapeHtml(course.status === "unnamed" ? "pendiente de definir" : "material de estudio") + '</p>' +
+      '<h2>' + escapeHtml(course.name) + '</h2><p>' + escapeHtml(course.shortName) + ' · ' +
+      escapeHtml(resources.length === 1 ? "1 material registrado" : resources.length + " materiales registrados") +
+      '</p></div><a href="courses/' + escapeHtml(course.id) + '/index.html" class="notebook-course-page">Ver índice del curso</a></header>' +
+      (assessments.length ? '<aside class="notebook-assessment-context"><span class="notebook-meta-label">Contexto de evaluación conocido</span><ul>' + assessmentContext + '</ul></aside>' : "") +
+      (resources.length ? '<div class="notebook-resource-groups">' + groupMarkup + '</div>' :
+        '<div class="notebook-placeholder"><p class="notebook-overline">Sin material registrado</p><h3>Este ramo permanece como marcador de posición.</h3><p>Aún no hay recursos ni procedencia asociados en el registro.</p></div>') +
+      '</section>';
+  }
+
   window.MI_COMPONENTS = {
+    assessmentsForCourse: assessmentsForCourse,
     assessmentById: assessmentById,
     courseById: courseById,
     escapeHtml: escapeHtml,
@@ -192,9 +357,13 @@
     renderCourseCards: renderCourseCards,
     renderCourseMaterials: renderCourseMaterials,
     renderGlobalNavigation: renderGlobalNavigation,
+    renderNotebookCourse: renderNotebookCourse,
+    renderNotebookCourseList: renderNotebookCourseList,
+    renderNotebookTypeSummary: renderNotebookTypeSummary,
     renderProvenanceBadges: renderProvenanceBadges,
     renderResourceCards: renderResourceCards,
     resourcesForCourse: resourcesForCourse,
-    sourceById: sourceById
+    sourceById: sourceById,
+    sourcesForCourse: sourcesForCourse
   };
 })();

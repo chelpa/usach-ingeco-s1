@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cuaderno académico de Mi Semestre: materiales, fuentes y contexto de evaluación.">
+<title>Cuaderno académico — Mi Semestre</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/notebook.css">
+</head>
+<body class="notebook-page">
+
+<script src="data/site-data.js"></script>
+<script src="assets/components.js"></script>
+<script src="assets/nav.js" data-base="./" data-course="" data-notebook="true"></script>
+
+<main>
+  <header class="notebook-hero">
+    <div class="notebook-wrap">
+      <p class="notebook-overline">Mi Semestre · 2° semestre 2026</p>
+      <h1>Cuaderno académico</h1>
+      <p class="notebook-intro">Una mesa de lectura para encontrar el material existente, entender de dónde viene y entrar directo a cada recurso.</p>
+      <dl class="notebook-overview" aria-label="Resumen del cuaderno">
+        <div><dt id="notebook-course-count">0</dt><dd>ramos registrados</dd></div>
+        <div><dt id="notebook-resource-count">0</dt><dd>materiales disponibles</dd></div>
+        <div><dt id="notebook-source-count">0</dt><dd>fuentes registradas</dd></div>
+        <div><dt id="notebook-assessment-count">0</dt><dd>evaluaciones conocidas</dd></div>
+      </dl>
+    </div>
+  </header>
+
+  <div class="notebook-wrap notebook-layout">
+    <aside class="notebook-index" aria-label="Índice de cursos">
+      <div class="notebook-index-heading"><p class="notebook-overline">Índice</p><h2>Ramos</h2></div>
+      <section aria-labelledby="active-courses-heading">
+        <h3 id="active-courses-heading">En curso</h3>
+        <div id="notebook-active-courses" class="notebook-course-list"></div>
+      </section>
+      <section aria-labelledby="pending-courses-heading">
+        <h3 id="pending-courses-heading">Sin definir</h3>
+        <div id="notebook-pending-courses" class="notebook-course-list"></div>
+      </section>
+      <section class="notebook-type-summary" aria-labelledby="material-types-heading">
+        <h3 id="material-types-heading">Mapa de materiales</h3>
+        <ul id="notebook-type-summary"></ul>
+      </section>
+      <p class="notebook-index-note">Los ramos sin nombre se mantienen como marcadores de posición hasta contar con información registrada.</p>
+    </aside>
+
+    <div class="notebook-reading-area">
+      <div class="notebook-reading-toolbar"><span>Materiales, capacidades y procedencia</span><a href="index.html">Volver al inicio</a></div>
+      <div id="notebook-course-sheets"></div>
+    </div>
+  </div>
+</main>
+
+<script>
+  (function () {
+    var data = window.MI_SEMESTRE_DATA;
+    var components = window.MI_COMPONENTS;
+    var activeCourses = data.courses.filter(function (course) { return course.status === "active"; });
+    var pendingCourses = data.courses.filter(function (course) { return course.status !== "active"; });
+    var availableResources = data.resources.filter(function (resource) {
+      return resource.status === "published" || resource.status === "archived";
+    });
+
+    document.getElementById("notebook-course-count").textContent = data.courses.length;
+    document.getElementById("notebook-resource-count").textContent = availableResources.length;
+    document.getElementById("notebook-source-count").textContent = data.sources.length;
+    document.getElementById("notebook-assessment-count").textContent = data.assessments.length;
+    document.getElementById("notebook-active-courses").innerHTML = components.renderNotebookCourseList({ courses: activeCourses });
+    document.getElementById("notebook-pending-courses").innerHTML = components.renderNotebookCourseList({ courses: pendingCourses });
+    document.getElementById("notebook-type-summary").innerHTML = components.renderNotebookTypeSummary({ resources: availableResources });
+    document.getElementById("notebook-course-sheets").innerHTML = data.courses.map(function (course) {
+      return components.renderNotebookCourse({ courseId: course.id, base: "./" });
+    }).join("");
+
+    var sheets = Array.prototype.slice.call(document.querySelectorAll("[data-notebook-sheet]"));
+    var courseLinks = Array.prototype.slice.call(document.querySelectorAll("[data-notebook-course]"));
+    function selectCourse(courseId, moveFocus) {
+      var selected = courseId && document.getElementById("curso-" + courseId) ? courseId : activeCourses[0].id;
+      sheets.forEach(function (sheet) { sheet.hidden = sheet.getAttribute("data-notebook-sheet") !== selected; });
+      courseLinks.forEach(function (link) {
+        var current = link.getAttribute("data-notebook-course") === selected;
+        link.classList.toggle("is-current", current);
+        if (current) link.setAttribute("aria-current", "page"); else link.removeAttribute("aria-current");
+      });
+      if (moveFocus) document.getElementById("curso-" + selected).focus();
+    }
+    function courseFromHash() { return decodeURIComponent(window.location.hash.replace("#curso-", "")); }
+    selectCourse(courseFromHash(), false);
+    window.addEventListener("hashchange", function () { selectCourse(courseFromHash(), true); });
+  })();
+</script>
+</body>
+</html>

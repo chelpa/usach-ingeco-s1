@@ -84,7 +84,7 @@
   }
 
   nav.tabs{
-    position:sticky; top:56px; z-index:20;
+    position:sticky; top:var(--mi-semestre-nav-height, 56px); z-index:20;
     background:var(--surface);
     border-bottom:1px solid var(--border);
     box-shadow:var(--shadow);
@@ -297,7 +297,7 @@
 </head>
 <body>
 
-<script src="../../assets/nav.js" data-base="../../" data-course="economia"></script>
+<script src="../../assets/nav.js" data-base="../../" data-course="economia" data-resource="true"></script>
 
 <header class="hero">
   <div class="eyebrow">Introducción a la Economía · USACH</div>

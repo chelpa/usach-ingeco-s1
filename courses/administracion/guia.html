@@ -82,7 +82,7 @@
   a { color: inherit; }
 
   .app-header {
-    position: sticky; top: 56px; z-index: 20;
+    position: sticky; top: var(--mi-semestre-nav-height, 56px); z-index: 20;
     background: var(--surface-1);
     border-bottom: 1px solid var(--gridline);
     padding: 14px 20px;
@@ -234,7 +234,7 @@
 </head>
 <body>
 
-<script src="../../assets/nav.js" data-base="../../" data-course="administracion"></script>
+<script src="../../assets/nav.js" data-base="../../" data-course="administracion" data-resource="true"></script>
 
 <header class="app-header">
   <div class="brand" onclick="goDashboard()">

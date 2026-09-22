@@ -158,7 +158,7 @@
 
   /* ---------- TOC ---------- */
   nav.toc{
-    position:sticky; top:56px; z-index:20;
+    position:sticky; top:var(--mi-semestre-nav-height, 56px); z-index:20;
     background:color-mix(in srgb, var(--paper) 88%, transparent);
     backdrop-filter: blur(8px);
     border-bottom:1px solid var(--line);
@@ -424,7 +424,7 @@
 </head>
 <body>
 
-<script src="../../assets/nav.js" data-base="../../" data-course="maye1"></script>
+<script src="../../assets/nav.js" data-base="../../" data-course="maye1" data-resource="true"></script>
 
 <header class="hero">
   <div class="hero-inner">
