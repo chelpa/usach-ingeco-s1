@@ -83,9 +83,9 @@
         var focusable = drawerPanel.querySelectorAll("button, [href]");
         var first = focusable[0];
         var last = focusable[focusable.length - 1];
-        if (event.shiftKey && document.activeElement === first) {
+        if (event.shiftKey && (document.activeElement === first || document.activeElement === drawerPanel || !drawerPanel.contains(document.activeElement))) {
           event.preventDefault(); last.focus();
-        } else if (!event.shiftKey && document.activeElement === last) {
+        } else if (!event.shiftKey && (document.activeElement === last || !drawerPanel.contains(document.activeElement))) {
           event.preventDefault(); first.focus();
         }
       }

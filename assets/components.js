@@ -146,12 +146,12 @@
     return '<div class="site-nav" data-component="global-navigation">' +
       '<div class="site-nav-inner">' +
       '<a class="brand" href="' + escapeHtml(joinPath(base, "index.html")) + '">🎓 Mi Semestre</a>' +
+      courseDrawer +
       '<a class="site-nav-link' + (activeHome ? " active" : "") + '" href="' +
       escapeHtml(joinPath(base, "index.html")) + '"' + (activeHome ? ' aria-current="page"' : "") + '>Inicio</a>' +
       '<a class="notebook-link' + (activeNotebook ? " active" : "") + '" href="' +
       escapeHtml(joinPath(base, "notebook.html")) + '"' + (activeNotebook ? ' aria-current="page"' : "") +
       '>Cuaderno</a>' +
-      courseDrawer +
       contextLink +
       "</div>" +
       "</div>";
