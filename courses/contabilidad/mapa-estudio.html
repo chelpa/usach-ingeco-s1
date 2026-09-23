@@ -175,6 +175,11 @@
   function conceptAnchor(target) {
     return "concept-" + target.id;
   }
+  function focusAnchoredConcept() {
+    var id = location.hash.slice(1);
+    var card = document.getElementById(id);
+    if (card && card.classList.contains("concept-node")) card.focus({ preventScroll: true });
+  }
   function targetTitle(target) {
     var items = target.kind === "concept" ? model.concepts : model.skills;
     return items.find(function (item) { return item.id === target.id; }).title;
@@ -194,6 +199,7 @@
     var target = { kind: kind, id: item.id };
     var card = element("article", "concept-node");
     card.id = conceptAnchor(target);
+    card.tabIndex = -1;
     card.dataset[kind === "concept" ? "conceptId" : "skillId"] = item.id;
     card.append(element("span", "concept-kind", kind === "concept" ? "Concepto" : "Habilidad"));
     card.append(element("h3", "", item.title));
@@ -277,6 +283,7 @@
       var course = registry.courses.find(function (item) { return item.id === model.courseId; });
       var source = registry.resources.find(function (item) { return item.id === model.sourceResourceId && item.courseId === model.courseId; });
       renderTree(course, source);
+      focusAnchoredConcept();
       renderSource(source);
       var store = window.MI_STUDY_STORE.createStudyStore({ model: model, registry: registry, engine: engine, storage: localStorage });
       var targets = model.concepts.map(function (item) { return { kind: "concept", id: item.id }; }).concat(
@@ -296,6 +303,7 @@
       if (!tree.querySelector(".tree-course")) tree.textContent = "Mapa no disponible";
     }
   }
+  window.addEventListener("hashchange", focusAnchoredConcept);
   initialize();
 })();
 </script>
