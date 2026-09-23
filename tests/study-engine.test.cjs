@@ -157,12 +157,22 @@ test("MemoryState derivation has no hidden clock", () => {
   const source = fs.readFileSync(path.join(root, "assets/study-engine.js"), "utf8");
   assert.doesNotMatch(source, /Date\.now\s*\(|new Date\s*\(\s*\)/);
 });
-test("all academic resource bodies match the Phase 3D base", () => {
+test("all academic resource bodies match the Phase 3D base apart from math rendering assets", () => {
   assert.equal(registry.resources.length, 12);
   for (const resource of registry.resources) {
-    const current = fs.readFileSync(path.join(root, resource.href));
+    let current = fs.readFileSync(path.join(root, resource.href), "utf8");
     const baseline = execFileSync("git", ["show", "mi-semestre-phase-3d:" + resource.href], { cwd: root });
-    assert.deepEqual(current, baseline, resource.href);
+    if (resource.id === "maye1-compendio") {
+      const assets = [
+        '<link rel="stylesheet" href="../../assets/math-notation.css">\n',
+        '<script src="../../assets/math-notation.js"></script>\n'
+      ];
+      for (const asset of assets) {
+        assert.equal(current.split(asset).length, 2, resource.href + ": rendering asset occurs once");
+        current = current.replace(asset, "");
+      }
+    }
+    assert.deepEqual(Buffer.from(current), baseline, resource.href);
   }
 });
 test("storage errors are surfaced", async () => {
