@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Mapa personal de estudio de Contabilidad, basado en las definiciones del StudyModel.">
+<title>Mapa de estudio · Contabilidad — Mi Semestre</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .tree-main { padding-top: 30px; }
+  .tree-intro { max-width: 760px; margin: 0 0 24px; }
+  .tree-intro p { margin: 0; }
+  .tree-caution {
+    padding: 15px 18px; margin: 0 0 26px; border-left: 4px solid var(--gold);
+    border-radius: 0 10px 10px 0; background: #fff8e9; color: var(--ink-soft);
+    font-size: 14px;
+  }
+  .tree-caution strong { color: var(--ink); }
+  .tree-scene {
+    padding: 34px 28px 30px; border: 1px solid #cfdedb; border-radius: 22px;
+    background: linear-gradient(180deg, #f0f8f6 0%, #f8fbfa 32%, #fff 100%);
+    box-shadow: 0 14px 32px rgba(38,43,49,.07);
+  }
+  .tree-course, .tree-unit-header {
+    position: relative; text-align: center; border-radius: 16px; margin-left: auto; margin-right: auto;
+  }
+  .tree-course {
+    max-width: 430px; margin-bottom: 42px; padding: 21px 24px;
+    background: var(--charcoal); color: #fff; box-shadow: 0 9px 22px rgba(25,35,38,.18);
+  }
+  .tree-course::after, .tree-unit-header::after {
+    content: ""; position: absolute; top: 100%; left: calc(50% - 1px);
+    width: 2px; background: #83b6af;
+  }
+  .tree-course::after { height: 42px; }
+  .tree-unit-header {
+    max-width: 550px; margin-bottom: 55px; padding: 18px 22px;
+    border: 2px solid var(--teal-dark); background: #fff;
+    box-shadow: 0 7px 18px rgba(36,116,107,.09);
+  }
+  .tree-unit-header::after { height: 55px; }
+  .tree-kicker {
+    display: block; margin-bottom: 5px; font-size: 11px; font-weight: 800;
+    letter-spacing: .11em; text-transform: uppercase;
+  }
+  .tree-course .tree-kicker { color: #9ed6cf; }
+  .tree-unit-header .tree-kicker { color: var(--teal-dark); }
+  .tree-course strong { font-family: var(--serif); font-size: 27px; line-height: 1.2; }
+  .tree-unit-header h2 { margin: 0; font-family: var(--serif); font-size: 23px; line-height: 1.25; }
+  .tree-unit-group + .tree-unit-group { margin-top: 50px; }
+  .concept-grid {
+    position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch; gap: 15px;
+  }
+  .concept-grid::before {
+    content: ""; position: absolute; left: 12%; right: 12%; top: -28px;
+    height: 2px; background: #83b6af;
+  }
+  .concept-node {
+    position: relative; display: flex; flex-direction: column; min-width: 0;
+    padding: 18px; border: 1px solid #d7e3e0; border-top: 5px solid var(--teal-dark);
+    border-radius: 13px; background: #fff; box-shadow: 0 5px 14px rgba(31,62,58,.07);
+    scroll-margin-top: 75px;
+  }
+  .concept-node::before {
+    content: ""; position: absolute; left: calc(50% - 1px); bottom: 100%;
+    width: 2px; height: 28px; background: #83b6af;
+  }
+  .concept-node:target { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .concept-node[data-has-requirement="true"] { border-top-color: var(--gold); }
+  .concept-kind { color: var(--teal-dark); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .concept-node h3 { margin: 5px 0 16px; font-size: 18px; line-height: 1.25; }
+  .concept-memory { margin: 0 0 17px; padding: 11px 12px; border-radius: 9px; background: #f2f5f4; color: var(--ink-soft); font-size: 13px; }
+  .concept-memory strong { display: block; margin-bottom: 3px; color: var(--ink); }
+  .concept-memory time { display: block; margin-top: 3px; font-size: 12px; }
+  .concept-requires { margin: 0 0 16px; padding: 11px 12px; border-radius: 9px; background: #fff8e9; color: var(--ink); font-size: 13px; }
+  .concept-requires strong { display: block; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+  .concept-requires a { font-weight: 700; }
+  .concept-source { margin-top: auto; padding-top: 13px; border-top: 1px solid var(--line); font-size: 13px; }
+  .concept-source strong, .concept-source small { display: block; }
+  .concept-source strong { margin-bottom: 4px; }
+  .concept-source small { margin-top: 5px; color: var(--muted); line-height: 1.4; }
+  .concept-activity {
+    display: inline-flex; align-items: center; justify-content: center; min-height: 42px;
+    margin-top: 15px; padding: 8px 13px; border-radius: 8px;
+    background: var(--teal-dark); color: #fff; font-size: 13px; font-weight: 800; text-decoration: none;
+  }
+  .concept-activity:hover { background: #17594f; color: #fff; }
+  .concept-node a:focus-visible, .tree-source a:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .tree-source {
+    margin: 28px 0 0; padding: 22px 24px; border: 1px solid var(--line);
+    border-radius: 13px; background: #fff;
+  }
+  .tree-source h2 { margin: 0 0 8px; font-size: 19px; }
+  .tree-source p { margin: 0 0 12px; font-size: 14px; }
+  .tree-source ul { margin: 9px 0 0; padding-left: 20px; color: var(--ink-soft); font-size: 13px; }
+  .tree-error { padding: 15px 18px; border: 1px solid #e8bcb2; border-radius: 9px; background: #fff0ec; color: #8c3024; }
+  [hidden] { display: none !important; }
+  @media (max-width: 780px) {
+    .concept-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .concept-grid::before { display: none; }
+    .concept-node::before { display: none; }
+  }
+  @media (max-width: 600px) {
+    .tree-main { padding-top: 20px; }
+    .tree-scene { padding: 22px 17px 22px; }
+    .tree-course, .tree-unit-header { text-align: left; margin-left: 0; margin-right: 0; }
+    .tree-course { margin-bottom: 28px; padding: 17px 19px; }
+    .tree-course::after { left: 26px; height: 28px; }
+    .tree-unit-header { margin-bottom: 26px; padding: 15px 18px; }
+    .tree-unit-header::after { left: 26px; height: 26px; }
+    .concept-grid {
+      display: grid; grid-template-columns: minmax(0, 1fr); gap: 13px;
+      margin-left: 25px; padding-left: 19px; border-left: 2px solid #83b6af;
+    }
+    .concept-node::before {
+      display: block; left: -21px; top: 26px; bottom: auto; width: 20px; height: 2px;
+    }
+    .concept-node { padding: 17px; }
+    .tree-source { padding: 19px; }
+  }
+</style>
+</head>
+<body>
+<script src="../../data/site-data.js"></script>
+<script src="../../assets/components.js"></script>
+<script src="../../assets/nav.js" data-base="../../" data-course="contabilidad" data-resource="true"></script>
+
+<header class="hero hero-page">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../../index.html">Inicio</a> / <a href="index.html">Contabilidad</a> / Mapa de estudio</div>
+    <div class="eyebrow-rule"></div>
+    <div class="eyebrow">Estudiar · Contabilidad</div>
+    <h1 class="title">Mapa de estudio</h1>
+    <div class="subtitle">Una vista navegable de la unidad, sus conceptos y la relación de estudio registrada.</div>
+  </div>
+</header>
+
+<main class="wrap tree-main">
+  <div class="tree-intro"><p>Abre el material de referencia o entra a la autoevaluación disponible desde su concepto.</p></div>
+  <p class="tree-caution"><strong>Mapa personal de estudio.</strong> Representa definiciones de estudio; no es el programa oficial ni establece requisitos académicos. Las autoevaluaciones son declaraciones personales, no pruebas de dominio.</p>
+  <p id="tree-error" class="tree-error" role="alert" hidden></p>
+  <section id="study-tree" class="tree-scene" aria-label="Jerarquía del modelo de estudio">Cargando mapa de estudio…</section>
+  <aside id="source-context" class="tree-source" aria-labelledby="source-heading" hidden>
+    <h2 id="source-heading">Material y procedencia</h2>
+    <p id="source-description"></p>
+    <ul id="source-provenance"></ul>
+  </aside>
+  <footer class="site-footer">Sitio personal de apuntes · actualizado a mano curso por curso.</footer>
+</main>
+
+<script src="../../data/study-data.js"></script>
+<script src="../../assets/study-engine.js"></script>
+<script src="../../assets/study-store.js"></script>
+<script>
+(function () {
+  "use strict";
+  var model = window.MI_SEMESTRE_STUDY_DATA;
+  var registry = window.MI_SEMESTRE_DATA;
+  var engine = window.MI_STUDY_ENGINE;
+  var tree = document.getElementById("study-tree");
+  var errorEl = document.getElementById("tree-error");
+  var ratingLabels = { "uncertain": "No estoy seguro", "can-explain": "Puedo explicarlo" };
+  var activityPages = { "conta-auto-evaluar-devengo": "estudio.html" };
+
+  function element(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+  function sameTarget(left, right) {
+    return left.kind === right.kind && left.id === right.id;
+  }
+  function conceptAnchor(target) {
+    return "concept-" + target.id;
+  }
+  function targetTitle(target) {
+    var items = target.kind === "concept" ? model.concepts : model.skills;
+    return items.find(function (item) { return item.id === target.id; }).title;
+  }
+  function renderMemory(container, memory) {
+    container.replaceChildren();
+    if (memory.assessment === "unknown") {
+      container.append(element("strong", "", "Sin evidencia registrada"));
+      return;
+    }
+    container.append(element("strong", "", "Autoevaluación: " + ratingLabels[memory.latestSelfAssessment]));
+    var observed = element("time", "", new Intl.DateTimeFormat("es-CL", { dateStyle: "medium", timeStyle: "short" }).format(new Date(memory.lastObservedAt)));
+    observed.dateTime = memory.lastObservedAt;
+    container.append(observed);
+  }
+  function renderNode(item, kind, source) {
+    var target = { kind: kind, id: item.id };
+    var card = element("article", "concept-node");
+    card.id = conceptAnchor(target);
+    card.dataset[kind === "concept" ? "conceptId" : "skillId"] = item.id;
+    card.append(element("span", "concept-kind", kind === "concept" ? "Concepto" : "Habilidad"));
+    card.append(element("h3", "", item.title));
+    var memory = element("p", "concept-memory", "Leyendo evidencia…");
+    memory.dataset.memoryTarget = kind + ":" + item.id;
+    card.append(memory);
+
+    var requirements = model.relations.filter(function (relation) {
+      return relation.type === "requires" && sameTarget(relation.from, target);
+    });
+    if (requirements.length) {
+      card.dataset.hasRequirement = "true";
+      requirements.forEach(function (relation) {
+        var line = element("p", "concept-requires");
+        line.append(element("strong", "", "Relación de estudio"));
+        line.append("Requiere: ");
+        var link = element("a", "", targetTitle(relation.to));
+        link.href = "#" + conceptAnchor(relation.to);
+        line.append(link);
+        card.append(line);
+      });
+    }
+
+    var sourceBox = element("div", "concept-source");
+    sourceBox.append(element("strong", "", "Material de referencia disponible"));
+    var sourceLink = element("a", "", "Abrir " + source.title);
+    sourceLink.href = "../../" + source.href;
+    sourceBox.append(sourceLink);
+    sourceBox.append(element("small", "", "Consulta general; sin sección exacta asignada a este concepto."));
+    card.append(sourceBox);
+
+    model.activityDefinitions.filter(function (activity) {
+      return activity.targets.some(function (activityTarget) { return sameTarget(activityTarget, target); });
+    }).forEach(function (activity) {
+      if (!activityPages[activity.id]) return;
+      var activityLink = element("a", "concept-activity", "Autoevaluarme");
+      activityLink.href = activityPages[activity.id];
+      activityLink.setAttribute("aria-label", activity.title);
+      card.append(activityLink);
+    });
+    return card;
+  }
+  function renderTree(course, source) {
+    tree.replaceChildren();
+    var courseNode = element("div", "tree-course");
+    courseNode.append(element("span", "tree-kicker", "Ramo"));
+    courseNode.append(element("strong", "", course.name));
+    tree.append(courseNode);
+
+    model.units.slice().sort(function (a, b) { return a.order - b.order; }).forEach(function (unit) {
+      var group = element("div", "tree-unit-group");
+      group.dataset.unitId = unit.id;
+      var heading = element("div", "tree-unit-header");
+      heading.append(element("span", "tree-kicker", "Unidad de estudio"));
+      heading.append(element("h2", "", unit.title));
+      group.append(heading);
+      var nodes = element("div", "concept-grid");
+      model.concepts.filter(function (item) { return item.unitId === unit.id; }).forEach(function (item) {
+        nodes.append(renderNode(item, "concept", source));
+      });
+      model.skills.filter(function (item) { return item.unitId === unit.id; }).forEach(function (item) {
+        nodes.append(renderNode(item, "skill", source));
+      });
+      group.append(nodes);
+      tree.append(group);
+    });
+  }
+  function renderSource(source) {
+    document.getElementById("source-description").textContent = source.title + " es el material general asociado a este modelo de estudio. Los conceptos aún no están vinculados a secciones precisas.";
+    var provenance = document.getElementById("source-provenance");
+    provenance.replaceChildren();
+    (source.provenance || []).forEach(function (entry) {
+      var record = registry.sources.find(function (item) { return item.id === entry.sourceId; });
+      if (record) provenance.append(element("li", "", record.title));
+    });
+    document.getElementById("source-context").hidden = false;
+  }
+  async function initialize() {
+    try {
+      engine.validateStudyModel(model, registry);
+      var course = registry.courses.find(function (item) { return item.id === model.courseId; });
+      var source = registry.resources.find(function (item) { return item.id === model.sourceResourceId && item.courseId === model.courseId; });
+      renderTree(course, source);
+      renderSource(source);
+      var store = window.MI_STUDY_STORE.createStudyStore({ model: model, registry: registry, engine: engine, storage: localStorage });
+      var targets = model.concepts.map(function (item) { return { kind: "concept", id: item.id }; }).concat(
+        model.skills.map(function (item) { return { kind: "skill", id: item.id }; })
+      );
+      await Promise.all(targets.map(async function (target) {
+        var memory = await store.getMemoryState(target);
+        var container = document.getElementById(conceptAnchor(target)).querySelector(".concept-memory");
+        renderMemory(container, memory);
+      }));
+    } catch (error) {
+      errorEl.textContent = "No se pudo leer el modelo de estudio o la evidencia guardada. Recarga la página para intentarlo de nuevo.";
+      errorEl.hidden = false;
+      tree.querySelectorAll(".concept-memory").forEach(function (container) {
+        container.textContent = "Estado no disponible";
+      });
+      if (!tree.querySelector(".tree-course")) tree.textContent = "Mapa no disponible";
+    }
+  }
+  initialize();
+})();
+</script>
+</body>
+</html>

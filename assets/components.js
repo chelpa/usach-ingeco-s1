@@ -329,6 +329,17 @@
       '</div>';
   }
 
+  function renderCourseStudyEntry(options) {
+    options = options || {};
+    if (options.courseId !== "contabilidad") return "";
+    return '<a class="course-study-entry" data-study-entry href="' +
+      escapeHtml(joinPath(options.base || "./", "courses/contabilidad/mapa-estudio.html")) + '">' +
+      '<span class="course-study-entry-mark" aria-hidden="true">✦</span>' +
+      '<span class="course-study-entry-copy"><strong>Mapa de estudio</strong>' +
+      '<small>Explora la unidad, sus conceptos y la relación de estudio registrada.</small></span>' +
+      '<span class="course-study-entry-arrow" aria-hidden="true">→</span></a>';
+  }
+
   function notebookTypeLabel(type) {
     return TYPE_LABELS[type] || type;
   }
@@ -455,6 +466,7 @@
     renderAssessmentBadges: renderAssessmentBadges,
     renderCourseCards: renderCourseCards,
     renderCourseMaterials: renderCourseMaterials,
+    renderCourseStudyEntry: renderCourseStudyEntry,
     renderGlobalNavigation: renderGlobalNavigation,
     renderNotebookCourse: renderNotebookCourse,
     renderNotebookCourseList: renderNotebookCourseList,

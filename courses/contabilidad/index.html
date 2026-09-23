@@ -5,6 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contabilidad General — Mi Semestre</title>
 <link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .course-study-section { margin-top: 34px; }
+  .course-study-section .section-heading { padding-top: 0; margin-bottom: 16px; }
+  .course-study-entry {
+    display: flex; align-items: center; gap: 18px; padding: 22px 24px;
+    border: 1px solid #a8d4ce; border-radius: 14px;
+    background: linear-gradient(125deg, #e7f4f2, #f7fbfa);
+    color: var(--ink); text-decoration: none;
+  }
+  .course-study-entry:hover { border-color: var(--teal-dark); box-shadow: 0 8px 22px rgba(36,116,107,.12); }
+  .course-study-entry:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .course-study-entry-mark {
+    display: grid; place-items: center; flex: none; width: 48px; height: 48px;
+    border-radius: 13px; background: var(--teal-dark); color: #fff; font-size: 26px;
+  }
+  .course-study-entry-copy { display: grid; gap: 3px; min-width: 0; }
+  .course-study-entry-copy strong { color: var(--teal-dark); font-size: 19px; }
+  .course-study-entry-copy small { color: var(--ink-soft); font-size: 14px; }
+  .course-study-entry-arrow { margin-left: auto; color: var(--teal-dark); font-size: 23px; }
+  @media (max-width: 480px) {
+    .course-study-entry { gap: 13px; padding: 18px; }
+    .course-study-entry-mark { width: 42px; height: 42px; }
+  }
+</style>
 </head>
 <body>
 
@@ -23,7 +47,11 @@
 </header>
 
 <div class="wrap">
-  <h2 class="section-heading">Material disponible</h2>
+  <section class="course-study-section" aria-labelledby="course-study-heading">
+    <h2 class="section-heading" id="course-study-heading">Estudiar</h2>
+    <div id="study-entry"></div>
+  </section>
+  <h2 class="section-heading" id="course-materials-heading">Materiales</h2>
   <div id="resource-list" class="resource-list"></div>
 
   <footer class="site-footer">
@@ -36,6 +64,8 @@
   if (course) {
     document.getElementById("course-title").textContent = course.name;
     document.getElementById("course-name-crumb").textContent = course.shortName;
+    document.getElementById("study-entry").innerHTML =
+      window.MI_COMPONENTS.renderCourseStudyEntry({ courseId: course.id, base: "../../" });
     document.getElementById("resource-list").innerHTML =
       window.MI_COMPONENTS.renderCourseMaterials({ courseId: course.id, base: "../../" });
   }
