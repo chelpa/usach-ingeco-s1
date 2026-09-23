@@ -170,3 +170,48 @@ test("storage errors are surfaced", async () => {
   broken.setItem = () => { throw new Error("quota exceeded"); };
   await assert.rejects(store(broken).appendEvidence(evidence()), /quota exceeded/);
 });
+test("self-assessment creates Evidence when randomUUID is unavailable", async () => {
+  const page = fs.readFileSync(path.join(root, "courses/contabilidad/estudio.html"), "utf8");
+  const script = page.match(/<script>\s*([\s\S]*?)<\/script>/)[1];
+  const elements = new Map();
+  function element() {
+    return { hidden: false, disabled: true, textContent: "", append() {}, replaceChildren() {}, addEventListener(type, listener) { this[type] = listener; } };
+  }
+  for (const id of ["study-state", "study-error", "study-retry"]) elements.set(id, element());
+  const buttons = [element(), element()];
+  buttons[0].dataset = { rating: "uncertain" };
+  buttons[1].dataset = { rating: "can-explain" };
+  const saved = [];
+  const browserWindow = {
+    MI_SEMESTRE_STUDY_DATA: model,
+    MI_SEMESTRE_DATA: registry,
+    MI_STUDY_ENGINE: engine,
+    MI_STUDY_STORE: { createStudyStore: () => ({
+      appendEvidence: async (item) => { saved.push(item); },
+      getMemoryState: async () => saved.length ? {
+        assessment: "self-reported", latestSelfAssessment: saved.at(-1).result.rating,
+        lastObservedAt: saved.at(-1).occurredAt
+      } : { assessment: "unknown" }
+    }) }
+  };
+  let nextByte = 0;
+  vm.runInNewContext(script, {
+    window: browserWindow,
+    document: { getElementById: (id) => elements.get(id), querySelectorAll: () => buttons, createElement: element },
+    localStorage: {},
+    crypto: { getRandomValues: (bytes) => bytes.fill(++nextByte) },
+    Uint8Array, Date, Intl
+  });
+  await new Promise(setImmediate);
+  assert.equal(buttons[0].disabled, false);
+  buttons[0].click();
+  await new Promise(setImmediate);
+  buttons[1].click();
+  await new Promise(setImmediate);
+  assert.deepEqual(saved.map((item) => item.result.rating), ["uncertain", "can-explain"]);
+  assert.equal(new Set(saved.map((item) => item.id)).size, 2);
+  assert.ok(saved.every((item) => /^event-[0-9a-f]{32}$/.test(item.id)));
+  assert.deepEqual(Object.keys(saved[0]), Object.keys(evidence()));
+  assert.ok(buttons.every((button) => !button.disabled));
+  assert.equal(elements.get("study-error").hidden, true);
+});

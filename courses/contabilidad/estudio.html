@@ -82,6 +82,23 @@
   var activity = model.activityDefinitions.find(function (item) { return item.id === "conta-auto-evaluar-devengo"; });
   var target = activity.targets[0];
   var store;
+  var evidenceIdSequence = 0;
+
+  function createEvidenceId() {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return "event-" + crypto.randomUUID();
+    }
+    if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+      var bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      return "event-" + Array.prototype.map.call(bytes, function (byte) {
+        return byte.toString(16).padStart(2, "0");
+      }).join("");
+    }
+    evidenceIdSequence += 1;
+    return "event-" + Date.now().toString(36) + "-" + evidenceIdSequence.toString(36) + "-" +
+      Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+  }
 
   function setBusy(busy) {
     buttons.forEach(function (button) { button.disabled = busy; });
@@ -139,18 +156,18 @@
   async function record(rating) {
     setBusy(true);
     clearError();
-    var evidence = {
-      schemaVersion: 1,
-      id: "event-" + crypto.randomUUID(),
-      courseId: model.courseId,
-      kind: "self-assessment",
-      activityId: activity.id,
-      target: { kind: target.kind, id: target.id },
-      result: { rating: rating },
-      occurredAt: new Date().toISOString(),
-      origin: "native"
-    };
     try {
+      var evidence = {
+        schemaVersion: 1,
+        id: createEvidenceId(),
+        courseId: model.courseId,
+        kind: "self-assessment",
+        activityId: activity.id,
+        target: { kind: target.kind, id: target.id },
+        result: { rating: rating },
+        occurredAt: new Date().toISOString(),
+        origin: "native"
+      };
       await store.appendEvidence(evidence);
     } catch (error) {
       showError("No se pudo confirmar el guardado de esta autoevaluación. Inténtalo de nuevo.");
