@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Bitácora cronológica de las autoevaluaciones registradas en Administración.">
+<title>Bitácora de estudio · Administración — Mi Semestre</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .log-main { padding-top: 30px; }
+  .log-intro { max-width: 760px; margin: 0 0 24px; }
+  .log-intro p { margin: 0 0 12px; }
+  .log-return { display: inline-flex; align-items: center; min-height: 44px; font-weight: 800; }
+  .log-return:focus-visible, .log-concept-link:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .log-panel { max-width: 800px; padding: 24px 27px 28px; border: 1px solid var(--line); border-radius: 17px; background: var(--panel); box-shadow: 0 10px 28px rgba(38,43,49,.06); }
+  .log-panel h2 { margin: 0; font-family: var(--serif); font-size: 24px; }
+  .log-panel-note { margin: 3px 0 0; font-size: 14px; }
+  .log-empty { margin: 22px 0 0; padding: 20px; border: 1px dashed #cbd7d3; border-radius: 11px; color: var(--ink-soft); background: #fafcfb; }
+  .log-error { margin: 20px 0 0; padding: 15px 18px; border: 1px solid #e8bcb2; border-radius: 9px; background: #fff0ec; color: #8c3024; }
+  .log-timeline { position: relative; list-style: none; margin: 22px 0 0; padding: 0 0 0 32px; }
+  .log-timeline::before { content: ""; position: absolute; left: 7px; top: 7px; bottom: 22px; width: 2px; background: #a7cbc5; }
+  .log-item { position: relative; margin: 0 0 24px; min-width: 0; }
+  .log-item:last-child { margin-bottom: 0; }
+  .log-item::before { content: ""; position: absolute; left: -32px; top: 6px; width: 16px; height: 16px; border: 3px solid var(--panel); border-radius: 50%; background: var(--teal-dark); box-shadow: 0 0 0 1px #8dbdb6; }
+  .log-date { display: block; margin-bottom: 7px; color: var(--ink-soft); font-size: 12px; font-weight: 700; letter-spacing: .015em; }
+  .log-card { min-width: 0; padding: 19px 21px 17px; border: 1px solid #d9e5e1; border-radius: 13px; background: var(--panel); box-shadow: 0 7px 20px rgba(38,43,49,.08); }
+  .log-heading { display: flex; align-items: start; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .log-type { display: inline-flex; align-items: center; min-height: 24px; padding: 3px 10px; border-radius: 99px; background: var(--teal-soft); color: var(--teal-dark); font-size: 11px; font-weight: 800; letter-spacing: .08em; line-height: 1.2; text-transform: uppercase; }
+  .log-stamp { display: inline-block; padding: 2px 8px; border: 2px solid var(--teal-dark); border-radius: 5px; color: var(--teal-dark); font-size: 10px; font-weight: 800; letter-spacing: .08em; line-height: 1.3; text-transform: uppercase; transform: rotate(-4deg); }
+  .log-card h3 { margin: 12px 0 2px; color: var(--ink); font-size: 20px; line-height: 1.25; }
+  .log-meta-line { margin: 0; color: var(--ink-soft); font-size: 15px; }
+  .log-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px 18px; margin: 16px 0 0; padding: 14px 0 0; border-top: 1px dashed var(--line); }
+  .log-fields div { min-width: 0; }
+  .log-fields dt { margin: 0; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+  .log-fields dd { margin: 3px 0 0; color: var(--ink); font-size: 14px; line-height: 1.35; }
+  .log-concept-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 12px; font-size: 14px; font-weight: 800; }
+  [hidden] { display: none !important; }
+  @media (max-width: 600px) {
+    .log-main { padding-top: 20px; }
+    .log-panel { padding: 20px 15px 22px; }
+    .log-timeline { padding-left: 29px; }
+    .log-item::before { left: -29px; }
+    .log-card { padding: 16px; }
+    .log-fields { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
+</head>
+<body>
+<script src="../../data/site-data.js"></script>
+<script src="../../assets/components.js"></script>
+<script src="../../assets/nav.js" data-base="../../" data-course="administracion" data-resource="true"></script>
+
+<header class="hero hero-page">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../../index.html">Inicio</a> / <a href="index.html">Administración</a> / <a href="mapa-estudio.html">Mapa de estudio</a> / Bitácora</div>
+    <div class="eyebrow-rule"></div>
+    <div class="eyebrow">Estudiar · Administración</div>
+    <h1 class="title">Bitácora de estudio</h1>
+    <div class="subtitle">Autoevaluaciones registradas, de la más reciente a la más antigua.</div>
+  </div>
+</header>
+
+<main class="wrap log-main">
+  <div class="log-intro"><p>Cada entrada corresponde a una autoevaluación guardada. Puedes volver al concepto desde su tarjeta.</p><a class="log-return" href="mapa-estudio.html">← Volver al mapa de estudio</a></div>
+  <section class="log-panel" aria-labelledby="log-heading">
+    <h2 id="log-heading">Actividad registrada</h2>
+    <p class="log-panel-note">Administración · historial de estudio</p>
+    <p id="log-empty" class="log-empty" hidden>Todavía no hay actividad de estudio registrada.</p>
+    <p id="log-error" class="log-error" role="alert" hidden></p>
+    <ol id="log-timeline" class="log-timeline" aria-label="Autoevaluaciones en orden cronológico inverso" hidden></ol>
+  </section>
+  <footer class="site-footer">Sitio personal de apuntes · actualizado a mano curso por curso.</footer>
+</main>
+
+<script src="../../data/study-data-administracion.js"></script>
+<script src="../../data/lesson-bundle-administracion.js"></script>
+<script src="../../assets/study-engine.js"></script>
+<script src="../../assets/study-store.js"></script>
+<script>
+(function () {
+  "use strict";
+  var model = window.MI_SEMESTRE_STUDY_DATA;
+  var lesson = window.MI_LESSON_BUNDLE;
+  var registry = window.MI_SEMESTRE_DATA;
+  var timeline = document.getElementById("log-timeline");
+  var empty = document.getElementById("log-empty");
+  var errorEl = document.getElementById("log-error");
+  var ratingLabels = { "uncertain": "No estoy seguro", "can-explain": "Puedo explicarlo" };
+
+  function element(tag, className, value) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (value !== undefined) node.textContent = value;
+    return node;
+  }
+  function renderField(list, label, value) {
+    var wrapper = element("div");
+    wrapper.append(element("dt", "", label), element("dd", "", value));
+    list.append(wrapper);
+  }
+  function renderEvent(evidence, course) {
+    var items = evidence.target.kind === "concept" ? lesson.concepts : model.skills;
+    var target = items.find(function (item) { return item.id === evidence.target.id; });
+    var studyTarget = evidence.target.kind === "concept" ? model.concepts.find(function (item) { return item.id === target.id; }) : target;
+    var unit = model.units.find(function (item) { return item.id === studyTarget.unitId; });
+    var item = element("li", "log-item");
+    var occurred = new Date(evidence.occurredAt);
+    var dateLabel = new Intl.DateTimeFormat("es-CL", { day: "numeric", month: "short", year: "numeric" }).format(occurred) + " · " +
+      new Intl.DateTimeFormat("es-CL", { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(occurred);
+    var date = element("time", "log-date", dateLabel);
+    date.dateTime = evidence.occurredAt;
+    item.append(date);
+
+    var card = element("article", "log-card");
+    var heading = element("div", "log-heading");
+    heading.append(element("span", "log-type", "Autoevaluación"), element("span", "log-stamp", "Registrada"));
+    card.append(heading, element("h3", "", target.title), element("p", "log-meta-line", ratingLabels[evidence.result.rating]));
+    var fields = element("dl", "log-fields");
+    renderField(fields, "Ramo", course.name);
+    renderField(fields, "Unidad", unit.title);
+    card.append(fields);
+    var link = element("a", "log-concept-link", "Ver concepto →");
+    link.href = "mapa-estudio.html#concept-" + target.id;
+    link.setAttribute("aria-label", "Ver concepto: " + target.title);
+    card.append(link);
+    item.append(card);
+    return item;
+  }
+  async function initialize() {
+    try {
+      if (!lesson || lesson.lessonId !== model.lessonId) throw new Error("LessonBundle no coincide con StudyModel");
+      var store = window.MI_STUDY_STORE.createStudyStore({
+        model: model, registry: registry, engine: window.MI_STUDY_ENGINE, storage: localStorage
+      });
+      var course = registry.courses.find(function (item) { return item.id === model.courseId; });
+      var evidence = await store.listEvidence({ courseId: model.courseId });
+      evidence.slice().sort(function (a, b) {
+        return b.occurredAt.localeCompare(a.occurredAt) || b.id.localeCompare(a.id);
+      }).forEach(function (event) { timeline.append(renderEvent(event, course)); });
+      empty.hidden = evidence.length !== 0;
+      timeline.hidden = evidence.length === 0;
+    } catch (error) {
+      timeline.replaceChildren();
+      timeline.hidden = true;
+      errorEl.textContent = "No se pudo leer la actividad registrada. Recarga la página para intentarlo de nuevo.";
+      errorEl.hidden = false;
+    }
+  }
+  initialize();
+})();
+</script>
+</body>
+</html>

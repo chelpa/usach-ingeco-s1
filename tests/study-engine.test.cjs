@@ -7,6 +7,7 @@ const { execFileSync } = require("node:child_process");
 
 const root = path.resolve(__dirname, "..");
 const model = require("../data/study-data.js");
+const administrationModel = require("../data/study-data-administracion.js");
 const engine = require("../assets/study-engine.js");
 const { createStudyStore } = require("../assets/study-store.js");
 const window = {};
@@ -63,6 +64,40 @@ test("CommonJS export loads without browser dependencies and factory requires ex
 test("valid model passes and has no invented production Skill", () => {
   assert.equal(engine.validateStudyModel(model, registry), true);
   assert.equal(model.skills.length, 0);
+});
+test("Administración Chapter 1 model resolves its source, concepts, and activity", () => {
+  assert.equal(engine.validateStudyModel(administrationModel, registry), true);
+  assert.equal(administrationModel.courseId, "administracion");
+  assert.equal(administrationModel.units.length, 1);
+  assert.equal(administrationModel.concepts.length, 5);
+  assert.deepEqual(administrationModel.relations, []);
+  for (const concept of administrationModel.concepts) {
+    assert.equal(Object.hasOwn(concept, "title"), false);
+    assert.equal(Object.hasOwn(concept, "summary"), false);
+    assert.equal(Object.hasOwn(concept, "source"), false);
+  }
+});
+test("Administración Evidence survives a fresh store and projects only to its target", async () => {
+  const storage = memoryStorage();
+  const target = { kind: "concept", id: "admin-seis-variables-tga" };
+  const event = { ...evidence("admin-event-1"), courseId: "administracion", activityId: "admin-recordar-variables", target };
+  await createStudyStore({ model: administrationModel, registry, engine, storage }).appendEvidence(event);
+  const fresh = createStudyStore({ model: administrationModel, registry, engine, storage });
+  assert.deepEqual(await fresh.listEvidence(), [event]);
+  assert.deepEqual(await fresh.getMemoryState(target), {
+    assessment: "self-reported", latestSelfAssessment: "uncertain", lastObservedAt: event.occurredAt
+  });
+  assert.deepEqual(await fresh.getMemoryState({ kind: "concept", id: "admin-perspectivas" }), {
+    assessment: "unknown", latestSelfAssessment: null, lastObservedAt: null
+  });
+});
+test("study entry routes both real courses and leaves other courses alone", () => {
+  const browser = { MI_SEMESTRE_DATA: registry };
+  vm.runInNewContext(fs.readFileSync(path.join(root, "assets/components.js"), "utf8"), { window: browser });
+  const entry = browser.MI_COMPONENTS.renderCourseStudyEntry;
+  assert.match(entry({ courseId: "contabilidad", base: "../../" }), /courses\/contabilidad\/mapa-estudio\.html/);
+  assert.match(entry({ courseId: "administracion", base: "../../" }), /courses\/administracion\/mapa-estudio\.html/);
+  assert.equal(entry({ courseId: "economia", base: "../../" }), "");
 });
 test("bad courseId fails", () => {
   const bad = copy(model); bad.courseId = "missing";
@@ -158,8 +193,9 @@ test("MemoryState derivation has no hidden clock", () => {
   assert.doesNotMatch(source, /Date\.now\s*\(|new Date\s*\(\s*\)/);
 });
 test("all academic resource bodies match the Phase 3D base apart from math rendering assets", () => {
-  assert.equal(registry.resources.length, 12);
-  for (const resource of registry.resources) {
+  const baselineResources = registry.resources.filter((resource) => resource.id !== "administracion-chiavenato-cap1");
+  assert.equal(baselineResources.length, 12);
+  for (const resource of baselineResources) {
     let current = fs.readFileSync(path.join(root, resource.href), "utf8");
     const baseline = execFileSync("git", ["show", "mi-semestre-phase-3d:" + resource.href], { cwd: root });
     if (resource.id === "maye1-compendio") {

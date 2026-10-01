@@ -239,5 +239,7 @@ if (errors.length) {
   for (const message of errors) console.error("- " + message);
   process.exitCode = 1;
 } else {
-  console.log("Mi Semestre registry valid: 7 courses, 12 resources, 4 assessments, 17 sources.");
+  console.log("Mi Semestre registry valid: " + data.courses.length + " courses, " +
+    data.resources.length + " resources, " + data.assessments.length + " assessments, " +
+    data.sources.length + " sources.");
 }

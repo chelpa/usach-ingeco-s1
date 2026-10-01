@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad de recuerdo · Administración — Mi Semestre</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .study-main { padding-top: 30px; }
+  .study-card { max-width: 680px; margin: 0 auto; padding: 28px; }
+  .study-card h2 { margin: 0 0 8px; font-size: 25px; color: var(--teal-dark); }
+  .study-card p { margin: 0 0 18px; }
+  .study-note { font-size: 14px; }
+  .study-response { display: block; width: 100%; min-height: 125px; margin: 0 0 15px; padding: 12px; border: 1px solid var(--line); border-radius: 9px; font: 15px var(--sans); resize: vertical; }
+  .study-check { margin: 12px 0 18px; padding: 16px; border-left: 4px solid var(--teal-dark); background: var(--teal-soft); border-radius: 0 9px 9px 0; }
+  .study-check p { margin: 0 0 8px; }
+  .study-check p:last-child { margin-bottom: 0; }
+  .study-reveal { appearance: none; border: 1px solid var(--teal-dark); border-radius: 9px; background: var(--teal-dark); color: #fff; cursor: pointer; font: 700 15px var(--sans); padding: 11px 16px; min-height: 44px; }
+  .study-reveal:focus-visible, .study-response:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .study-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0; }
+  .study-actions button, .study-retry {
+    appearance: none; border: 1px solid var(--teal-dark); border-radius: 9px;
+    background: var(--panel); color: var(--teal-dark); cursor: pointer;
+    font: 700 15px var(--sans); padding: 11px 16px; min-height: 44px;
+  }
+  .study-actions button:hover:not(:disabled), .study-retry:hover { background: var(--teal-soft); }
+  .study-actions button:focus-visible, .study-retry:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .study-actions button:disabled { opacity: .55; cursor: wait; }
+  .study-state { border-top: 1px solid var(--line); padding-top: 18px; color: var(--ink-soft); }
+  .study-state p { margin: 0 0 8px; }
+  .study-state strong { color: var(--ink); }
+  .study-error { color: #8c3024; background: #fff0ec; border: 1px solid #e8bcb2; border-radius: 9px; padding: 12px 14px; margin: 16px 0; }
+  .study-retry { margin-top: 8px; }
+  .study-map-return { display: inline-flex; align-items: center; min-height: 44px; margin-top: 18px; font-weight: 700; }
+  .study-map-return:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+  [hidden] { display: none !important; }
+  @media (max-width: 480px) {
+    .study-main { padding-top: 18px; }
+    .study-card { padding: 20px; }
+    .study-actions { flex-direction: column; }
+    .study-actions button { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<script src="../../data/site-data.js"></script>
+<script src="../../assets/components.js"></script>
+<script src="../../assets/nav.js" data-base="../../" data-course="administracion" data-resource="true"></script>
+
+<header class="hero hero-page">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../../index.html">Inicio</a> / <a href="index.html">Administración</a> / <a href="mapa-estudio.html#concept-admin-seis-variables-tga">Mapa de estudio</a> / Actividad</div>
+    <div class="eyebrow-rule"></div>
+    <div class="eyebrow">Actividad de estudio · Administración</div>
+    <h1 class="title">Recordar y explicar</h1>
+    <div class="subtitle">Chiavenato · capítulo 1</div>
+  </div>
+</header>
+
+<main class="wrap study-main">
+  <section class="card study-card" aria-labelledby="study-concept">
+    <h2 id="study-concept"></h2>
+    <p id="study-prompt"></p>
+    <label for="study-response">Tu explicación (opcional; permanece en esta página)</label>
+    <textarea id="study-response" class="study-response" placeholder="Escribe o dilo en voz alta antes de revelar la pista."></textarea>
+    <button class="study-reveal" id="study-reveal" type="button">Mostrar pista para contrastar</button>
+    <div class="study-check" id="study-check" hidden>
+      <p><strong>Contrasta:</strong> <span id="study-check-text"></span></p>
+      <p><small id="study-source"></small></p>
+    </div>
+    <p class="study-note">Después de contrastar, registra cómo te fue. Es una declaración personal, no una prueba de dominio. Cada respuesta queda guardada como un evento separado.</p>
+    <div class="study-actions" id="study-actions" aria-label="Opciones de autoevaluación" hidden>
+      <button type="button" data-rating="uncertain" disabled>No estoy seguro</button>
+      <button type="button" data-rating="can-explain" disabled>Puedo explicarlo</button>
+    </div>
+    <div class="study-state" id="study-state" role="status" aria-live="polite">Cargando autoevaluación…</div>
+    <p class="study-error" id="study-error" role="alert" hidden></p>
+    <button class="study-retry" id="study-retry" type="button" hidden>Reintentar lectura</button>
+    <a class="study-map-return" href="mapa-estudio.html#concept-admin-seis-variables-tga">← Volver al concepto</a>
+    <a class="study-map-return" href="bitacora.html">Ver bitácora →</a>
+  </section>
+  <footer class="site-footer">Sitio personal de apuntes · actualizado a mano curso por curso.</footer>
+</main>
+
+<script src="../../data/study-data-administracion.js"></script>
+<script src="../../data/lesson-bundle-administracion.js"></script>
+<script src="../../assets/study-engine.js"></script>
+<script src="../../assets/study-store.js"></script>
+<script>
+(function () {
+  "use strict";
+  var stateEl = document.getElementById("study-state");
+  var errorEl = document.getElementById("study-error");
+  var retryEl = document.getElementById("study-retry");
+  var buttons = document.querySelectorAll("[data-rating]");
+  var model = window.MI_SEMESTRE_STUDY_DATA;
+  var lesson = window.MI_LESSON_BUNDLE;
+  var activity = model.activityDefinitions.find(function (item) { return item.id === "admin-recordar-variables"; });
+  var target = activity.targets[0];
+  var exercise = lesson.exercises.find(function (item) { return item.id === activity.lessonExerciseId; });
+  var reveal = document.getElementById("study-reveal");
+  var check = document.getElementById("study-check");
+  var actions = document.getElementById("study-actions");
+  var store;
+  var evidenceIdSequence = 0;
+
+  function createEvidenceId() {
+    if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+      return "event-" + crypto.randomUUID();
+    }
+    if (typeof crypto !== "undefined" && typeof crypto.getRandomValues === "function") {
+      var bytes = new Uint8Array(16);
+      crypto.getRandomValues(bytes);
+      return "event-" + Array.prototype.map.call(bytes, function (byte) {
+        return byte.toString(16).padStart(2, "0");
+      }).join("");
+    }
+    evidenceIdSequence += 1;
+    return "event-" + Date.now().toString(36) + "-" + evidenceIdSequence.toString(36) + "-" +
+      Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+  }
+
+  function setBusy(busy) {
+    buttons.forEach(function (button) { button.disabled = busy; });
+  }
+  function showError(message) {
+    errorEl.textContent = message;
+    errorEl.hidden = false;
+  }
+  function clearError() {
+    errorEl.textContent = "";
+    errorEl.hidden = true;
+  }
+  function renderMemoryState(memory) {
+    stateEl.replaceChildren();
+    if (memory.assessment === "unknown") {
+      stateEl.textContent = "Sin autoevaluaciones registradas";
+      return;
+    }
+    var ratingLabels = { "uncertain": "No estoy seguro", "can-explain": "Puedo explicarlo" };
+    var rating = document.createElement("p");
+    rating.append("Última autoevaluación: ");
+    var ratingValue = document.createElement("strong");
+    ratingValue.textContent = ratingLabels[memory.latestSelfAssessment];
+    rating.append(ratingValue);
+    var observed = document.createElement("p");
+    observed.append("Registrada: ");
+    var time = document.createElement("time");
+    time.dateTime = memory.lastObservedAt;
+    time.textContent = new Intl.DateTimeFormat("es-CL", { dateStyle: "medium", timeStyle: "short" }).format(new Date(memory.lastObservedAt));
+    observed.append(time);
+    stateEl.append(rating, observed);
+  }
+  async function refresh() {
+    renderMemoryState(await store.getMemoryState(target));
+  }
+  async function initialize() {
+    setBusy(true);
+    retryEl.hidden = true;
+    clearError();
+    try {
+      if (!exercise || lesson.lessonId !== model.lessonId) throw new Error("LessonBundle exercise does not resolve");
+      var concept = lesson.concepts.find(function (item) { return item.id === target.id; });
+      document.getElementById("study-concept").textContent = concept.title;
+      document.getElementById("study-prompt").textContent = exercise.prompt;
+      document.getElementById("study-check-text").textContent = exercise.check;
+      document.getElementById("study-source").textContent = exercise.refs.map(function (id) {
+        var ref = lesson.sourceRefs[id];
+        return "Fuente: «" + ref.heading + "», pp. " + ref.printedPages.join("–") +
+          " impresas / " + ref.pdfPages.join("–") + " del PDF.";
+      }).join(" ");
+      store = window.MI_STUDY_STORE.createStudyStore({
+        model: model,
+        registry: window.MI_SEMESTRE_DATA,
+        engine: window.MI_STUDY_ENGINE,
+        storage: localStorage
+      });
+      await refresh();
+      setBusy(false);
+    } catch (error) {
+      stateEl.textContent = "Estado no disponible";
+      showError("No se pudo leer la autoevaluación guardada. Revisa el almacenamiento del navegador e inténtalo de nuevo.");
+      retryEl.hidden = false;
+    }
+  }
+  async function record(rating) {
+    setBusy(true);
+    clearError();
+    try {
+      var evidence = {
+        schemaVersion: 1,
+        id: createEvidenceId(),
+        courseId: model.courseId,
+        kind: "self-assessment",
+        activityId: activity.id,
+        target: { kind: target.kind, id: target.id },
+        result: { rating: rating },
+        occurredAt: new Date().toISOString(),
+        origin: "native"
+      };
+      await store.appendEvidence(evidence);
+    } catch (error) {
+      showError("No se pudo confirmar el guardado de esta autoevaluación. Inténtalo de nuevo.");
+      setBusy(false);
+      return;
+    }
+    try {
+      await refresh();
+    } catch (error) {
+      showError("La autoevaluación se guardó, pero no se pudo leer el estado actualizado.");
+      retryEl.hidden = false;
+    }
+    setBusy(false);
+  }
+  buttons.forEach(function (button) {
+    button.addEventListener("click", function () { record(button.dataset.rating); });
+  });
+  reveal.addEventListener("click", function () {
+    check.hidden = false;
+    actions.hidden = false;
+    reveal.hidden = true;
+  });
+  retryEl.addEventListener("click", initialize);
+  initialize();
+})();
+</script>
+</body>
+</html>

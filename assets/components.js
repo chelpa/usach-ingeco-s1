@@ -331,12 +331,19 @@
 
   function renderCourseStudyEntry(options) {
     options = options || {};
-    if (options.courseId !== "contabilidad") return "";
+    var studyPages = {
+      contabilidad: "courses/contabilidad/mapa-estudio.html",
+      administracion: "courses/administracion/mapa-estudio.html"
+    };
+    if (!studyPages[options.courseId]) return "";
+    var description = options.courseId === "contabilidad"
+      ? "Explora la unidad, sus conceptos y la relación de estudio registrada."
+      : "Explora el capítulo, sus conceptos y tu actividad de estudio.";
     return '<a class="course-study-entry" data-study-entry href="' +
-      escapeHtml(joinPath(options.base || "./", "courses/contabilidad/mapa-estudio.html")) + '">' +
+      escapeHtml(joinPath(options.base || "./", studyPages[options.courseId])) + '">' +
       '<span class="course-study-entry-mark" aria-hidden="true">✦</span>' +
       '<span class="course-study-entry-copy"><strong>Mapa de estudio</strong>' +
-      '<small>Explora la unidad, sus conceptos y la relación de estudio registrada.</small></span>' +
+      '<small>' + escapeHtml(description) + '</small></span>' +
       '<span class="course-study-entry-arrow" aria-hidden="true">→</span></a>';
   }
 

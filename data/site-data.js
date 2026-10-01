@@ -226,6 +226,19 @@
         assessmentIds: [],
         capabilities: ["summary", "flashcards", "quiz", "progress", "dark-mode"]
       },
+      {
+        id: "administracion-chiavenato-cap1",
+        courseId: "administracion",
+        title: "📘 Lección de estudio — Chiavenato, capítulo 1",
+        description: "Resumen, explicaciones, mapa conceptual, tarjetas, práctica, quiz y glosario con páginas de origen.",
+        type: "study-kit",
+        href: "courses/administracion/capitulo-1.html",
+        status: "published",
+        displayOrder: 20,
+        provenance: [{ sourceId: "administracion-chiavenato", relation: "based-on" }],
+        assessmentIds: [],
+        capabilities: ["summary", "concept-map", "flashcards", "exercises", "quiz", "glossary"]
+      },
 
       {
         id: "computacion-guia-trabajo-final-r",
@@ -395,6 +408,15 @@
         authors: ["Robbins"],
         institution: null,
         edition: "13ª edición"
+      },
+      {
+        id: "administracion-chiavenato",
+        courseId: "administracion",
+        kind: "textbook",
+        title: "Introducción a la teoría general de la administración: una visión integral de la moderna administración de las organizaciones",
+        authors: ["Idalberto Chiavenato"],
+        institution: null,
+        edition: "10ª edición"
       },
       {
         id: "administracion-organizational-theory",

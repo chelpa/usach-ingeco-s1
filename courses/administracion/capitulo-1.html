@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Lección de estudio con resumen, conceptos, mapa, práctica y glosario del capítulo 1 de Chiavenato.">
+<title>La administración y sus perspectivas · Mi Semestre</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  .lesson-main { padding-top: 30px; }
+  .lesson-intro { max-width: 900px; }
+  .lesson-intro p { margin: 0 0 15px; }
+  .lesson-links { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 28px; }
+  .lesson-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 9px 15px; border: 1px solid var(--teal-dark); border-radius: 9px; color: var(--teal-dark); font-weight: 800; text-decoration: none; }
+  .lesson-links a:first-child { background: var(--teal-dark); color: #fff; }
+  .lesson-links a:hover { box-shadow: 0 5px 14px rgba(36,116,107,.16); }
+  .lesson-page-nav { display: flex; flex-wrap: wrap; gap: 7px 16px; margin: 0 0 30px; padding: 14px 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+  .lesson-page-nav a { font-size: 14px; font-weight: 700; }
+  .lesson-section { margin: 0 0 42px; scroll-margin-top: 84px; }
+  .lesson-section h2 { margin: 0 0 15px; font-family: var(--serif); font-size: clamp(25px, 3vw, 32px); }
+  .lesson-section > p { max-width: 850px; }
+  .lesson-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+  .lesson-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lesson-card { min-width: 0; padding: 19px 20px; border: 1px solid var(--line); border-radius: 13px; background: var(--panel); box-shadow: 0 5px 15px rgba(31,62,58,.05); scroll-margin-top: 84px; }
+  .lesson-card:target { outline: 3px solid var(--gold); outline-offset: 3px; }
+  .lesson-card h3 { margin: 0 0 10px; color: var(--teal-dark); font-size: 19px; }
+  .lesson-card p { margin: 0 0 11px; }
+  .lesson-card p:last-child { margin-bottom: 0; }
+  .lesson-card a { font-weight: 800; }
+  .lesson-cite { display: block; margin-top: 13px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+  .lesson-source { margin: 18px 0 28px; padding: 17px 20px; border-left: 4px solid var(--gold); border-radius: 0 10px 10px 0; background: #fff8e9; font-size: 14px; overflow-wrap: anywhere; }
+  .lesson-source p { margin: 0 0 6px; }
+  .lesson-source p:last-child { margin: 0; }
+  .lesson-source code { overflow-wrap: anywhere; font-size: 12px; }
+  .lesson-list { max-width: 950px; margin: 0; padding-left: 22px; }
+  .lesson-list li { margin: 0 0 13px; padding-left: 3px; }
+  .lesson-list .lesson-cite { margin-top: 5px; padding: 0; border: 0; }
+  .lesson-map { display: grid; gap: 11px; max-width: 980px; }
+  .lesson-map-node { padding: 10px; border-radius: 8px; background: var(--panel); color: var(--teal-dark); font-weight: 800; text-align: center; }
+  .lesson-map-relation { color: var(--ink-soft); font-size: 14px; text-align: center; }
+  .lesson-reveal { margin: 0 0 12px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); }
+  .lesson-reveal > summary { cursor: pointer; font-weight: 800; }
+  .lesson-reveal > p { margin: 12px 0 0; }
+  .lesson-reveal .lesson-cite { margin-top: 12px; }
+  .lesson-options { margin: 12px 0 0; padding-left: 22px; }
+  .lesson-options li { margin: 5px 0; }
+  .lesson-answer { margin-top: 12px; padding: 12px 14px; border-radius: 9px; background: var(--teal-soft); }
+  .lesson-glossary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+  .lesson-glossary > div { padding: 16px 18px; border: 1px solid var(--line); border-radius: 11px; background: var(--panel); }
+  .lesson-glossary dt { color: var(--teal-dark); font-weight: 800; }
+  .lesson-glossary dd { margin: 6px 0 0; }
+  .lesson-error { color: #8c3024; background: #fff0ec; border: 1px solid #e8bcb2; border-radius: 9px; padding: 14px; }
+  @media (max-width: 760px) {
+    .lesson-main { padding-top: 20px; }
+    .lesson-grid, .lesson-grid.three, .lesson-glossary { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  /* Guided study: page-local presentation and transient deck controls only. */
+  header.hero.hero-page { padding: 34px 0 36px; }
+  header.hero.hero-page h1.title { max-width: 720px; font-family: var(--serif); font-size: clamp(30px, 4vw, 44px); font-weight: 700; line-height: 1.15; }
+  .lesson-chapter { color: #f1c963; }
+  .lesson-intro { max-width: 780px; font-size: 18px; line-height: 1.7; }
+  .lesson-route { margin: 24px 0 32px; padding: 25px; border: 1px solid #b9d8d1; border-radius: 18px; background: linear-gradient(120deg, #edf7f4, #fffdf7); }
+  .lesson-route-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
+  .lesson-route h2, .lesson-record h2 { margin: 0 0 7px; font-family: var(--serif); font-size: 28px; }
+  .lesson-route p { margin: 0; }
+  .lesson-kicker { margin: 0 0 9px !important; color: var(--teal-dark); font-size: 12px; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+  .lesson-button { display: inline-flex; justify-content: center; align-items: center; gap: 8px; min-height: 46px; padding: 11px 17px; border: 1px solid #c3d6d1; border-radius: 10px; background: #fff; color: var(--teal-dark); font: inherit; font-size: 14px; font-weight: 800; text-decoration: none; cursor: pointer; }
+  .lesson-button.primary { background: var(--teal-dark); border-color: var(--teal-dark); color: #fff; }
+  .lesson-button:hover:not(:disabled) { background: var(--teal-soft); }
+  .lesson-button.primary:hover { background: #1c5c55; }
+  .lesson-button:disabled { opacity: .45; cursor: default; }
+  .lesson-main :is(a, button, summary):focus-visible { outline: 3px solid var(--teal-dark); outline-offset: 4px; }
+  .lesson-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 23px 0 0; padding: 0; list-style: none; }
+  .lesson-steps a { display: flex; align-items: flex-start; gap: 11px; height: 100%; padding: 15px 12px; border: 1px solid #d6e4df; border-radius: 11px; background: #ffffffb3; color: var(--ink); text-decoration: none; }
+  .lesson-steps a:hover, .lesson-steps a[aria-current="step"] { background: #fff; border-color: var(--teal-dark); }
+  .lesson-step-number { display: grid; place-items: center; flex: none; width: 29px; height: 29px; border-radius: 50%; background: var(--teal-soft); color: var(--teal-dark); font-size: 13px; font-weight: 800; }
+  .lesson-steps strong, .lesson-steps small { display: block; }
+  .lesson-steps strong { font-size: 15px; }
+  .lesson-steps small { margin-top: 3px; color: var(--ink-soft); font-size: 12px; }
+  .lesson-page-nav { padding: 12px 0; border: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); border-radius: 0; background: transparent; }
+  .lesson-page-nav a { min-height: 44px; display: inline-flex; align-items: center; }
+  .lesson-section { margin-bottom: 48px; }
+  .lesson-section h2 { padding-top: 15px; border-top: 1px solid var(--line); }
+  .lesson-section > p { margin: -3px 0 20px; }
+  .lesson-section:focus { outline: none; }
+  .lesson-section:focus-visible { outline: 3px solid var(--teal-dark); outline-offset: 5px; }
+  .lesson-card { padding: 22px; box-shadow: none; }
+  #lesson-summary .lesson-card { border-top: 3px solid #6aa99e; background: #f4faf8; }
+  .lesson-cite { color: #535e66; }
+  .lesson-next { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 19px; padding: 16px 18px; border-radius: 11px; background: #eef4f1; }
+  .lesson-next span { font-size: 14px; color: var(--ink-soft); }
+  .lesson-next a { font-size: 14px; font-weight: 800; min-height: 44px; display: inline-flex; align-items: center; }
+  .lesson-map { max-width: none; gap: 18px; }
+  .lesson-map-group { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2.5fr); gap: 22px; align-items: center; padding: 22px; border: 1px solid #cbded9; border-radius: 14px; background: #f6faf9; }
+  .lesson-map-origin { padding: 17px 14px; border: 1px solid #abcfc6; border-radius: 11px; background: #e5f2ed; text-align: center; }
+  .lesson-map-origin h3 { margin: 0; color: var(--teal-dark); font-size: 18px; }
+  .lesson-map-branches { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+  .lesson-map-edge { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: center; gap: 16px; }
+  .lesson-map-relation { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #3f5550; font-size: 14px; }
+  .lesson-map-arrow { display: block; width: 100%; color: var(--teal-dark); font-size: 24px; line-height: 1; }
+  .lesson-map-target { padding: 15px; border: 1px solid #d5e2dd; border-radius: 11px; background: #fff; }
+  .lesson-map-node { display: block; padding: 0; font-size: 16px; background: transparent; }
+  .lesson-map-edge > .lesson-cite { grid-column: 1 / -1; margin-top: -4px; padding: 0; border: 0; }
+  .lesson-flash-deck { max-width: 700px; margin: 0 auto; }
+  .lesson-flash-meta { display: flex; justify-content: space-between; gap: 14px; align-items: center; margin-bottom: 12px; color: var(--ink-soft); font-size: 13px; }
+  .lesson-flash-meta strong { color: var(--teal-dark); font-size: 14px; }
+  .lesson-flash-card { display: block; width: 100%; min-height: 270px; padding: 30px; border: 1px solid #b9d4cd; border-top: 4px solid var(--teal-dark); border-radius: 17px; background: #fff; color: var(--ink); font: inherit; text-align: center; cursor: pointer; box-shadow: 0 12px 28px #1f3e3a0c; }
+  .lesson-flash-card[aria-expanded="true"] { background: #eaf5f0; }
+  .lesson-flash-card:hover { border-color: var(--teal-dark); }
+  .lesson-flash-face { display: block; }
+  .lesson-flash-face[hidden] { display: none; }
+  .lesson-flash-label { display: block; margin-bottom: 23px; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; font-weight: 800; color: var(--teal-dark); }
+  .lesson-flash-text { display: block; font-family: var(--serif); font-size: clamp(21px, 2.5vw, 26px); line-height: 1.5; }
+  .lesson-flash-hint { display: block; margin-top: 24px; color: var(--ink-soft); font-size: 12px; }
+  .lesson-flash-controls { display: flex; justify-content: center; gap: 10px; margin-top: 19px; }
+  .lesson-flash-tools { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  #lesson-flash-cite .lesson-cite { min-height: 46px; text-align: center; }
+  .lesson-flash-help { margin: 15px 0 0; font-size: 12px; text-align: center; }
+  #lesson-quiz { display: grid; gap: 16px; }
+  #lesson-quiz .lesson-reveal { margin-top: 16px; margin-bottom: 0; }
+  .lesson-record { padding: 27px; background: var(--teal-soft); border: 1px solid #bad5ce; border-radius: 16px; }
+  .lesson-record h2 { padding: 0; border: 0; }
+  .lesson-record > p { margin: 8px 0 20px; }
+  .lesson-links a:first-child { background: transparent; color: var(--teal-dark); }
+  .lesson-source { margin: 30px 0; padding: 17px 20px; }
+  .lesson-source summary { cursor: pointer; font-weight: 800; color: #644a1d; min-height: 44px; display: list-item; }
+  .lesson-source summary small { display: block; color: var(--ink-soft); font-weight: 400; font-size: 12px; }
+  #lesson-source { margin-top: 14px; }
+  @media (max-width: 760px) {
+    .lesson-route, .lesson-record { padding: 20px; }
+    .lesson-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .lesson-map-group { grid-template-columns: minmax(0, 1fr); padding: 18px; gap: 15px; }
+    .lesson-map-edge { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    .lesson-map-arrow { transform: rotate(90deg); width: auto; }
+    .lesson-map-branches { gap: 20px; }
+    .lesson-map-target { text-align: center; }
+    .lesson-map-edge > .lesson-cite { text-align: center; margin-top: 0; }
+    .lesson-flash-card { padding: 24px 20px; min-height: 290px; }
+    .lesson-flash-controls { gap: 7px; }
+    .lesson-flash-controls .lesson-button { padding: 10px; font-size: 13px; flex: 1; }
+    .lesson-flash-meta { font-size: 12px; }
+    .lesson-next { display: block; }
+    .lesson-next span { display: block; }
+    .lesson-main { padding-left: 20px; padding-right: 20px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .lesson-flash-card[aria-expanded="true"] .lesson-flash-face:not([hidden]) { animation: lesson-reveal .18s ease-out; }
+    @keyframes lesson-reveal { from { opacity: .3; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+  }
+</style>
+</head>
+<body>
+<script src="../../data/site-data.js"></script>
+<script src="../../assets/components.js"></script>
+<script src="../../assets/nav.js" data-base="../../" data-course="administracion" data-resource="true"></script>
+
+<header class="hero hero-page">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="../../index.html">Inicio</a> / <a href="index.html">Administración</a> / Capítulo 1</div>
+    <div class="eyebrow-rule"></div>
+    <div class="eyebrow lesson-chapter">Capítulo 01 · Chiavenato</div>
+    <h1 class="title" id="lesson-title">La administración y sus perspectivas</h1>
+    <div class="subtitle">Comprende las ideas, conecta los conceptos y pon a prueba tu recuerdo.</div>
+  </div>
+</header>
+
+<main class="wrap lesson-main">
+  <p id="lesson-error" class="lesson-error" role="alert" hidden></p>
+  <div class="lesson-intro"><p id="lesson-overview"></p></div>
+  <section class="lesson-route" aria-labelledby="lesson-route-title">
+    <p class="lesson-kicker">Tu ruta de estudio</p>
+    <div class="lesson-route-head">
+      <div><h2 id="lesson-route-title">¿Qué hago ahora?</h2><p>Sigue estos seis pasos a tu ritmo. Puedes volver a cualquier sección.</p></div>
+      <a class="lesson-button primary" href="#summary">Empezar a estudiar →</a>
+    </div>
+    <ol class="lesson-steps">
+      <li><a href="#summary"><span class="lesson-step-number">1</span><span><strong>Comprender</strong><small>Resumen + explicaciones</small></span></a></li>
+      <li><a href="#concepts"><span class="lesson-step-number">2</span><span><strong>Conectar</strong><small>Conceptos + mapa + ejemplos</small></span></a></li>
+      <li><a href="#flashcards"><span class="lesson-step-number">3</span><span><strong>Recordar</strong><small id="lesson-route-flash-count">Tarjetas de recuerdo</small></span></a></li>
+      <li><a href="#exercises"><span class="lesson-step-number">4</span><span><strong>Practicar</strong><small>Explica con tus palabras</small></span></a></li>
+      <li><a href="#quiz"><span class="lesson-step-number">5</span><span><strong>Hacer el quiz</strong><small>Contrasta tus respuestas</small></span></a></li>
+      <li><a href="#record"><span class="lesson-step-number">6</span><span><strong>Registrar cómo te fue</strong><small>Actividad + autoevaluación</small></span></a></li>
+    </ol>
+  </section>
+  <nav class="lesson-page-nav" aria-label="Secciones de la lección">
+    <a href="#objectives">Objetivos</a><a href="#summary">Resumen</a><a href="#sections">Explicaciones</a>
+    <a href="#concepts">Conceptos</a><a href="#concept-map">Mapa</a><a href="#examples">Ejemplos</a>
+    <a href="#flashcards">Tarjetas</a><a href="#exercises">Práctica</a><a href="#quiz">Quiz</a><a href="#glossary">Glosario</a>
+  </nav>
+  <section class="lesson-section" id="objectives"><h2>Objetivos de aprendizaje</h2><ol class="lesson-list" id="lesson-objectives"></ol></section>
+  <section class="lesson-section" id="summary"><h2>Resumen estructurado</h2><div class="lesson-grid three" id="lesson-summary"></div></section>
+  <section class="lesson-section" id="sections"><h2>Explicaciones por sección</h2><div class="lesson-grid" id="lesson-sections"></div></section>
+  <section class="lesson-section" id="concepts"><h2>Conceptos clave</h2><div class="lesson-grid" id="lesson-concepts"></div></section>
+  <section class="lesson-section" id="concept-map"><h2>Mapa de relaciones</h2><p>Lee desde el concepto destacado y sigue cada flecha. Las palabras sobre la flecha explican la relación. Estas conexiones no son prerrequisitos de estudio.</p><div class="lesson-map" id="lesson-map"></div></section>
+  <section class="lesson-section" id="examples"><h2>Ejemplos para pensar</h2><div class="lesson-grid" id="lesson-examples"></div></section>
+  <section class="lesson-section" id="flashcards"><h2>Tarjetas de recuerdo</h2><p>Responde en voz alta antes de voltear. Compara tu idea con la respuesta y pasa a la siguiente tarjeta.</p>
+    <div class="lesson-flash-deck" id="lesson-flashcards" role="group" aria-label="Mazo de tarjetas de recuerdo">
+      <div class="lesson-flash-meta"><strong id="lesson-flash-counter" role="status" aria-live="polite" aria-atomic="true"></strong><span>Piensa → voltea → compara</span></div>
+      <button class="lesson-flash-card" id="lesson-flash-card" type="button" aria-expanded="false" aria-controls="lesson-flash-back" aria-describedby="lesson-flash-cite">
+        <span class="lesson-flash-face" id="lesson-flash-front"><span class="lesson-flash-label">Pregunta</span><span class="lesson-flash-text" id="lesson-flash-question"></span><span class="lesson-flash-hint">Toca para ver la respuesta</span></span>
+        <span class="lesson-flash-face" id="lesson-flash-back" hidden><span class="lesson-flash-label">Respuesta</span><span class="lesson-flash-text" id="lesson-flash-answer"></span><span class="lesson-flash-hint">Toca para volver a la pregunta</span></span>
+      </button>
+      <div id="lesson-flash-cite"></div>
+      <div class="lesson-flash-controls">
+        <button class="lesson-button" id="lesson-flash-prev" type="button" aria-label="Tarjeta anterior">← Anterior</button>
+        <button class="lesson-button primary" id="lesson-flash-flip" type="button" aria-controls="lesson-flash-back" aria-expanded="false">Voltear</button>
+        <button class="lesson-button" id="lesson-flash-next" type="button" aria-label="Tarjeta siguiente">Siguiente →</button>
+      </div>
+      <div class="lesson-flash-tools"><button class="lesson-button" id="lesson-flash-shuffle" type="button">Barajar</button><button class="lesson-button" id="lesson-flash-reset" type="button">Volver al inicio</button></div>
+      <p class="lesson-flash-help">También puedes usar ← / → dentro del mazo y Enter o espacio para voltear la tarjeta. Al recargar, el mazo vuelve al inicio.</p>
+    </div></section>
+  <section class="lesson-section" id="exercises"><h2>Preguntas de práctica</h2><p>Explícalas en voz alta o por escrito y luego contrasta tu respuesta.</p><div id="lesson-exercises"></div></section>
+  <section class="lesson-section" id="quiz"><h2>Quiz breve</h2><p>Elige mentalmente una opción y revela la respuesta. Este quiz no guarda notas ni afirma dominio.</p><div id="lesson-quiz"></div></section>
+  <section class="lesson-section" id="glossary"><h2>Glosario</h2><dl class="lesson-glossary" id="lesson-glossary"></dl></section>
+  <section class="lesson-section lesson-record" id="record" tabindex="-1">
+    <p class="lesson-kicker">Paso 6 · Cierra tu sesión</p>
+    <h2>Registra cómo te fue</h2>
+    <p>Ahora haz la actividad del capítulo y registra tu autoevaluación. Después podrás consultarla en la bitácora.</p>
+    <a class="lesson-button primary" href="estudio.html">Hacer actividad y registrar autoevaluación →</a>
+    <div class="lesson-links"><a href="bitacora.html">Ver bitácora →</a><a href="mapa-estudio.html">Ver Study Tree →</a></div>
+  </section>
+  <details class="lesson-source"><summary>Fuente y referencias del capítulo<small id="lesson-source-pages"></small></summary><div id="lesson-source"></div></details>
+  <footer class="site-footer">Sitio personal de apuntes · actualizado a mano curso por curso.</footer>
+</main>
+
+<script src="../../data/lesson-bundle-administracion.js"></script>
+<script>
+(function () {
+  "use strict";
+  var bundle = window.MI_LESSON_BUNDLE;
+  function el(tag, className, value) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (value !== undefined) node.textContent = value;
+    return node;
+  }
+  function pages(range) { return range[0] === range[1] ? String(range[0]) : range.join("–"); }
+  function cite(item) {
+    return el("small", "lesson-cite", item.refs.map(function (id) {
+      var ref = bundle.sourceRefs[id];
+      return "Chiavenato · «" + ref.heading + "» · p. " + pages(ref.printedPages) +
+        " impresa / PDF " + pages(ref.pdfPages);
+    }).join(" · "));
+  }
+  function card(title, body, item, id) {
+    var article = el("article", "lesson-card");
+    if (id) article.id = id;
+    article.append(el("h3", "", title), el("p", "", body), cite(item));
+    return article;
+  }
+  function initFlashcards() {
+    // Position and order exist only in this page session, never in student state.
+    var originalOrder = bundle.flashcards.map(function (_, index) { return index; });
+    var order = originalOrder.slice();
+    var position = 0;
+    var flipped = false;
+    var deck = document.getElementById("lesson-flashcards");
+    var face = document.getElementById("lesson-flash-card");
+    var flip = document.getElementById("lesson-flash-flip");
+    var prev = document.getElementById("lesson-flash-prev");
+    var next = document.getElementById("lesson-flash-next");
+    function showFace() {
+      document.getElementById("lesson-flash-front").hidden = flipped;
+      document.getElementById("lesson-flash-back").hidden = !flipped;
+      face.setAttribute("aria-expanded", String(flipped));
+      flip.setAttribute("aria-expanded", String(flipped));
+      flip.textContent = flipped ? "Ver pregunta" : "Voltear";
+    }
+    function showCard() {
+      var item = bundle.flashcards[order[position]];
+      document.getElementById("lesson-flash-question").textContent = item.front;
+      document.getElementById("lesson-flash-answer").textContent = item.back;
+      document.getElementById("lesson-flash-counter").textContent = "Tarjeta " + (position + 1) + " de " + order.length;
+      document.getElementById("lesson-flash-cite").replaceChildren(cite(item));
+      prev.disabled = position === 0;
+      next.disabled = position === order.length - 1;
+      flipped = false;
+      showFace();
+    }
+    function move(delta) {
+      var destination = position + delta;
+      if (destination < 0 || destination >= order.length) return;
+      var activeControl = document.activeElement;
+      position = destination;
+      showCard();
+      // Keep keyboard focus in the deck when a boundary disables its control.
+      if ((activeControl === prev && prev.disabled) || (activeControl === next && next.disabled)) face.focus();
+    }
+    function toggle() { flipped = !flipped; showFace(); }
+    face.addEventListener("click", toggle);
+    flip.addEventListener("click", toggle);
+    prev.addEventListener("click", function () { move(-1); });
+    next.addEventListener("click", function () { move(1); });
+    document.getElementById("lesson-flash-shuffle").addEventListener("click", function () {
+      for (var i = order.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var swap = order[i]; order[i] = order[j]; order[j] = swap;
+      }
+      position = 0; showCard();
+    });
+    document.getElementById("lesson-flash-reset").addEventListener("click", function () {
+      order = originalOrder.slice(); position = 0; showCard();
+    });
+    deck.addEventListener("keydown", function (event) {
+      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault(); move(event.key === "ArrowLeft" ? -1 : 1);
+      }
+    });
+    document.getElementById("lesson-route-flash-count").textContent = order.length + " flashcards";
+    showCard();
+  }
+  function initRoute() {
+    var nextSteps = [
+      ["objectives", "summary", "Ten estas metas presentes al leer.", "Leer el resumen"],
+      ["summary", "sections", "Siguiente: desarrolla las ideas del resumen.", "Leer las explicaciones"],
+      ["sections", "concepts", "Siguiente: identifica las ideas clave.", "Revisar conceptos"],
+      ["concepts", "concept-map", "Siguiente: conecta estos conceptos.", "Explorar el mapa"],
+      ["concept-map", "examples", "Siguiente: lleva las relaciones a una situación.", "Ver los ejemplos"],
+      ["examples", "flashcards", "Siguiente: intenta recordar sin mirar.", "Practicar con flashcards"],
+      ["flashcards", "exercises", "Cuando termines el mazo, explica las ideas con tus palabras.", "Ir a las preguntas de práctica"],
+      ["exercises", "quiz", "Siguiente: contrasta lo que recuerdas.", "Hacer el quiz"],
+      ["quiz", "record", "Después del quiz, cierra tu sesión con una autoevaluación.", "Registrar cómo te fue"]
+    ];
+    nextSteps.forEach(function (step) {
+      var section = document.getElementById(step[0]);
+      section.setAttribute("tabindex", "-1");
+      var prompt = el("div", "lesson-next");
+      var link = el("a", "", step[3] + " →"); link.href = "#" + step[1];
+      prompt.append(el("span", "", step[2]), link);
+      section.append(prompt);
+    });
+    document.getElementById("glossary").setAttribute("tabindex", "-1");
+    var stepForSection = { objectives: "summary", summary: "summary", sections: "summary", concepts: "concepts", "concept-map": "concepts", examples: "concepts", flashcards: "flashcards", exercises: "exercises", quiz: "quiz", record: "record" };
+    function updateRoute() {
+      var sectionId = window.location.hash.slice(1);
+      document.querySelectorAll(".lesson-steps a").forEach(function (link) {
+        if (link.hash === "#" + stepForSection[sectionId]) link.setAttribute("aria-current", "step");
+        else link.removeAttribute("aria-current");
+      });
+    }
+    document.querySelectorAll('.lesson-main a[href^="#"]').forEach(function (link) {
+      link.addEventListener("click", function () {
+        var target = document.getElementById(link.hash.slice(1));
+        if (target) target.focus({ preventScroll: true });
+      });
+    });
+    window.addEventListener("hashchange", updateRoute);
+    updateRoute();
+  }
+  function render() {
+    if (!bundle || bundle.schemaVersion !== 1 || bundle.lessonId !== "administracion-chiavenato-cap1") throw new Error("LessonBundle no disponible");
+    document.getElementById("lesson-title").textContent = bundle.title;
+    document.getElementById("lesson-overview").textContent = bundle.overview.text;
+    document.getElementById("lesson-source-pages").textContent = "Chiavenato · pp. " + pages(bundle.source.printedPages) + " impresas / PDF " + pages(bundle.source.pdfPages);
+    var source = document.getElementById("lesson-source");
+    var sourceEntry = window.MI_SEMESTRE_DATA.sources.find(function (item) { return item.id === bundle.source.sourceId; });
+    source.append(el("p", "", "Fuente académica: " + sourceEntry.authors.join(", ") + ", " + sourceEntry.title + ", " + sourceEntry.edition + " · Capítulo 1 · pp. " + pages(bundle.source.printedPages) + " impresas / " + pages(bundle.source.pdfPages) + " del PDF."));
+    source.append(el("p", "", "Identidad acreditada: " + bundle.source.sourceId + " · SHA-256: " + bundle.source.sha256));
+    source.append(el("p", "", "El RAW se conserva fuera de Git. Esta lección ofrece paráfrasis breves y ubicación por página; consulta el libro para el desarrollo completo."));
+    source.append(cite(bundle.overview));
+    bundle.objectives.forEach(function (item) {
+      var li = el("li", "", item.text); li.append(cite(item)); document.getElementById("lesson-objectives").append(li);
+    });
+    bundle.summary.forEach(function (item) { document.getElementById("lesson-summary").append(card(item.title, item.text, item)); });
+    bundle.sections.forEach(function (item) { document.getElementById("lesson-sections").append(card(item.title, item.explanation, item)); });
+    bundle.concepts.forEach(function (item) {
+      var node = card(item.title, item.explanation, item, "lesson-concept-" + item.id);
+      var link = el("a", "", "Ver en Study Tree →"); link.href = "mapa-estudio.html#concept-" + item.id;
+      node.append(link); document.getElementById("lesson-concepts").append(node);
+    });
+    var nodes = Object.fromEntries(bundle.conceptMap.nodes.map(function (node) { return [node.id, node]; }));
+    // Branches share their real source node; no relationships are inferred.
+    var mapGroups = new Map();
+    bundle.conceptMap.links.forEach(function (link) {
+      if (!mapGroups.has(link.from)) mapGroups.set(link.from, []);
+      mapGroups.get(link.from).push(link);
+    });
+    mapGroups.forEach(function (links, from) {
+      var group = el("article", "lesson-map-group");
+      var origin = el("div", "lesson-map-origin");
+      origin.append(el("h3", "", nodes[from].label));
+      var branches = el("ul", "lesson-map-branches");
+      links.forEach(function (link) {
+        var edge = el("li", "lesson-map-edge");
+        var relation = el("span", "lesson-map-relation", link.label);
+        var arrow = el("span", "lesson-map-arrow", "⟶");
+        arrow.setAttribute("aria-hidden", "true");
+        relation.append(arrow);
+        var target = el("div", "lesson-map-target");
+        target.append(el("span", "lesson-map-node", nodes[link.to].label));
+        edge.append(relation, target, cite(link));
+        branches.append(edge);
+      });
+      group.append(origin, branches);
+      document.getElementById("lesson-map").append(group);
+    });
+    bundle.examples.forEach(function (item) {
+      var node = card(item.title, item.scenario, item);
+      node.append(el("p", "", item.takeaway)); document.getElementById("lesson-examples").append(node);
+    });
+    initFlashcards();
+    bundle.exercises.forEach(function (item) {
+      var details = el("details", "lesson-reveal");
+      details.append(el("summary", "", item.prompt), el("p", "", item.check), cite(item));
+      document.getElementById("lesson-exercises").append(details);
+    });
+    bundle.quiz.forEach(function (item, index) {
+      var article = el("article", "lesson-card");
+      article.append(el("h3", "", (index + 1) + ". " + item.prompt));
+      var options = el("ol", "lesson-options");
+      item.options.forEach(function (option) { options.append(el("li", "", option)); });
+      article.append(options);
+      var details = el("details", "lesson-reveal");
+      details.append(el("summary", "", "Mostrar respuesta"),
+        el("p", "lesson-answer", item.options[item.correctIndex] + ". " + item.explanation));
+      article.append(details, cite(item)); document.getElementById("lesson-quiz").append(article);
+    });
+    bundle.glossary.forEach(function (item) {
+      var entry = el("div"); entry.append(el("dt", "", item.term), el("dd", "", item.definition), cite(item));
+      document.getElementById("lesson-glossary").append(entry);
+    });
+  }
+  try { render(); initRoute(); } catch (error) {
+    var warning = document.getElementById("lesson-error");
+    warning.textContent = "No se pudo cargar la lección. Recarga la página para intentarlo de nuevo.";
+    warning.hidden = false;
+  }
+})();
+</script>
+</body>
+</html>
